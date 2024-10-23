@@ -1,1 +1,6 @@
-# nakbanksystem
+# Sistema de Gestion Para la empresa NakBank
+
+## Requirements
+- open-jdk 23
+- jdbc
+- PostGres 16.0.0
