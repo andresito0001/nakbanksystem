@@ -21,8 +21,8 @@ public class Main {
             ResultSet rs = st.executeQuery("select * from cliente");
             
             while (rs.next()) {
-                System.out.print("Column 1 returned ");
-                System.out.println(rs.getString(1));
+                System.out.print("Cedula: ");
+                System.out.println(rs.getString("cedula") + " Nombre: " + rs.getString("nombre") + " Apellido: " + rs.getString("apellido") + " Alias: " + rs.getString("alias"));
             }
             
             rs.close();
