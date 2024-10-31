@@ -3,4 +3,5 @@
 ## Requirements
 - open-jdk 23
 - jdbc
-- PostGres 16.0.0
+- PostgreSQL 16.0.0
+- JavaFX
