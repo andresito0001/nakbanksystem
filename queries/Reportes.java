@@ -2,14 +2,10 @@ package queries;
 import java.sql.*;
 import java.util.Scanner;
 
-
 public class Reportes {
-    
-    public void reporteFlujo (int dia) {
+    public void reporteFlujo(int dia, Connection conn) {
         try {
             Scanner sc = new Scanner(System.in);
-            Connection conn = DriverManager.getConnection("jdbc:postgresql://autorack.proxy.rlwy.net:18835/railway", "postgres", "GIkVDzIIaAUzmJLTFrTMujbkkuyMkhKW");
-            System.out.println("Conexion establecida");
 
             System.out.println ("Ingrese la fecha de consulta: ");
             String fecha = " '"+sc.nextLine()+"'";
@@ -27,7 +23,6 @@ public class Reportes {
             Statement st = conn.createStatement();
             ResultSet rs = st.executeQuery(consultaFinal);
 
-
             while(rs.next()) {
                 System.out.println(rs.getMetaData().getColumnLabel(1)+ ": " + rs.getString(1) + " | " + 
                 rs.getMetaData().getColumnLabel(2)+ ": " + rs.getString(2) + " | "+ 
@@ -36,23 +31,15 @@ public class Reportes {
 
             rs.close();
             st.close();
-
-            conn.close();
-            System.out.println("Conexion cerrada");
-
-
-        } catch (SQLException e)
-        {
+        } catch (SQLException e) {
             System.out.println("Eror de conexion");
             System.out.println(e.getCause());
         }
     }
-    public void reporteTopCliente () {
-        try {
 
+    public void reporteTopCliente(Connection conn) {
+        try {
             Scanner sc = new Scanner(System.in);
-            Connection conn = DriverManager.getConnection("jdbc:postgresql://autorack.proxy.rlwy.net:18835/railway", "postgres", "GIkVDzIIaAUzmJLTFrTMujbkkuyMkhKW");
-            System.out.println("Conexion establecida");
 
             System.out.println("Ingrese el mes para ver el top clientes (1 es enero, 12 es diciembre)");
             String mes = sc.nextLine();
@@ -83,19 +70,14 @@ public class Reportes {
 
             rs.close();
             st.close();
-            conn.close();
-
         } catch (SQLException e) {
             System.out.println("Error de conexion. " + e.getCause());
         }
     }
-    public void reporteAverage () {
+
+    public void reporteAverage (Connection conn) {
         try {
-
             Scanner sc = new Scanner(System.in);
-            Connection conn = DriverManager.getConnection("jdbc:postgresql://autorack.proxy.rlwy.net:18835/railway", "postgres", "GIkVDzIIaAUzmJLTFrTMujbkkuyMkhKW");
-            System.out.println("Conexion establecida");
-
             
             System.out.println("Ingrese el periodo de tiempo a ver desde la fecha actual \n 1-Un mes \t2- Una semana \t 3-Otro");
             String temp = sc.nextLine();
@@ -127,10 +109,7 @@ public class Reportes {
                 System.out.println("|Tasa de compra promedio Bs: "+rs.getString(1) + "\t | Cantidad de Transacciones: " + rs.getString(2));            
             }
 
-            rs.close();
-            st.close();
             conn.close();
-
         } catch (SQLException e) {
             System.out.println("Error de conexion. " + e.getCause());
         }
