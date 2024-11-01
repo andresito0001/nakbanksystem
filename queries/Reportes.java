@@ -58,7 +58,6 @@ public class Reportes {
             "(sum(cantidad_recibida) * avg(cantidad_enviada/cantidad_recibida))/" + promedioTasa + " as profit " +
             " from transaccion inner join cliente on transaccion.cedula_cliente = cliente.cedula where moneda_enviada = 'bs' and tipo = 'compra' " + 
             " and extract (month from fecha) = " + mes + " group by cliente.cedula order by profit desc";
-            //" and extract(month from current_date) group by cliente.cedula order by profit desc"; 
 
             System.out.println("Promedio de Tasa Bs en las transacciones: " + promedioTasa + "\nTOP CLIENTES: ");
 
@@ -112,6 +111,36 @@ public class Reportes {
             conn.close();
         } catch (SQLException e) {
             System.out.println("Error de conexion. " + e.getCause());
+        }
+    }
+    public void reporteCantidad (Connection conn) {
+        try {
+            Scanner sc = new Scanner(System.in);
+
+            System.out.println ("Ingrese el metodo a visualizar (zelle, binance, banesco, venezuela, cash)");
+            String metodo = sc.nextLine();
+            System.out.println("Fecha inicio: ");
+            String fecha = "'" + sc.nextLine() + "' ";
+            System.out.println("Fecha fin: ");
+            fecha += "and '" + sc.nextLine() + "' ";
+            String consulta = "select ( select count (*) from transaccion where fecha between " +
+            fecha + ") as numero_trx_periodo, (select count(*) from transaccion where " + 
+            " metodo_enviado = '" + metodo + "' and fecha between " + fecha + " ) as cantidad_trx_metodo";
+
+            Statement st = conn.createStatement();
+            ResultSet rs = st.executeQuery(consulta);
+            System.out.println ("Periodo de Tiempo \t| Numero Transacciones Periodo \t| Cantidad Transacciones Metodo");
+            while (rs.next())
+            {
+                System.out.println(fecha + "|" + rs.getString(1) + "\t|" + rs.getString(2));
+            }
+
+            rs.close();
+            st.close();
+            conn.close();
+        }
+        catch (SQLException e) {
+            System.out.println("Error de conexion "+ e.getCause());
         }
     }
 }
