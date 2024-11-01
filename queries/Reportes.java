@@ -129,10 +129,10 @@ public class Reportes {
 
             Statement st = conn.createStatement();
             ResultSet rs = st.executeQuery(consulta);
-            System.out.println ("Periodo de Tiempo \t| Numero Transacciones Periodo \t| Cantidad Transacciones Metodo");
+            System.out.println ("Periodo de Tiempo \t| #Transacciones Periodo | #Transacciones"+metodo);
             while (rs.next())
             {
-                System.out.println(fecha + "|" + rs.getString(1) + "\t|" + rs.getString(2));
+                System.out.println(fecha + "|" + rs.getString(1) + "\t\t|" + rs.getString(2));
             }
 
             rs.close();
@@ -141,6 +141,43 @@ public class Reportes {
         }
         catch (SQLException e) {
             System.out.println("Error de conexion "+ e.getCause());
+        }
+    }
+    public void reporteDiferenciaTasas (Connection conn) {
+        try {
+
+            Scanner sc = new Scanner(System.in);
+
+            System.out.println("\nFecha inicio: ");
+            String fecha = "'" + sc.nextLine() + "' ";
+            System.out.println("Fecha fin: ");
+            fecha += "and '" + sc.nextLine() + "' ";
+
+            String consulta = "select avg(V.cantidad_recibida/V.cantidad_enviada) as Tasa_Ventas_Promedio, " + 
+            " avg(C.cantidad_enviada/C.cantidad_recibida) as Tasa_Compra_Promedio, " + 
+            " ((avg(V.cantidad_recibida/V.cantidad_enviada)-avg(C.cantidad_enviada/C.cantidad_recibida))/avg(C.cantidad_enviada/C.cantidad_recibida))*100 " + 
+            " as Relacion from transaccion V, transaccion C " +
+            " where V.referencia <> C.referencia and " + 
+            " V.tipo ='venta' and V.moneda_recibida = 'bs' and V.moneda_enviada = 'usd' " + 
+            " and C.tipo = 'compra' and C.moneda_recibida = 'usd' and C.moneda_enviada = 'bs' " + 
+            " and C.fecha between " + fecha;
+   
+
+            Statement st = conn.createStatement();
+            ResultSet rs = st.executeQuery(consulta);
+            System.out.println("Tasa Ventas Promedio \t|Tasa Compra Promedio \t|Relacion");
+            while (rs.next())
+            {
+                System.out.println(rs.getString(1)+ "\t\t\t|" + rs.getString(2) + "\t\t\t|" + rs.getString(3));
+            }
+
+            rs.close();
+            st.close();
+            conn.close();
+
+        }
+        catch (SQLException e) {
+            System.out.println(e.getCause());
         }
     }
 }
