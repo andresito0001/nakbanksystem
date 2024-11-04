@@ -1,9 +1,13 @@
-import java.sql.*;
-import java.util.Scanner;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import queries.Clientes;
+// import java.util.Scanner;
 
 public class Main {
     public static void main (String args[]) {
-        try {
+        try { 
+            /* 
             Scanner sc = new Scanner(System.in);
             String url, user, pass;
             System.out.print("Welcome to NakBank System!\nEnter url: ");
@@ -12,8 +16,9 @@ public class Main {
             user = sc.nextLine();
             System.out.print("Enter password: ");
             pass = sc.nextLine();
-           
-            Connection conn = DriverManager.getConnection(url, user, pass);
+           */
+            
+            final Connection conn = DriverManager.getConnection("url", "user", "pass");
             System.out.println("Done!");
             
             conn.close();
