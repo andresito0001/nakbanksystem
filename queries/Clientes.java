@@ -83,15 +83,10 @@ public class Clientes {
         }
     }
 
-    public void reporteTopCliente(Connection conn) {
+    public void fillTopClient(final Connection conn, final String startDate, final String endDate) {
         try {
-            Scanner sc = new Scanner(System.in);
-
-            System.out.println("Ingrese el mes para ver el top clientes (1 es enero, 12 es diciembre)");
-            String mes = sc.nextLine();
-
             String calcularPromedio = "select avg (cantidad_recibida/cantidad_enviada) as promedio from transaccion where moneda_recibida = 'bs' and tipo = 'venta' " + 
-            " and extract (month from fecha) = " + mes + " ;";
+            "and fecha between '" + startDate + "' and '" + endDate + " '";
             Statement st = conn.createStatement();
             ResultSet rs = st.executeQuery(calcularPromedio);
             double promedioTasa = 0;
@@ -100,23 +95,27 @@ public class Clientes {
                 promedioTasa = rs.getDouble("promedio");                
             }
 
-            String consultaTopCliente = "select concat (nombre, ' ', apellido) as cliente, count(*) as cantidad_trx, " +
+            String consultaTopCliente = "select avg (cantidad_recibida/cantidad_enviada) as promedio from transaccion where moneda_recibida = 'bs' and tipo = 'venta' " + 
+            "and fecha between '" + startDate + "' and '" + endDate + " ';" + " select concat (nombre, ' ', apellido) as cliente, count(*) as cantidad_trx, " +
             "(sum(cantidad_recibida) * avg(cantidad_enviada/cantidad_recibida))/" + promedioTasa + " as profit " +
             " from transaccion inner join cliente on transaccion.cedula_cliente = cliente.cedula where moneda_enviada = 'bs' and tipo = 'compra' " + 
-            " and extract (month from fecha) = " + mes + " group by cliente.cedula order by profit desc";
+            " and fecha between '" + startDate +  "' and '" + endDate + "' " + "group by cliente.cedula order by profit desc";
 
             System.out.println("Promedio de Tasa Bs en las transacciones: " + promedioTasa + "\nTOP CLIENTES: ");
 
             rs = st.executeQuery(consultaTopCliente);
             System.out.println(" | Cliente" + " | Cantidad Transacciones | Profit |");
             while (rs.next()) {
-                System.out.println (" | " + rs.getString("cliente")+ " | "+rs.getString("cantidad_trx") + " | " + rs.getDouble("profit") + " | ");
+                String cliente = rs.getString("cliente");
+                String cantidad_transacciones = rs.getString("cantidad_trx");
+                String profit = rs.getString("profit");
+                System.out.println (" | " + cliente +  " | "+ cantidad_transacciones + " | " + profit + " | ");
             }
 
             rs.close();
             st.close();
         } catch (SQLException e) {
-            System.out.println("Error de conexion. " + e.getCause());
+            System.out.println("[ERROR]: " + e.getSQLState());
         }
     }
 }
