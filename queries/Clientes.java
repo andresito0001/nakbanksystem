@@ -1,4 +1,5 @@
 package queries;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -55,7 +56,7 @@ public class Clientes {
 
     public static void fillByAlias(final Connection conn, final String alias) {
         try {
-            final String query = "SELECT * FROM cliente WHERE alias = ?";
+            final String query = "select * from cliente where alias = ?";
             final PreparedStatement st = conn.prepareStatement(query);
             st.setString(1, alias);
             final ResultSet rs = st.executeQuery();
@@ -74,6 +75,8 @@ public class Clientes {
                 );
             }
 
+            rs.close();
+            st.close();
         } catch (SQLException e) {
             System.err.println("[ERROR]: " + e.getSQLState());
         }
