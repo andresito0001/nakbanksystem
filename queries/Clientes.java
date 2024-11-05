@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Scanner;
 import java.sql.ResultSet;
 
 public class Clientes {
@@ -13,11 +12,13 @@ public class Clientes {
      * Muestra todos los datos de todos los clientes registrados
      * @param conn
      */
-    public static void fillClients(final Connection conn) {
-        try {
-            final Statement st = conn.createStatement();
-            final String query = "select * from cliente";
-            final ResultSet rs = st.executeQuery(query);
+    public static void fillClients(final Connection conn) throws SQLException {
+
+        String query = "select * from cliente";
+
+        try (PreparedStatement st = conn.prepareStatement(query)) {
+
+            final ResultSet rs = st.executeQuery();
             
             while (rs.next()) {
                 String ci = rs.getString("cedula");
@@ -32,7 +33,6 @@ public class Clientes {
                     + ", apellido: " + apellido
                 );
             }
-
             rs.close();
             st.close();
         } catch (SQLException e) {
@@ -47,10 +47,11 @@ public class Clientes {
      * @param cedula
      * @return boolean
      */
-    public static boolean existClient(final Connection conn, final String cedula) {
-        try {
-            final String query = "SELECT COUNT(*) FROM cliente WHERE cedula = ?";
-            final PreparedStatement st = conn.prepareStatement(query);
+    public static boolean existClient(final Connection conn, final String cedula) throws SQLException {
+        
+        final String query = "SELECT COUNT(*) FROM cliente WHERE cedula = ?";
+
+        try (PreparedStatement st = conn.prepareStatement(query)) {
             st.setString(1, cedula);
 
             ResultSet rs = st.executeQuery();
@@ -72,10 +73,11 @@ public class Clientes {
      * @param conn
      * @param alias
      */
-    public static void fillByAlias(final Connection conn, final String alias) {
-        try {
-            final String query = "select * from cliente where alias = ?";
-            final PreparedStatement st = conn.prepareStatement(query);
+    public static void fillByAlias(final Connection conn, final String alias) throws SQLException {
+        
+        final String query = "select * from cliente where alias = ?";
+
+        try (PreparedStatement st = conn.prepareStatement(query)) {
             st.setString(1, alias);
             final ResultSet rs = st.executeQuery();
 
@@ -108,33 +110,24 @@ public class Clientes {
      * @param startDate
      * @param endDate
      */
-    public static void fillTopClient(final Connection conn, final String startDate, final String endDate) {
-        try {
-            String calcularPromedio = "select avg (cantidad_recibida/cantidad_enviada) as promedio from transaccion where moneda_recibida = 'bs' and tipo = 'venta' " + 
-            "and fecha between '" + startDate + "' and '" + endDate + " '";
-            Statement st = conn.createStatement();
-            ResultSet rs = st.executeQuery(calcularPromedio);
-            double promedioTasa = 0;
+    public static void fillTopClient(final Connection conn, final String startDate, final String endDate) throws SQLException {
+        
+        String query = "select concat (nombre, ' ', apellido) as cliente, count(*) as cantidad_trx, " + 
+        "(sum(cantidad_recibida) * avg(cantidad_enviada/cantidad_recibida))/(" +
+        "select avg (cantidad_recibida/cantidad_enviada) as promedio from transaccion where moneda_recibida = 'bs' and tipo = 'venta' " +
+        "and fecha between '" + startDate + "' and '" + endDate + "') as profit " + 
+        "from transaccion inner join cliente on transaccion.cedula_cliente = cliente.cedula where moneda_enviada = 'bs' and tipo = 'compra' " +
+        "and fecha between '" + startDate + "' and '" + endDate + "' group by cliente.cedula order by profit desc";
+        
+        try (PreparedStatement st = conn.prepareStatement(query)){
 
-            while (rs.next()) {
-                promedioTasa = rs.getDouble("promedio");                
-            }
+            ResultSet rs = st.executeQuery();
 
-            String consultaTopCliente = "select avg (cantidad_recibida/cantidad_enviada) as promedio from transaccion where moneda_recibida = 'bs' and tipo = 'venta' " + 
-            "and fecha between '" + startDate + "' and '" + endDate + " ';" + " select concat (nombre, ' ', apellido) as cliente, count(*) as cantidad_trx, " +
-            "(sum(cantidad_recibida) * avg(cantidad_enviada/cantidad_recibida))/" + promedioTasa + " as profit " +
-            " from transaccion inner join cliente on transaccion.cedula_cliente = cliente.cedula where moneda_enviada = 'bs' and tipo = 'compra' " + 
-            " and fecha between '" + startDate +  "' and '" + endDate + "' " + "group by cliente.cedula order by profit desc";
-
-            System.out.println("Promedio de Tasa Bs en las transacciones: " + promedioTasa + "\nTOP CLIENTES: ");
-
-            rs = st.executeQuery(consultaTopCliente);
-            System.out.println(" | Cliente" + " | Cantidad Transacciones | Profit |");
             while (rs.next()) {
                 String cliente = rs.getString("cliente");
                 String cantidad_transacciones = rs.getString("cantidad_trx");
                 String profit = rs.getString("profit");
-                System.out.println (" | " + cliente +  " | "+ cantidad_transacciones + " | " + profit + " | ");
+                System.out.println (" | " + cliente +  " | "+ cantidad_transacciones + " | " + profit + " | ");                  
             }
 
             rs.close();
