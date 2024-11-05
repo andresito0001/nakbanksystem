@@ -3,11 +3,9 @@ package queries;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.sql.ResultSet;
 
 public class Clientes {
-
     /***
      * Muestra todos los datos de todos los clientes registrados
      * @param conn
@@ -74,7 +72,6 @@ public class Clientes {
      * @param alias
      */
     public static void fillByAlias(final Connection conn, final String alias) throws SQLException {
-        
         final String query = "select * from cliente where alias = ?";
 
         try (PreparedStatement st = conn.prepareStatement(query)) {
@@ -111,7 +108,6 @@ public class Clientes {
      * @param endDate
      */
     public static void fillTopClient(final Connection conn, final String startDate, final String endDate) throws SQLException {
-        
         String query = "select concat (nombre, ' ', apellido) as cliente, count(*) as cantidad_trx, " + 
         "(sum(cantidad_recibida) * avg(cantidad_enviada/cantidad_recibida))/(" +
         "select avg (cantidad_recibida/cantidad_enviada) as promedio from transaccion where moneda_recibida = 'bs' and tipo = 'venta' " +
@@ -119,8 +115,7 @@ public class Clientes {
         "from transaccion inner join cliente on transaccion.cedula_cliente = cliente.cedula where moneda_enviada = 'bs' and tipo = 'compra' " +
         "and fecha between '" + startDate + "' and '" + endDate + "' group by cliente.cedula order by profit desc";
         
-        try (PreparedStatement st = conn.prepareStatement(query)){
-
+        try (PreparedStatement st = conn.prepareStatement(query)) {
             ResultSet rs = st.executeQuery();
 
             while (rs.next()) {
@@ -132,8 +127,6 @@ public class Clientes {
 
             rs.close();
             st.close();
-        } catch (SQLException e) {
-            System.out.println("[ERROR]: " + e.getSQLState());
         }
     }
 
@@ -145,20 +138,16 @@ public class Clientes {
      * @param apellido
      * @param cedula
      */
-    public static void insertCliente (final Connection conn, final String alias, final String nombre, final String apellido, final String cedula) throws SQLException {
-        
+    public static void insertClient(final Connection conn, final String alias, final String nombre, final String apellido, final String cedula) throws SQLException {
         final String query = "insert into cliente(alias, nombre, apellido, cedula) values (?, ?, ?, ?)";
         try (PreparedStatement st = conn.prepareStatement(query)){
             st.setString(1, alias);
             st.setString(2, nombre);
             st.setString(3, apellido);
             st.setString(4, cedula);
-            int numUpdate = st.executeUpdate();
+            // int numUpdate = st.executeUpdate();
 
             st.close();
-        }
-        catch (SQLException e) {
-            System.out.println ("[Error]: " + e.getSQLState());
         }
     }
 
