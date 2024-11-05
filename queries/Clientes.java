@@ -145,11 +145,10 @@ public class Clientes {
      * @param apellido
      * @param cedula
      */
-    public static void insertCliente (final Connection conn, final String alias, final String nombre, final String apellido, final String cedula) {
-
-        try {
-            final String query = "insert into cliente(alias, nombre, apellido, cedula) values (?, ?, ?, ?)";
-            final PreparedStatement st = conn.prepareStatement(query);
+    public static void insertCliente (final Connection conn, final String alias, final String nombre, final String apellido, final String cedula) throws SQLException {
+        
+        final String query = "insert into cliente(alias, nombre, apellido, cedula) values (?, ?, ?, ?)";
+        try (PreparedStatement st = conn.prepareStatement(query)){
             st.setString(1, alias);
             st.setString(2, nombre);
             st.setString(3, apellido);
