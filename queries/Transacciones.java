@@ -31,12 +31,10 @@ public class Transacciones {
                 .append(", metodo_recibido: ").append(rs.getString("metodo_recibido"))
                 .append(", cantidad_enviada: ").append(rs.getString("cantidad_enviada"))
                 .append(", moneda_enviada: " ).append(rs.getString("moneda_enviada"))
-                .append(", metodo_enviado").append(rs.getString("metodo_enviado"))
-                .append(", status: ").append(rs.getString("status"));
-
-                System.err.println(metaData);
+                .append(", metodo_enviado: ").append(rs.getString("metodo_enviado"))
+                .append(", status: ").append(rs.getString("status")).append("\n");
             }
-
+            System.out.println(metaData);
             rs.close();
             st.close();
         }
@@ -57,17 +55,37 @@ public class Transacciones {
             
             while (rs.next()) {
                 metaData.append("Nombre: ").append(rs.getString("nombre"))
-                .append("Apellido: ").append(rs.getString("apellido"))
-                .append("Cedula: ").append(rs.getString("cedula"))
-                .append("Fecha: ").append(String.valueOf(rs.getDate("fecha")));
+                .append(", Apellido: ").append(rs.getString("apellido"))
+                .append(", Cedula: ").append(rs.getString("cedula"))
+                .append(", Fecha: ").append(String.valueOf(rs.getDate("fecha"))).append("\n");
                 
                 // el resto de los datos...
-
-                System.out.println(metaData);
+                // ARREGLAR ESTO ANTES DEL INFORME DEL VIERNES
             }
+
+            System.out.println(metaData);
             rs.close();
             st.close();
         }
+    }
 
+    public static Integer getNumOftTransByTypeAndDate(final Connection conn, String type, Date beginDate, Date endDate) throws SQLException {
+        String query = "select tipo, count(*) as total_transacciones " +
+                        "from transaccion where tipo = ? and fecha between ? and ? group by tipo;";
+
+        try (final PreparedStatement st = conn.prepareStatement(query)) {
+            st.setString(1, type);
+            st.setDate(2, beginDate);
+            st.setDate(3, endDate);
+
+            final ResultSet rs = st.executeQuery();
+            rs.next();
+
+            int count = rs.getInt("total_transacciones");
+            
+            rs.close();
+            st.close();
+            return count > 0 ? count : 0;
+        }
     }
 }
