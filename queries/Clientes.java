@@ -3,6 +3,9 @@ package queries;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+
+import org.postgresql.translation.messages_bg;
+
 import java.sql.ResultSet;
 import java.sql.Date;
 
@@ -12,27 +15,29 @@ public class Clientes {
      * @param conn
      * @return void
      */
-    public static void fillClients(final Connection conn) throws SQLException {
+    public static StringBuilder fillClients(final Connection conn) throws SQLException {
 
         String query = "select * from cliente";
+        StringBuilder metaData = new StringBuilder();
 
         try (PreparedStatement st = conn.prepareStatement(query)) {
             final ResultSet rs = st.executeQuery();
-            StringBuilder metaData = new StringBuilder();
             
             while (rs.next()) {
                 metaData.append("Cedula: ").append(rs.getString("cedula"))
                 .append(", Alias: ").append(rs.getString("alias"))
                 .append(", Nombre: ").append(rs.getString("nombre"))
-                .append(", Apellido: ").append(rs.getString("apellido"));
+                .append(", Apellido: ").append(rs.getString("apellido"))
+                .append("\n");
                 
             }
-            System.out.println(metaData);
             rs.close();
             st.close();
         } catch (SQLException e) {
             System.err.println("[ERROR]: " + e.getSQLState());
         }
+
+        return metaData;
     }
     
     /**
