@@ -82,7 +82,9 @@ public class Transacciones {
             rs.next();
 
             int count = rs.getInt("total_transacciones");
-
+            
+            rs.close();
+            st.close();
             return count > 0 ? count : 0;
         }
     }
