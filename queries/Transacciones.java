@@ -60,13 +60,30 @@ public class Transacciones {
                 .append(", Fecha: ").append(String.valueOf(rs.getDate("fecha"))).append("\n");
                 
                 // el resto de los datos...
+                // ARREGLAR ESTO ANTES DEL INFORME DEL VIERNES
             }
-            
+
             System.out.println(metaData);
             rs.close();
             st.close();
         }
     }
 
+    public static Integer getNumOftTransByTypeAndDate(final Connection conn, String type, Date beignDate, Date endDate) throws SQLException {
+        String query = "select tipo, count(*) as total_transacciones " +
+                        "from transaccion where tipo = ? and fecha between ? and ? group by tipo;";
+
+        try (final PreparedStatement st = conn.prepareStatement(query)) {
+            st.setString(1, type);
+            st.setDate(2, beignDate);
+            st.setDate(3, endDate);
+
+            final ResultSet rs = st.executeQuery();
+            rs.next();
+
+            int count = rs.getInt("total_transacciones");
+
+            return count > 0 ? count : 0;
+        }
     }
 }
