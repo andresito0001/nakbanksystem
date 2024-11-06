@@ -69,13 +69,13 @@ public class Transacciones {
         }
     }
 
-    public static Integer getNumOftTransByTypeAndDate(final Connection conn, String type, Date beignDate, Date endDate) throws SQLException {
+    public static Integer getNumOftTransByTypeAndDate(final Connection conn, String type, Date beginDate, Date endDate) throws SQLException {
         String query = "select tipo, count(*) as total_transacciones " +
                         "from transaccion where tipo = ? and fecha between ? and ? group by tipo;";
 
         try (final PreparedStatement st = conn.prepareStatement(query)) {
             st.setString(1, type);
-            st.setDate(2, beignDate);
+            st.setDate(2, beginDate);
             st.setDate(3, endDate);
 
             final ResultSet rs = st.executeQuery();
