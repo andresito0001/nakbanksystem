@@ -4,33 +4,30 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.ResultSet;
+import java.sql.Date;
 
 public class Clientes {
     /***
      * Muestra todos los datos de todos los clientes registrados
      * @param conn
+     * @return void
      */
     public static void fillClients(final Connection conn) throws SQLException {
 
         String query = "select * from cliente";
 
         try (PreparedStatement st = conn.prepareStatement(query)) {
-
             final ResultSet rs = st.executeQuery();
+            StringBuilder metaData = new StringBuilder();
             
             while (rs.next()) {
-                String ci = rs.getString("cedula");
-                String alias = rs.getString("alias");
-                String nombre = rs.getString("nombre");
-                String apellido = rs.getString("apellido");
-
-                System.err.println (
-                    "Cedula: " + ci + 
-                    ", alias: " + alias 
-                    + ", nombre: " + nombre 
-                    + ", apellido: " + apellido
-                );
+                metaData.append("Cedula: ").append(rs.getString("cedula"))
+                .append(", Alias: ").append(rs.getString("alias"))
+                .append(", Nombre: ").append(rs.getString("nombre"))
+                .append(", Apellido: ").append(rs.getString("apellido"));
+                
             }
+            System.out.println(metaData);
             rs.close();
             st.close();
         } catch (SQLException e) {
@@ -77,25 +74,19 @@ public class Clientes {
         try (PreparedStatement st = conn.prepareStatement(query)) {
             st.setString(1, alias);
             final ResultSet rs = st.executeQuery();
+            StringBuilder metaData = new StringBuilder();
 
             while (rs.next()) {
-                String ci = rs.getString("cedula");
-                String aliasQuery =  rs.getString("alias");
-                String nombre = rs.getString("nombre");
-                String apellido = rs.getString("apellido");
-
-                System.out.println (
-                    "alias: " + aliasQuery + 
-                    ", Nombre: " + nombre + 
-                    ", Apellido: " + apellido + 
-                    ", Cedula: " + ci
-                );
+                metaData.append("Alias: ").append(rs.getString("alias"))
+                .append(", Nombre: ").append(rs.getString("nombre"))
+                .append(", Apellido: ").append(rs.getString("apellido"))
+                .append(", Cedula: ").append(rs.getString("cedula"));
             }
+
+            System.out.println (metaData);
 
             rs.close();
             st.close();
-        } catch (SQLException e) {
-            System.err.println("[ERROR]: " + e.getSQLState());
         }
     }
 
@@ -107,23 +98,29 @@ public class Clientes {
      * @param startDate
      * @param endDate
      */
-    public static void fillTopClient(final Connection conn, final String startDate, final String endDate) throws SQLException {
+    public static void fillTopClient(final Connection conn, final Date beginDate, final Date endDate) throws SQLException {
         String query = "select concat (nombre, ' ', apellido) as cliente, count(*) as cantidad_trx, " + 
         "(sum(cantidad_recibida) * avg(cantidad_enviada/cantidad_recibida))/(" +
         "select avg (cantidad_recibida/cantidad_enviada) as promedio from transaccion where moneda_recibida = 'bs' and tipo = 'venta' " +
-        "and fecha between '" + startDate + "' and '" + endDate + "') as profit " + 
+        "and fecha between ? and ? ) as profit " + 
         "from transaccion inner join cliente on transaccion.cedula_cliente = cliente.cedula where moneda_enviada = 'bs' and tipo = 'compra' " +
-        "and fecha between '" + startDate + "' and '" + endDate + "' group by cliente.cedula order by profit desc";
-        
+        "and fecha between ? and ? group by cliente.cedula order by profit desc";
+                    
         try (PreparedStatement st = conn.prepareStatement(query)) {
-            ResultSet rs = st.executeQuery();
+            st.setDate(1, beginDate);
+            st.setDate(2, endDate);
+            st.setDate(3, beginDate);
+            st.setDate(4, endDate);
+            final ResultSet rs = st.executeQuery();
+            StringBuilder metaData = new StringBuilder();
 
             while (rs.next()) {
-                String cliente = rs.getString("cliente");
-                String cantidad_transacciones = rs.getString("cantidad_trx");
-                String profit = rs.getString("profit");
-                System.out.println (" | " + cliente +  " | "+ cantidad_transacciones + " | " + profit + " | ");                  
+                metaData.append("Cliente: ").append(rs.getString("cliente"))
+                .append(", Transacciones Realizadas: ").append(rs.getString("cantidad_trx"))
+                .append(", Profit: ").append(rs.getString("profit"));
             }
+
+            System.out.println(metaData);
 
             rs.close();
             st.close();
@@ -145,7 +142,6 @@ public class Clientes {
             st.setString(2, nombre);
             st.setString(3, apellido);
             st.setString(4, cedula);
-            // int numUpdate = st.executeUpdate();
 
             st.close();
         }
