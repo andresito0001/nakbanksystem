@@ -16,10 +16,13 @@ public class Transacciones {
      * @param cedula
      * @return void
      */
-    public static void fillByClient(Connection conn, final String cedula) throws SQLException {
-        final String query = "select * from transaccion where cedula_cliente = ?";
+    public static void fillByClient(Connection conn, final String cedula, Date beginDate, Date endDate) throws SQLException {
+        final String query = "select * from transaccion where cedula_cliente = ? and fecha between ? and ?";
         try (PreparedStatement st = conn.prepareStatement(query);) {
             st.setString(1, cedula);
+            st.setDate(2, beginDate);
+            st.setDate(3, endDate);
+            
             final ResultSet rs = st.executeQuery();
             StringBuilder metaData = new StringBuilder();
 
@@ -69,8 +72,9 @@ public class Transacciones {
         }
     }
 
-    public static Integer getNumOftTransByTypeAndDate(final Connection conn, String type, Date beginDate, Date endDate) throws SQLException {
-        String query = "select tipo, count(*) as total_transacciones " +
+    public static Integer getNumOftTransByTypeAndDate(final Connection conn, final String type, final Date beginDate, 
+    final Date endDate) throws SQLException {
+        final String query = "select tipo, count(*) as total_transacciones " +
                         "from transaccion where tipo = ? and fecha between ? and ? group by tipo;";
 
         try (final PreparedStatement st = conn.prepareStatement(query)) {
@@ -81,11 +85,34 @@ public class Transacciones {
             final ResultSet rs = st.executeQuery();
             rs.next();
 
-            int count = rs.getInt("total_transacciones");
+            Integer count = rs.getInt("total_transacciones");
             
             rs.close();
             st.close();
             return count > 0 ? count : 0;
+        }
+    }
+
+    public static Float getAllAmountReceivedBy(Connection conn, final String transType,
+                                                final String currencyReceived,
+                                                final String receivedMethod) throws SQLException {
+        final String query = "select sum(cantidad_recibida) as total "
+                              + "from transaccion " 
+                              + "where tipo = ? and moneda_recibida = ? and metodo_recibido = ? ";
+        
+        try (final PreparedStatement st = conn.prepareStatement(query)) {
+            st.setString(1, transType);
+            st.setString(2, currencyReceived);
+            st.setString(3, receivedMethod);
+
+            final ResultSet rs = st.executeQuery();
+            rs.next();
+
+            Float total = rs.getFloat("total");
+            rs.close();
+            st.close();
+
+            return total;
         }
     }
 }
