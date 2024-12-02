@@ -378,6 +378,16 @@ public class Transacciones {
 
                     Character ch = sc.next().toUpperCase().charAt(0); sc.nextLine();
 
+                    final Double totalBalanceEnviado =  BanksCompany.getTotalBalanceOf(conn, metodoEnviado);
+
+                    if (totalBalanceEnviado <= 0.0 || totalBalanceEnviado < cantEnviada) {
+                        System.out.println("[ERROR] No hay saldo suficiente en " + typeMoneySent + "\nSe poseen: " + totalBalanceEnviado + typeMoneySent);
+                        break;
+                    } else {
+                        final String condition = "codigo = " + "'" + metodoEnviado + "'";
+                        updateRegister(conn, "bancos", "saldo_actual", (totalBalanceEnviado - cantEnviada), condition);
+                    }
+
                     switch (ch) {
                         case 'Y': {
                             try (final PreparedStatement st = conn.prepareStatement(query)) {
@@ -387,8 +397,8 @@ public class Transacciones {
                                 try (final PreparedStatement stm = conn.prepareStatement(dateTimeQuery)) {
                                     ResultSet rs = stm.executeQuery();
                                     if (rs.next()) {
-                                        simuinvRegister(conn, rs.getDate("fecha"), rs.getTimestamp("hora"), "INGRESO", cantRecibida, MoneyType.BOLIVARES.getNombre(), metodoRecibido, "COMPRA");
-                                        simuinvRegister(conn, rs.getDate("fecha"), rs.getTimestamp("hora"), "EGRESO", cantEnviada, MoneyType.BINANCE_USDT.getNombre(), PlataformasOnline.BINANCE.getNombre(), "VENTA");
+                                        simuinvRegister(conn, rs.getDate("fecha"), rs.getTimestamp("hora"), "INGRESO", cantRecibida, typeMoneySent, metodoRecibido, transType);
+                                        simuinvRegister(conn, rs.getDate("fecha"), rs.getTimestamp("hora"), "EGRESO", cantEnviada, typeMoneyReceived, metodoEnviado, transType);
                                     } else {
                                         System.err.println("No data found in simutrans table.");
                                     }
