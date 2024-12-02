@@ -3,9 +3,6 @@ package queries;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-
-import org.postgresql.translation.messages_bg;
-
 import java.sql.ResultSet;
 import java.sql.Date;
 
@@ -16,7 +13,6 @@ public class Clientes {
      * @return void
      */
     public static StringBuilder fillClients(final Connection conn) throws SQLException {
-
         String query = "select * from cliente";
         StringBuilder metaData = new StringBuilder();
 
@@ -29,7 +25,6 @@ public class Clientes {
                 .append(", Nombre: ").append(rs.getString("nombre"))
                 .append(", Apellido: ").append(rs.getString("apellido"))
                 .append("\n");
-                
             }
             rs.close();
             st.close();
@@ -151,5 +146,4 @@ public class Clientes {
             st.close();
         }
     }
-
 }
