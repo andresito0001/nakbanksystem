@@ -11,7 +11,8 @@ public class checkTransType {
         Map<Character, String> transactionTypes = Map.of (
             'C', TransTypes.COMPRA.getTransType(),
             'V', TransTypes.VENTA.getTransType(),
-            'I', TransTypes.INVERSION.getTransType()
+            'I', TransTypes.INVERSION.getTransType(),
+            'W', TransTypes.SWAP.getTransType()
         );
 
         return transactionTypes.getOrDefault(ch, null);

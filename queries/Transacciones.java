@@ -354,6 +354,9 @@ public class Transacciones {
                         case "VENTA": {
                             gananciaPerdida = cantRecibida - (cantEnviada / tasaMadre);
                         } break;
+                        case "SWAP": {
+                            gananciaPerdida = cantRecibida - (cantEnviada / tasaMadre);
+                        } break;
                         default:
                             gananciaPerdida = 0.0;
                             break;
@@ -363,7 +366,7 @@ public class Transacciones {
 
                     final String query = "insert into simutrans(cedula_cliente, admin, fecha, tipo, cantidad_recibida, moneda_recibida, metodo_recibido, cantidad_enviada, moneda_enviada, metodo_enviado, status, tasa, ganancia, ref_bancaria) " + 
                     "values ('V-11222599', " + "'" + username + "', " + "'" + TimeZone.getDateZoneCaracas() + "', " + "'" + transType + "', "
-                    + "'" + cantRecibida + "', " + "'" + typeMoneyReceived + "', " + "'" + metodoRecibido + "', " + "'" + cantEnviada + "', " + "'" + typeMoneySent + "', " + "'" + metodoEnviado + "', " + "'OK', " + "'" + tasa + "', " + "'" + gananciaPerdida + "', " + "'123456789555'" + ");";
+                    + "'" + cantRecibida + "', " + "'" + typeMoneyReceived + "', " + "'" + metodoRecibido + "', " + "'" + cantEnviada + "', " + "'" + typeMoneySent + "', " + "'" + metodoEnviado + "', " + "'OK', " + "'" + tasa + "', " + "'" + gananciaPerdida + "', " + "'123456789555'" + ");"; 
 
                     System.out.println("Estos son los datos del registro:\n" +
                     "Cedula Cliente: " + "V-11222599" + "\n" +
@@ -379,13 +382,17 @@ public class Transacciones {
                     Character ch = sc.next().toUpperCase().charAt(0); sc.nextLine();
 
                     final Double totalBalanceEnviado =  BanksCompany.getTotalBalanceOf(conn, metodoEnviado);
+                    final Double totalBalanceRecibido = BanksCompany.getTotalBalanceOf(conn, metodoRecibido);
 
                     if (totalBalanceEnviado <= 0.0 || totalBalanceEnviado < cantEnviada) {
                         System.out.println("[ERROR] No hay saldo suficiente en " + typeMoneySent + "\nSe poseen: " + totalBalanceEnviado + typeMoneySent);
                         break;
                     } else {
-                        final String condition = "codigo = " + "'" + metodoEnviado + "'";
+                        String condition = "codigo = " + "'" + metodoEnviado + "'";
                         updateRegister(conn, "bancos", "saldo_actual", (totalBalanceEnviado - cantEnviada), condition);
+                        condition = "codigo = " + "'" + metodoRecibido + "'";
+                        updateRegister(conn, "bancos", "saldo_actual", (totalBalanceRecibido + cantRecibida), condition);
+
                     }
 
                     switch (ch) {

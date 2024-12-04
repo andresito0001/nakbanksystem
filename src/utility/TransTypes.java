@@ -3,7 +3,8 @@ package utility;
 public enum TransTypes {
     INVERSION("INVERSION"),
     COMPRA("COMPRA"),
-    VENTA("VENTA");
+    VENTA("VENTA"),
+    SWAP("SWAP");
 
     TransTypes(final String transType) {
         this.transType = transType;
