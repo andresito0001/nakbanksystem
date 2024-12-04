@@ -355,7 +355,7 @@ public class Transacciones {
                             gananciaPerdida = cantRecibida - (cantEnviada / tasaMadre);
                         } break;
                         case "SWAP": {
-                            gananciaPerdida = cantRecibida - (cantEnviada / tasaMadre);
+                            gananciaPerdida = cantRecibida - cantEnviada; //como la sacariamos aqui?
                         } break;
                         default:
                             gananciaPerdida = 0.0;
