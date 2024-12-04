@@ -29,11 +29,11 @@ public class BanksCompany {
         return data;
     }
 
-    public static Double getTotalBalanceOf(final Connection conn, final String moneyType) {
+    public static Double getTotalBalanceOf(final Connection conn, final String bankCode) {
         Double totalBalance = 0.0;
 
-        try (PreparedStatement stmt = conn.prepareStatement("select sum(saldo_actual) from bancos where moneda = ?")) {
-            stmt.setString(1, moneyType);
+        try (PreparedStatement stmt = conn.prepareStatement("select sum(saldo_actual) from bancos where codigo = ?")) {
+            stmt.setString(1, bankCode);
 
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
