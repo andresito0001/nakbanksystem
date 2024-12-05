@@ -1,7 +1,7 @@
-package utility.CheckTypes;
+package main.java.util.CheckTypes;
 
 import java.util.Map;
-import utility.monedas.MoneyType;
+import main.java.util.monedas.MoneyType;
 
 public class checkMoneyType {
     public static String check(Character ch) {

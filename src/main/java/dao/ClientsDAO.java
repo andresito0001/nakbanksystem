@@ -1,18 +1,22 @@
-package queries;
+package main.java.dao;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.ResultSet;
 import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
-public class Clientes {
+public class ClientsDAO {
+    public ClientsDAO(final Connection conn) {
+        this.conn = conn;
+    }
+
     /***
      * Muestra todos los datos de todos los clientes registrados
      * @param conn
      * @return void
      */
-    public static StringBuilder fillClients(final Connection conn) throws SQLException {
+    public StringBuilder fillClients() throws SQLException {
         String query = "select * from cliente";
         StringBuilder metaData = new StringBuilder();
 
@@ -42,8 +46,7 @@ public class Clientes {
      * @param cedula
      * @return boolean
      */
-    public static boolean existClient(final Connection conn, final String cedula) throws SQLException {
-        
+    public boolean existClient(final String cedula) throws SQLException {
         final String query = "SELECT COUNT(*) FROM cliente WHERE cedula = ?";
 
         try (PreparedStatement st = conn.prepareStatement(query)) {
@@ -68,7 +71,7 @@ public class Clientes {
      * @param conn
      * @param alias
      */
-    public static void fillByAlias(final Connection conn, final String alias) throws SQLException {
+    public void fillByAlias(final String alias) throws SQLException {
         final String query = "select * from cliente where alias = ?";
 
         try (PreparedStatement st = conn.prepareStatement(query)) {
@@ -98,7 +101,7 @@ public class Clientes {
      * @param startDate
      * @param endDate
      */
-    public static void fillTopClient(final Connection conn, final Date beginDate, final Date endDate) throws SQLException {
+    public void fillTopClient(final Date beginDate, final Date endDate) throws SQLException {
         String query = "select concat (nombre, ' ', apellido) as cliente, count(*) as cantidad_trx, " + 
         "(sum(cantidad_recibida) * avg(cantidad_enviada/cantidad_recibida))/(" +
         "select avg (cantidad_recibida/cantidad_enviada) as promedio from transaccion where moneda_recibida = 'bs' and tipo = 'venta' " +
@@ -135,7 +138,7 @@ public class Clientes {
      * @param apellido
      * @param cedula
      */
-    public static void insertClient(final Connection conn, final String alias, final String nombre, final String apellido, final String cedula) throws SQLException {
+    public void insertClient(final String alias, final String nombre, final String apellido, final String cedula) throws SQLException {
         final String query = "insert into cliente(alias, nombre, apellido, cedula) values (?, ?, ?, ?)";
         try (PreparedStatement st = conn.prepareStatement(query)){
             st.setString(1, alias);
@@ -146,4 +149,6 @@ public class Clientes {
             st.close();
         }
     }
+
+    private final Connection conn;
 }

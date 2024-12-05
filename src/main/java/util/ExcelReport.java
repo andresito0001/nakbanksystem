@@ -1,13 +1,14 @@
-package queries;
+package main.java.util;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+import queries.Clientes;
+
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Arrays;
 
 public class ExcelReport {
 

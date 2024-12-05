@@ -1,7 +1,6 @@
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import queries.Transacciones;
 
 public class Main {
     public static void main (String args[]) {
@@ -18,8 +17,12 @@ public class Main {
            */
             
             final Connection conn = DriverManager.getConnection();
+            conn.close();
+            
             System.out.println("Done!");
-                    
+
+
+            
     //   //  tabla simutrans
     //        List<String> colums = List.of (
     //         "referencia",
@@ -136,7 +139,6 @@ public class Main {
             // );
 
 
-           Transacciones.newRegister(conn);
             
 
            // crea una nueva tabla

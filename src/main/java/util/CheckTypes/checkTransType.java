@@ -1,8 +1,8 @@
-package utility.CheckTypes;
+package main.java.util.CheckTypes;
 
 import java.util.Map;
 
-import utility.TransTypes;
+import main.java.util.TransTypes;
 
 public class checkTransType {
     public static String check(final Character ch) {

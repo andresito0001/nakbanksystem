@@ -1,4 +1,4 @@
-package utility.monedas;
+package main.java.util.monedas;
 
 public enum MoneyType {
     BOLIVARES("Bolivares", "VES"),

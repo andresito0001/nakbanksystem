@@ -1,4 +1,4 @@
-package queries;
+package main.java.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -7,8 +7,12 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BanksCompany {
-    public static List<String> getInfoOf(final Connection conn, final String colum, final String key, final String value) throws SQLException {
+public class BanksDAO {
+    public BanksDAO(final Connection conn) {
+        this.conn = conn;
+    }
+
+    public List<String> getInfoOf(final String colum, final String key, final String value) throws SQLException {
         final String query = "select " + colum + " from bancos where " + key + " = " + "'" + value + "'" + ";";
 
         List<String> data = new ArrayList<>();
@@ -29,7 +33,7 @@ public class BanksCompany {
         return data;
     }
 
-    public static Double getTotalBalanceOf(final Connection conn, final String bankCode) {
+    public Double getTotalBalanceOf(final String bankCode) {
         Double totalBalance = 0.0;
 
         try (PreparedStatement stmt = conn.prepareStatement("select sum(saldo_actual) from bancos where codigo = ?")) {
@@ -46,4 +50,6 @@ public class BanksCompany {
 
         return totalBalance;
     }
+
+    private final Connection conn;
 }

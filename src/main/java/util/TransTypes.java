@@ -1,4 +1,4 @@
-package utility;
+package main.java.util;
 
 public enum TransTypes {
     INVERSION("INVERSION"),

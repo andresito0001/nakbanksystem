@@ -1,8 +1,8 @@
-package utility.CheckTypes;
+package main.java.util.CheckTypes;
 
 import java.util.Map;
-import utility.bancos.BancosNacionales;
-import utility.bancos.PlataformasOnline;
+import main.java.util.bancos.BancosNacionales;
+import main.java.util.bancos.PlataformasOnline;
 
 public class checkMethod {
     public static String check(final Character ch) {

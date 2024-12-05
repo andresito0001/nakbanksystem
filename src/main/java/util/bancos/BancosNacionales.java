@@ -1,4 +1,4 @@
-package utility.bancos;
+package main.java.util.bancos;
 
 public enum BancosNacionales {
     BANCO_DE_VENEZUELA("Banco de Venezuela", "0102"),

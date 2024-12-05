@@ -1,4 +1,4 @@
-package utility;
+package main.java.util;
 
 import java.time.LocalTime;
 import java.time.ZoneId;

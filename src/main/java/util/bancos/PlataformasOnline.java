@@ -1,4 +1,4 @@
-package utility.bancos;
+package main.java.util.bancos;
 
 public enum PlataformasOnline {
     BINANCE("Binance"),
