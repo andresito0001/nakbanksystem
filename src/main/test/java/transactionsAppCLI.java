@@ -295,14 +295,11 @@ public class transactionsAppCLI {
 
                     Character ch = sc.next().toUpperCase().charAt(0); sc.nextLine();
 
-                    final Double totalBalanceUsdt =  banksDAO.getTotalBalanceOf("USDT");
+                    final Double totalBalanceUsdt =  banksDAO.getTotalBalanceOf("BE-WN-0006");
                     
                     if (totalBalanceUsdt <= 0.0 || totalBalanceUsdt < cantEnviada) {
                         System.out.println("[ERROR] No hay saldo suficiente en USDT\nSe poseen: " + totalBalanceUsdt + " USDT");
                         break;
-                    } else {
-                        final String condition = "codigo = " + "'" + "BE-WN-0006" + "'";
-                        dbUtils.updateRegister("bancos", "saldo_actual", (totalBalanceUsdt - cantEnviada), condition);
                     }
 
                     switch (ch) {
@@ -316,6 +313,9 @@ public class transactionsAppCLI {
                                     if (rs.next()) {
                                         inventoryDAO.newRegister(rs.getDate("fecha"), rs.getTimestamp("hora"), "INGRESO", cantRecibida, MoneyType.BOLIVARES.getNombre(), metodoRecibido, "COMPRA");
                                         inventoryDAO.newRegister(rs.getDate("fecha"), rs.getTimestamp("hora"), "EGRESO", cantEnviada, MoneyType.BINANCE_USDT.getNombre(), PlataformasOnline.BINANCE.getNombre(), "VENTA");
+                                        
+                                        dbUtils.updateRegister("bancos", "saldo_actual", (totalBalanceUsdt - cantEnviada), "codigo = " + "'" + "BE-WN-0006" + "'");
+                                        dbUtils.updateRegister("bancos", "saldo_actual", cantRecibida, "codigo = " + "'" + nCuenta + "'");
                                     } else {
                                         System.err.println("No data found in simutrans table.");
                                     }
