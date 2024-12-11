@@ -6,6 +6,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import main.java.entities.Clients;
+
 public class ClientsDAO {
     public ClientsDAO(final Connection conn) {
         this.conn = conn;
@@ -138,14 +140,15 @@ public class ClientsDAO {
      * @param apellido
      * @param cedula
      */
-    public void insertClient(final String alias, final String nombre, final String apellido, final String cedula) throws SQLException {
+    public void insertClient(final Clients client) throws SQLException {
         final String query = "insert into cliente(alias, nombre, apellido, cedula) values (?, ?, ?, ?)";
         try (PreparedStatement st = conn.prepareStatement(query)){
-            st.setString(1, alias);
-            st.setString(2, nombre);
-            st.setString(3, apellido);
-            st.setString(4, cedula);
+            st.setString(1, client.getAlias());
+            st.setString(2, client.getLastName());
+            st.setString(3, client.getLastName());
+            st.setString(4, client.getCi());
 
+            st.executeUpdate();
             st.close();
         }
     }
