@@ -29,7 +29,7 @@ public class AdminDAO {
 
     public boolean authenticateUser(final String userName, final String password) throws SQLException {
         final String query = "select * from administradores where nombre_usuario = ? and password = ?";
-
+        
         try (final PreparedStatement st = this.conn.prepareStatement(query)) {
             st.setString(1, userName);
             st.setString(2, password);
