@@ -347,20 +347,27 @@ public class transactionsAppCLI {
                 } break;
                 
                 case 4: {
-                    final String query = "select * from simuinv";
+                    final String query = "select * from bancos";
                     try (PreparedStatement st = conn.prepareStatement(query)) {
                         final ResultSet rs = st.executeQuery();
                         StringBuilder metaData = new StringBuilder();
                         
                         if (rs.next()) {
                             while (rs.next()) {
-                                metaData.append(", fecha: ").append(String.valueOf(rs.getString("fecha")))
-                                .append("hora: ").append(String.valueOf(rs.getString("hora")))
-                                .append(", tipo: ").append(rs.getString("tipo_movimiento"))
-                                .append(", moneda: ").append(rs.getString("moneda"))
-                                .append(", cantidad: ").append(rs.getString("cantidad"))
-                                .append(", metodo: ").append(rs.getString("metodo"));
+                                // metaData.append(", fecha: ").append(String.valueOf(rs.getString("fecha")))
+                                // .append("hora: ").append(String.valueOf(rs.getString("hora")))
+                                // .append(", tipo: ").append(rs.getString("tipo_movimiento"))
+                                // .append(", moneda: ").append(rs.getString("moneda"))
+                                // .append(", cantidad: ").append(rs.getString("cantidad"))
+                                // .append(", metodo: ").append(rs.getString("metodo"));
+
+                                metaData.append("Banco: ").append(rs.getString("nombre_banco"))
+                                .append(", Codigo: ").append(rs.getString("codigo"))
+                                .append(", saldo: ").append(rs.getDouble("saldo_actual"))
+                                .append(" ").append(rs.getString("moneda")).append('\n');
                             }
+
+                            System.out.println(metaData);
                         } else {
                             System.out.println("[WARNING] No hay registros disponibles");
                         }
