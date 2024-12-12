@@ -67,7 +67,7 @@ public class transactionsAppCLI {
             gananciaPerdida = 0.0;
             cantRecibida = 0.0;
 
-            System.out.println("Menu Principal\n\t[1] Resgistrar Transaccion\n\t[2] Iniciar Ciclo\n\t[3] Cerrar ciclo actual\n\t[4] Ver inventario\n\t[0] Salir del programa");
+            System.out.println("Menu Principal\n\t[1] Resgistrar Transaccion\n\t[2] Iniciar Ciclo\n\t[3] Cerrar ciclo actual\n\t[4] Ver inventario\n\t[5] Transferencia a cuentas propias (SOLO CUENTAS EN BOLIVARES)\n\t[0] Salir del programa");
             menuOp = sc.nextInt(); sc.nextLine();
 
             switch (menuOp) {
@@ -375,6 +375,69 @@ public class transactionsAppCLI {
                         st.close();
                     }
                 } break;
+
+                case 5: { 
+                    Integer opint = 0;
+
+                    final List<String> nombreBanco = banksDAO.getInfoOf("nombre_banco", "moneda", "VES");
+                    final List<String> codigos = banksDAO.getInfoOf("codigo", "moneda", "VES");
+
+                    do {
+                        System.out.println("Seleccione la cuenta a debitar\n");
+                        
+                        System.out.printf("%-30s%-30s%n", "Banco", "Codigo");
+                        
+                        for (int index = 0; index < Math.min(nombreBanco.size(), codigos.size()); index++) {
+                            System.out.printf("%-30s%-30s%n", (index + 1) + ". " + nombreBanco.get(index), codigos.get(index));
+                        }
+                        
+                        opint = sc.nextInt(); sc.nextLine();
+
+                        if (!(opint >= 1 && opint <= Math.min(nombreBanco.size(), codigos.size()))) {
+                            System.out.println("[WARNING]: debe elegir una opcion en el rango establecido");
+                        }
+
+                    } while (!(opint >= 1 && opint <= Math.min(nombreBanco.size(), codigos.size())));
+                    
+                    String cuentaDebitar = codigos.get(opint - 1);
+                    opint = 0;
+
+                    do {
+                        System.out.println("Seleccione la cuenta a depositar\n");
+                        
+                        System.out.printf("%-30s%-30s%n", "Banco", "Codigo");
+                        
+                        for (int index = 0; index < Math.min(nombreBanco.size(), codigos.size()); index++) {
+                            System.out.printf("%-30s%-30s%n", (index + 1) + ". " + nombreBanco.get(index), codigos.get(index));
+                        }
+                        
+                        opint = sc.nextInt(); sc.nextLine();
+
+                        if (!(opint >= 1 && opint <= Math.min(nombreBanco.size(), codigos.size()))) {
+                            System.out.println("[WARNING]: debe elegir una opcion en el rango establecido");
+                        }
+
+                    } while (!(opint >= 1 && opint <= Math.min(nombreBanco.size(), codigos.size())));
+
+                    String cuentaDepositar = codigos.get(opint - 1);
+
+                    System.out.println("Monto: ");
+                    Double monto = sc.nextDouble(); sc.nextLine();
+                    
+                    final Double saldoCuentaDebitar = (Double)dbUtils.getValueOf("bancos", "saldo_actual", "codigo = " + "'" + cuentaDebitar + "'");
+                    final Double saldoCuentaDepositar = (Double)dbUtils.getValueOf("bancos", "saldo_actual", "codigo = " + "'" + cuentaDepositar + "'");
+                    
+                    if (saldoCuentaDebitar < monto) {
+                        System.out.println("[ERROR]: No hay saldo disponible en: " + cuentaDebitar);
+                        break;
+                    } else if (monto <= 0) {
+                        System.out.println("[ERROR]: Solo estan permitidos los numeros positivos sin incluir el 0");
+                    }
+
+                    dbUtils.updateRegister("bancos", "saldo_actual", saldoCuentaDebitar - monto, "codigo = " + "'" + cuentaDebitar + "'");
+                    dbUtils.updateRegister("bancos", "saldo_actual", saldoCuentaDepositar + monto , "codigo = " + "'" + cuentaDepositar + "'");
+                } break;
+
                 case 0: {
                     menuOp = 0;
                     exec = false;
