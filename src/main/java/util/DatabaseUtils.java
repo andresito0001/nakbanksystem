@@ -81,5 +81,15 @@ public class DatabaseUtils {
         }
     }
 
+    public Object getValueOf(final String tableName, final String key, final String condition) throws SQLException {
+        String query = "select " + key + " from " + tableName + " where " + condition;
+
+        try (final PreparedStatement st = conn.prepareStatement(query)) {
+            ResultSet rs = st.executeQuery();
+            rs.next();
+            return rs.getObject(key);
+        }
+    }
+
     private final Connection conn;
 }
