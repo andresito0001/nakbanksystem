@@ -1,6 +1,7 @@
 package main.test.java;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -13,8 +14,11 @@ import main.java.util.bancos.PlataformasOnline;
 import main.java.util.monedas.MoneyType;
 import main.java.dao.BanksDAO;
 import main.java.dao.InventoryDAO;
+import main.java.dao.CicleDAO;
+import main.java.services.CicleService;
 import main.java.util.TimeZone;
 import main.java.util.TransTypes;
+import main.java.util.ULID;
 
 public class transactionsAppCLI {
     public transactionsAppCLI(final Connection conn) {
@@ -27,7 +31,7 @@ public class transactionsAppCLI {
 
     public void executeApp() throws SQLException {
         Scanner sc = new Scanner(System.in);
-        String username, password;
+        String username = "", password = "";
         
         Character op;
         Integer menuOp = 0;
@@ -67,19 +71,19 @@ public class transactionsAppCLI {
             gananciaPerdida = 0.0;
             cantRecibida = 0.0;
 
-            System.out.println("Menu Principal\n\t[1] Resgistrar Transaccion\n\t[2] Iniciar Ciclo\n\t[3] Cerrar ciclo actual\n\t[4] Ver inventario\n\t[5] Transferencia a cuentas propias (SOLO CUENTAS EN BOLIVARES)\n\t[0] Salir del programa");
+            System.out.println("Menu Principal\n\t[1] Resgistrar Transaccion\n\t[2] Iniciar Ciclo\n\t[3] Cerrar ciclo actual\n\t[4] Ver inventario\n\t[5] Transferencia a cuentas propias (SOLO CUENTAS EN BOLIVARES)\n\t[6] Ver ganancia de un ciclo\n\t[7] Consultar ciclos por fecha\n\t[8] Ver ganacia total de ciclos entre un rango de fechas...\n\t[0] Salir del programa");
             menuOp = sc.nextInt(); sc.nextLine();
 
             switch (menuOp) {
                 case 1: {
-                    if (dbUtils.getInfoByLastReferenceOf("simutrans", "status", "tipo", "INVERSION").equals("INACTIVE") 
-                        || dbUtils.getInfoByLastReferenceOf("simutrans", "status", "tipo", "INVERSION").equals("VOID")) {
+                    if (dbUtils.getInfoByLastReferenceOf("cicles", "status", null, null).equals("INACTIVE") 
+                        || dbUtils.getInfoByLastReferenceOf("cicles", "status",null, null).equals("VOID")) {
                         System.err.println("[WARNING]: No hay ningun ciclo activo para realizar una transaccion de compra o venta");
                         break;
                     }
 
                     do {
-                        System.out.println("Seleccione el Tipo de transaccion:\n\t[C] Compra\n\t[V] Venta\n\t[W] Swap\nTu seleccion: ");
+                        System.out.println("Seleccione el Tipo de transaccion:\n\t[C] Compra\n\t[V] Venta (SIN USO)\n\t[W] Swap\nTu seleccion: ");
                         op = sc.next().toUpperCase().charAt(0);
     
                         if (!(!op.equals('C') && !op.equals('V') && !op.equals('W')))
@@ -109,7 +113,7 @@ public class transactionsAppCLI {
                         for (int index = 0; index < Math.min(nombreBanco.size(), codigos.size()); index++) {
                             System.out.printf("%-30s%-30s%n", (index + 1) + ". " + nombreBanco.get(index), codigos.get(index));
                         }
-                                
+                        
                         opint = sc.nextInt(); sc.nextLine();
 
                         if (!(opint >= 1 && opint <= Math.min(nombreBanco.size(), codigos.size()))) {
@@ -160,11 +164,12 @@ public class transactionsAppCLI {
 
                     System.err.println("Digite la tasa: ");
                     tasa = sc.nextDouble(); sc.nextLine();
-                    tasaMadre = Double.parseDouble(dbUtils.getInfoByLastReferenceOf("simutrans", "tasa", "tipo", "INVERSION"));
+                    tasaMadre = Double.parseDouble(dbUtils.getInfoByLastReferenceOf("cicles", "tasa", null, null));
 
+                    System.out.println(tasaMadre);
                     switch (transType) {
                         case "COMPRA": {
-                            gananciaPerdida = cantRecibida - (cantEnviada / tasaMadre);
+                            gananciaPerdida = cantRecibida - (cantEnviada / tasaMadre);                            
                         } break;
                         case "VENTA": {
                             gananciaPerdida = cantRecibida - (cantEnviada / tasaMadre);
@@ -178,9 +183,14 @@ public class transactionsAppCLI {
                     }
 
                     gananciaPerdida = gananciaPerdida < 0 ? gananciaPerdida * -1 : gananciaPerdida; 
+                    
+                    String cicle_id = dbUtils.getInfoByLastReferenceOf("cicles", "id", null, null);
 
-                    final String query = "insert into simutrans(cedula_cliente, admin, fecha, tipo, cantidad_recibida, moneda_recibida, metodo_recibido, cantidad_enviada, moneda_enviada, metodo_enviado, status, tasa, ganancia, ref_bancaria) " + 
-                    "values ('V-11222599', " + "'" + username + "', " + "'" + TimeZone.getDateZoneCaracas() + "', " + "'" + transType + "', "
+                    byte[] entropy = new byte[] { 0x1, 0x1, 0x2, 0x3, 0x4, 0x5, 0x6, 0x7, 0x8, 0x9 };
+                    final String id = ULID.generate(System.currentTimeMillis(), entropy);
+        
+                    final String query = "insert into trans(id, cicle_id, cedula_cliente, admin, fecha, tipo, cantidad_recibida, moneda_recibida, metodo_recibido, cantidad_enviada, moneda_enviada, metodo_enviado, status, tasa, ganancia, ref_bancaria) " + 
+                    "values (" + "'" + id + "', "  + "'" + cicle_id + "', " + "'V-11222599', " + "'" + username + "', " + "'" + TimeZone.getDateZoneCaracas() + "', " + "'" + transType + "', "
                     + "'" + cantRecibida + "', " + "'" + typeMoneyReceived + "', " + "'" + metodoRecibido + "', " + "'" + cantEnviada + "', " + "'" + typeMoneySent + "', " + "'" + metodoEnviado + "', " + "'OK', " + "'" + tasa + "', " + "'" + gananciaPerdida + "', " + "'123456789555'" + ");"; 
 
                     System.out.println("Estos son los datos del registro:\n" +
@@ -213,7 +223,7 @@ public class transactionsAppCLI {
                         case 'Y': {
                             try (final PreparedStatement st = conn.prepareStatement(query)) {
                                 st.executeUpdate();
-                                final String dateTimeQuery = "select fecha, hora from simutrans order by referencia desc limit 1";
+                                final String dateTimeQuery = "select fecha, hora from trans order by id desc limit 1";
 
                                 try (final PreparedStatement stm = conn.prepareStatement(dateTimeQuery)) {
                                     ResultSet rs = stm.executeQuery();
@@ -238,7 +248,7 @@ public class transactionsAppCLI {
                 } break;
 
                 case 2: {
-                    if (dbUtils.getInfoByLastReferenceOf("simutrans", "status", "tipo", "INVERSION").equals("ACTIVE")) {
+                    if (dbUtils.getInfoByLastReferenceOf("cicles", "status", null, null).equals("ACTIVE")) {
                         System.out.println("[WARNING] Ya hay un ciclo activo en este momento");
                         break;
                     }
@@ -276,12 +286,16 @@ public class transactionsAppCLI {
                     System.out.println("Introduzca la referencia bancaria: ");
                     String ref_bancaria = sc.nextLine();
 
-                    gananciaPerdida = cantEnviada * -1;
+                    // gananciaPerdida = cantEnviada * -1;
                     cantRecibida = cantEnviada * tasa;
 
-                    final String query = "insert into simutrans(cedula_cliente, admin, tipo, cantidad_recibida, moneda_recibida, metodo_recibido, cantidad_enviada, moneda_enviada, metodo_enviado, status, tasa, ganancia, ref_bancaria) " + 
-                                        "values ('V-11222599', " + "'" + username + "', " + "'" + TransTypes.INVERSION.getTransType() + "', "
-                                        + "'" + cantRecibida + "', " + "'" + MoneyType.BOLIVARES.getNombre() + "', " + "'" + nCuenta + "', " + "'" + cantEnviada + "', " + "'" + MoneyType.BINANCE_USDT.getNombre() + "', " + "'" + "BE-WN-0006" + "', " + "'ACTIVE', " + "'" + tasa + "', " + "'" + gananciaPerdida + "', " + "'" + ref_bancaria + "');";
+                    // gen ulid
+                    byte[] entropy = new byte[] { 0x1, 0x1, 0x2, 0x3, 0x4, 0x5, 0x6, 0x7, 0x8, 0x9 };
+                    final String id = ULID.generate(System.currentTimeMillis(), entropy);
+        
+                    final String query = "insert into cicles(id, cedula_cliente, admin, fecha, cantidad_recibida, moneda_recibida, metodo_recibido, cantidad_enviada, moneda_enviada, metodo_enviado, status, tasa, ref_bancaria) " + 
+                                        "values (" + "'" + id + "', " + "'V-11222599', " + "'" + username + "', " +  "'" + TimeZone.getDateZoneCaracas() + "', " +
+                                        "'" + cantRecibida + "', " + "'" + MoneyType.BOLIVARES.getNombre() + "', " + "'" + nCuenta + "', " + "'" + cantEnviada + "', " + "'" + MoneyType.BINANCE_USDT.getNombre() + "', " + "'" + "BE-WN-0006" + "', " + "'ACTIVE', " + "'" + tasa + "', " + "'" + ref_bancaria + "');";
                     
                     System.out.println("Estos son los datos del registro:\n" +
                     "Fecha: " + TimeZone.getDateZoneCaracas() + "\n" +
@@ -291,7 +305,7 @@ public class transactionsAppCLI {
                     "Cantidad enviada: " + cantEnviada + " " + MoneyType.BINANCE_USDT.getNombre() + "\n" +
                     "Enviado desde: BE-WN-0006" + "\n" + 
                     "Tasa: " + tasa + " " + MoneyType.BINANCE_USDT.getNombre() + "\n" + 
-                    "G/P: " + gananciaPerdida + "\nEsta seguro de que desea registrar esta transaccion? y/n: ");
+                    "\nEsta seguro de que desea registrar esta transaccion? y/n: ");
 
                     Character ch = sc.next().toUpperCase().charAt(0); sc.nextLine();
 
@@ -306,7 +320,7 @@ public class transactionsAppCLI {
                         case 'Y': {
                             try (final PreparedStatement st = conn.prepareStatement(query)) {
                                 st.executeUpdate();
-                                final String dateTimeQuery = "select fecha, hora from simutrans order by referencia desc limit 1";
+                                final String dateTimeQuery = "select fecha, hora from cicles order by id desc limit 1";
 
                                 try (final PreparedStatement stm = conn.prepareStatement(dateTimeQuery)) {
                                     ResultSet rs = stm.executeQuery();
@@ -317,7 +331,7 @@ public class transactionsAppCLI {
                                         dbUtils.updateRegister("bancos", "saldo_actual", (totalBalanceUsdt - cantEnviada), "codigo = " + "'" + "BE-WN-0006" + "'");
                                         dbUtils.updateRegister("bancos", "saldo_actual", cantRecibida, "codigo = " + "'" + nCuenta + "'");
                                     } else {
-                                        System.err.println("No data found in simutrans table.");
+                                        System.err.println("No data found in cicles table.");
                                     }
                                     stm.close();
                                 }
@@ -334,14 +348,14 @@ public class transactionsAppCLI {
                 } break;
 
                 case 3: {
-                    if (dbUtils.getInfoByLastReferenceOf("simutrans", "status", "tipo", "INVERSION").equals("INACTIVE") ||
-                        dbUtils.getInfoByLastReferenceOf("simutrans", "status", "tipo", "INVERSION").equals("VOID")) {
+                    if (dbUtils.getInfoByLastReferenceOf("cicles", "status", null, null).equals("INACTIVE") ||
+                        dbUtils.getInfoByLastReferenceOf("cicles", "status", null, null).equals("VOID")) {
                         System.err.println("[WARNING]: No hay ningun ciclo activo para cerrar");
                         break;
                     }
 
-                    final String condition = "referencia = (SELECT referencia FROM simutrans WHERE tipo = 'INVERSION' order by referencia desc limit 1)";
-                    dbUtils.updateRegister("simutrans", "status", "INACTIVE", condition);
+                    final String condition = "id = (select id from cicles order by id desc limit 1)";
+                    dbUtils.updateRegister("cicles", "status", "INACTIVE", condition);
 
                     System.out.println("[INFO]: Se ha cerrado el ciclo correctamente");
                 } break;
@@ -438,6 +452,51 @@ public class transactionsAppCLI {
                     dbUtils.updateRegister("bancos", "saldo_actual", saldoCuentaDepositar + monto , "codigo = " + "'" + cuentaDepositar + "'");
                 } break;
 
+                case 6: {
+                    String id;
+                    DatabaseUtils dbutils = new DatabaseUtils(conn);
+                    CicleService cicleService = new CicleService(conn);
+
+                    System.out.println("Ingrese el ID del ciclo: ");
+                    id = sc.nextLine();
+
+                    System.out.println("ID Ciclo: " + id.trim() + ", Inversion Inicial: " + dbutils.getValueOf("cicles", "cantidad_enviada", "id = " + "'" + id.trim() + "'") + " USDT, " + " Ganancia: " + cicleService.getProfit(id) + " USD ");
+                } break;
+
+                case 7: {
+                    CicleDAO cicle = new CicleDAO(conn);
+                    String beginDate, endDate;
+                    
+                    System.out.println("fecha de inicio\n> ");
+                    beginDate = sc.nextLine();
+                    System.out.println("fecha fin\n> ");
+                    endDate = sc.nextLine();
+                            
+                    StringBuilder sb = cicle.fillByDate(Date.valueOf(beginDate), Date.valueOf(endDate));
+                    System.out.println(sb);
+                } break;
+
+                case 8: {
+                    CicleDAO cicle = new CicleDAO(conn);
+                    CicleService cicleService = new CicleService(conn);
+
+                    String beginDate, endDate;
+                    
+                    System.out.println("fecha de inicio\n> ");
+                    beginDate = sc.nextLine();
+                    System.out.println("fecha fin\n> ");
+                    endDate = sc.nextLine();
+                    
+                    final List<String> ids = cicle.getIdsByDate(Date.valueOf(beginDate), Date.valueOf(endDate));
+                    final Double profit = cicleService.getProfitByIds(ids);
+                    final Integer numTrans = cicleService.getTotalOfTransByCiclesIds(ids);
+
+                    System.out.println("ganacia de los ciclos entre " + beginDate + " | " + endDate + "\n" 
+                    + "Total USD obtenidos: " + profit + '\n' 
+                    + "Numero de transacciones: " + numTrans + "\n"
+                    + "Tasa de compra promedio de USD a VES: " + cicleService.averagePurchaseRatebYIds(ids) + '\n'
+                    + "");
+                } break;
                 case 0: {
                     menuOp = 0;
                     exec = false;
