@@ -7,7 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class TransactionsDAO {
-    TransactionsDAO(final Connection conn) {
+    public TransactionsDAO(final Connection conn) {
         this.conn = conn;
     }
 
@@ -41,8 +41,8 @@ public class TransactionsDAO {
     public void fillByDate(final Date beginDate, final Date endDate) throws SQLException {
         String query = "select c.nombre, c.apellido, c.cedula, t.fecha, t.tipo, t.cantidad_recibida, t.moneda_recibida, " +
         "t.metodo_recibido, t.cantidad_enviada, t.moneda_enviada, t.metodo_enviado, t.status " +
-        "from transaccion t " +
-        "inner join cliente c on t.cedula_cliente = c.cedula " +
+        "from trans t " +
+        "inner join clientes c on t.cedula_cliente = c.cedula " +
         "where t.fecha between ? and ?";
 
         try (final PreparedStatement st = this.conn.prepareStatement(query)) {
@@ -105,6 +105,6 @@ public class TransactionsDAO {
             return total;
         }
     }
-
+    
     private final Connection conn;
 }
