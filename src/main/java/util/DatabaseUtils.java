@@ -64,11 +64,18 @@ public class DatabaseUtils {
 
     public String getInfoByLastReferenceOf(final String tableName, final String column, 
                                     final String key, final String value) throws SQLException {
-        final String query = "select " + column + " from " + tableName + " " +
-                             "where " + key + " = " + "'" + value + "' " + 
-                             "order by referencia desc " + 
-                             "limit 1";
-        
+        final String query;
+        if (key == null || value == null) {
+            query = "select " + column + " from " + tableName + " " +
+            "order by id desc " + 
+            "limit 1";
+        } else {
+            query = "select " + column + " from " + tableName + " " +
+                                "where " + key + " = " + "'" + value + "' " + 
+                                "order by id desc " + 
+                                "limit 1";
+        }
+
         try (final PreparedStatement st = conn.prepareStatement(query)) {
             ResultSet rs = st.executeQuery();
             if (rs.next()) {
@@ -83,7 +90,6 @@ public class DatabaseUtils {
 
     public Object getValueOf(final String tableName, final String key, final String condition) throws SQLException {
         String query = "select " + key + " from " + tableName + " where " + condition;
-
         try (final PreparedStatement st = conn.prepareStatement(query)) {
             ResultSet rs = st.executeQuery();
             rs.next();
