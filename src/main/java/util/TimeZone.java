@@ -9,7 +9,7 @@ public class TimeZone {
     public static String getDateZoneCaracas() {
         ZonedDateTime zonedDateTime = ZonedDateTime.now(ZoneId.of("America/Caracas"));
         String formattedDateTime = zonedDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-        return formattedDateTime;
+        return formattedDateTime.trim();
     }
 
     public static String getTimeZoneCaracas() {
