@@ -64,19 +64,14 @@ public class DatabaseUtils {
 
     public String getInfoByLastReferenceOf(final String tableName, final String column, 
                                     final String key, final String value) throws SQLException {
-        final String query;
-        if (key == null || value == null) {
-            query = "select " + column + " from " + tableName + " " +
-            "order by id desc " + 
-            "limit 1";
-        } else {
-            query = "select " + column + " from " + tableName + " " +
-                                "where " + key + " = " + "'" + value + "' " + 
-                                "order by id desc " + 
-                                "limit 1";
-        }
+        final String query = key == null || value == null 
+            ? "select " + column + " from " + tableName + " order by id desc limit 1"
+            : "select " + column + " from " + tableName + " where " + key + " = ? order by id desc limit 1";
 
         try (final PreparedStatement st = conn.prepareStatement(query)) {
+            if (key != null && value != null) {
+                st.setString(1, value);
+            }
             ResultSet rs = st.executeQuery();
             if (rs.next()) {
                 String data = rs.getString(column);
@@ -88,12 +83,29 @@ public class DatabaseUtils {
         }
     }
 
-    public Object getValueOf(final String tableName, final String key, final String condition) throws SQLException {
-        String query = "select " + key + " from " + tableName + " where " + condition;
+    public Double sumColumn(final String column, final String tableName, final String condition) throws SQLException {
+        final String query = "select sum(" + column + ") from " + tableName + " where " + condition;
+        
         try (final PreparedStatement st = conn.prepareStatement(query)) {
             ResultSet rs = st.executeQuery();
-            rs.next();
-            return rs.getObject(key);
+            
+            if (rs.next()) {
+                return rs.getDouble(1);
+            } else {
+                return 0.0;
+            }
+        }
+    } 
+
+    public Object getValueOf(final String column, final String tableName, final String condition) throws SQLException {
+        final String query = "select " + column + " from " + tableName + " where " + condition;
+        try (final PreparedStatement st = conn.prepareStatement(query)) {
+            ResultSet rs = st.executeQuery();
+            if (rs.next()) {
+                return rs.getObject(column);
+            } else {
+                return 0.0;
+            }
         }
     }
 
