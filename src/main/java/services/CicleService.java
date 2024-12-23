@@ -12,47 +12,35 @@ public class CicleService {
     }
 
     // OBTIENE EL PROFIT DE UN CICLO ESPECIFICO
-    public Double getProfit(final String id) throws SQLException {
-        final String query = "select sum(ganancia) from trans where cicle_id = ?";
+    // public Double getProfit(final String id) throws SQLException {
+    //     final String query = "select sum(ganancia) from trans where cicle_id = ?";
 
-        try (final PreparedStatement st = this.conn.prepareStatement(query)) {
-            st.setString(1, id);
-            final ResultSet rs = st.executeQuery();
+    //     try (final PreparedStatement st = this.conn.prepareStatement(query)) {
+    //         st.setString(1, id);
+    //         final ResultSet rs = st.executeQuery();
 
-            return rs.next() ? rs.getDouble(1) : 0;
-        }
-    }
+    //         return rs.next() ? rs.getDouble(1) : 0;
+    //     }
+    // }
 
     // OBTIENE EL SUMATORIO DE TODOS LOS PROFITS DE LOS CICLOS
-    public Double getProfitByIds(final List<String> ciclesIds) throws SQLException {
-        Double profit = 0.0;
+    // public Double getProfitByIds(final List<String> ciclesIds) throws SQLException {
+    //     Double profit = 0.0;
         
-        for (String entry : ciclesIds)
-            profit += getProfit(entry);
+    //     for (String entry : ciclesIds)
+    //         profit += getProfit(entry);
 
-        return profit;
-    }
+    //     return profit;
+    // }
 
-    // TASA PROMEDIO DE COMPRA DE USD A VES DE UN CICLO (SE PUEDE GENERALIZAR)
-    public Double averagePurchaseRate(final String cicleId)  throws SQLException {
-        final String query = "select avg(tasa) from trans where tipo = 'COMPRA' and moneda_recibida = 'USD' and moneda_enviada = 'VES' and cicle_id = " + "'" + cicleId + "';";
-
+    public Double averagePurchaseRate(final String columAvg, final String tableName, final String condition)  throws SQLException {
+        final String query = "select avg(" + columAvg + ") from " + tableName + " where " + condition;
+        
         try (final PreparedStatement st = this.conn.prepareStatement(query)) {
             final ResultSet rs = st.executeQuery();
 
             return rs.next() ? rs.getDouble(1) : 0;
         }
-    }
-
-    // TASA PROMEDIO DE COMPRA DE USD A VES DE VARIOS CICLOS (SE PUEDE GENERALIZAR)
-    public Double averagePurchaseRatebYIds(final List<String> ids) throws SQLException {
-        Double average = 0.0;
-
-        for(String entry : ids) {
-            average += averagePurchaseRate(entry);
-        }
-        
-        return average / ids.size();
     }
 
     public Integer getNumofTransByCicleId(final String id)  throws SQLException {
