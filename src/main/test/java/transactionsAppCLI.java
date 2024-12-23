@@ -48,6 +48,9 @@ public class transactionsAppCLI {
         Boolean exec = true;
         Double cantRecibida;
 
+        Double availableBalanceOfCycle = 0.0;
+        String lastCycleId = new String();
+
         do {
             System.out.println("Ingrese su nombre de usuario: ");
             username = sc.nextLine();
@@ -70,6 +73,23 @@ public class transactionsAppCLI {
             tasa = 0.0;
             gananciaPerdida = 0.0;
             cantRecibida = 0.0;
+
+            if (!dbUtils.getInfoByLastReferenceOf("cicles", "status", null, null).equals("INACTIVE")) {
+                lastCycleId = String.valueOf(dbUtils.getValueOf("id", "cicles", "status = 'ACTIVE'"));
+                Double initialCycleInvestment = (Double)dbUtils.getValueOf("cantidad_recibida", "cicles", "id = " + "'" + lastCycleId + "';");
+                Double cycleAvailableBalance = (Double)dbUtils.sumColumn("cantidad_enviada", "trans", "cicle_id = " + "'" + lastCycleId + "' " + "and " + "moneda_enviada = 'VES' and tipo = 'COMPRA' and moneda_recibida = 'USD'");
+                tasaMadre = Double.parseDouble(dbUtils.getInfoByLastReferenceOf("cicles", "tasa", null, null));
+                availableBalanceOfCycle = ((initialCycleInvestment - cycleAvailableBalance) / tasaMadre);
+                
+                if (availableBalanceOfCycle <= 10.00) {
+                    System.err.println("[WARNING]: Del ciclo ID: " + lastCycleId + " Solo quedan " + availableBalanceOfCycle + " USD ");
+                }
+
+                System.out.println("Cycle status:\nInversion inicial: " + initialCycleInvestment + " VES \n"
+                + "Total de bolivares que quedan del ciclo: " + (availableBalanceOfCycle * tasaMadre) + " VES\n" 
+                + "Tasa del ciclo actual: " + tasaMadre + " USD " + "\n"
+                + "ID del ciclo activo: " + lastCycleId);
+            }
 
             System.out.println("Menu Principal\n\t[1] Resgistrar Transaccion\n\t[2] Iniciar Ciclo\n\t[3] Cerrar ciclo actual\n\t[4] Ver inventario\n\t[5] Transferencia a cuentas propias (SOLO CUENTAS EN BOLIVARES)\n\t[6] Ver ganancia de un ciclo\n\t[7] Consultar ciclos por fecha\n\t[8] Ver ganacia total de ciclos entre un rango de fechas...\n\t[0] Salir del programa");
             menuOp = sc.nextInt(); sc.nextLine();
@@ -354,6 +374,11 @@ public class transactionsAppCLI {
                         break;
                     }
 
+                    if (availableBalanceOfCycle >= 10.00) {
+                        System.err.println("[WARNING]: Del ciclo ID: " + lastCycleId + " quedan " + availableBalanceOfCycle + " USD " + "No se recomienda cerrar el ciclo");
+                        break;
+                    }
+
                     final String condition = "id = (select id from cicles order by id desc limit 1)";
                     dbUtils.updateRegister("cicles", "status", "INACTIVE", condition);
 
@@ -453,14 +478,14 @@ public class transactionsAppCLI {
                 } break;
 
                 case 6: {
-                    String id;
-                    DatabaseUtils dbutils = new DatabaseUtils(conn);
-                    CicleService cicleService = new CicleService(conn);
+                    // String id;
+                    // DatabaseUtils dbutils = new DatabaseUtils(conn);
+                    // CicleService cicleService = new CicleService(conn);
 
-                    System.out.println("Ingrese el ID del ciclo: ");
-                    id = sc.nextLine();
+                    // System.out.println("Ingrese el ID del ciclo: ");
+                    // id = sc.nextLine();
 
-                    System.out.println("ID Ciclo: " + id.trim() + ", Inversion Inicial: " + dbutils.getValueOf("cicles", "cantidad_enviada", "id = " + "'" + id.trim() + "'") + " USDT, " + " Ganancia: " + cicleService.getProfit(id) + " USD ");
+                    // System.out.println("ID Ciclo: " + id.trim() + ", Inversion Inicial: " + dbutils.getValueOf("cicles", "cantidad_enviada", "id = " + "'" + id.trim() + "'") + " USDT, " + " Ganancia: " + cicleService.getProfit(id) + " USD ");
                 } break;
 
                 case 7: {
@@ -479,23 +504,35 @@ public class transactionsAppCLI {
                 case 8: {
                     CicleDAO cicle = new CicleDAO(conn);
                     CicleService cicleService = new CicleService(conn);
+                    DatabaseUtils dbUtils = new DatabaseUtils(conn);
 
                     String beginDate, endDate;
                     
-                    System.out.println("fecha de inicio\n> ");
+                    System.out.println("fecha de inicio ");
                     beginDate = sc.nextLine();
-                    System.out.println("fecha fin\n> ");
+                    System.out.println("fecha fin ");
                     endDate = sc.nextLine();
                     
                     final List<String> ids = cicle.getIdsByDate(Date.valueOf(beginDate), Date.valueOf(endDate));
-                    final Double profit = cicleService.getProfitByIds(ids);
+                    Double profit = 0.0;
+
                     final Integer numTrans = cicleService.getTotalOfTransByCiclesIds(ids);
+                    Double average = 0.0;
+                    Double averageCycles = 0.0;
+                    String condition = new String();
+                    
+                    for (final String entry : ids) {
+                        condition =  "tipo = 'COMPRA' and moneda_recibida = 'USD' and moneda_enviada = 'VES' and cicle_id = " + "'" + entry + "';";
+                        average += cicleService.averagePurchaseRate("tasa", "trans", condition);
+                        profit += dbUtils.sumColumn("ganancia", "trans", "cicle_id = " + "'" + entry + "';");
+                        averageCycles += cicleService.averagePurchaseRate("tasa", "cicles", "id = " + "'" + entry + "';");
+                    }
 
                     System.out.println("ganacia de los ciclos entre " + beginDate + " | " + endDate + "\n" 
                     + "Total USD obtenidos: " + profit + '\n' 
                     + "Numero de transacciones: " + numTrans + "\n"
-                    + "Tasa de compra promedio de USD a VES: " + cicleService.averagePurchaseRatebYIds(ids) + '\n'
-                    + "");
+                    + "Tasa de compra promedio de VES a USD: " + average / ids.size() + '\n'
+                    + "Promedio de tasa de ciclos: " + averageCycles);
                 } break;
                 case 0: {
                     menuOp = 0;
