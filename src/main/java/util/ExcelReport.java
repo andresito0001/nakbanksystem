@@ -4,9 +4,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-
-import queries.Clientes;
-
+import main.java.dao.ClientsDAO;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
@@ -19,7 +17,8 @@ public class ExcelReport {
             Workbook workbook = new XSSFWorkbook();
 
             //Obtener los datos de los clientes
-            StringBuilder clientData = Clientes.fillClients(conn);
+            ClientsDAO clientsDao = new ClientsDAO(conn);
+            StringBuilder clientData = clientsDao.fillClients();
 
             //Crear la hoja en el archivo
 
@@ -67,8 +66,5 @@ public class ExcelReport {
         } catch (IOException e) {
             System.out.println("Error al guardar archivo");
         }
-        
-
     }
-
 }
