@@ -1,7 +1,7 @@
 package main.java.entities;
 
 public class Admin {
-    Admin(final String userName, final String password, final String status, final String rol) {
+    public Admin(final String userName, final String password, final String status, final String rol) {
         this.userName = userName;
         this.password = password;
         this.status = status;
