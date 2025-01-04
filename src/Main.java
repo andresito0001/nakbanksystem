@@ -23,21 +23,5 @@ public class Main extends Application {
 
     public static void main (String[] args) {
         launch(args);
-
-            /* 
-            Scanner sc = new Scanner(System.in);
-            String url, user, pass;
-            System.out.print("Welcome to NakBank System!\nEnter url: ");
-            url = sc.nextLine();
-            System.out.print("Enter username: ");
-            user = sc.nextLine();
-            System.out.print("Enter password: ");
-            pass = sc.nextLine();
-           */
-            
-            // final Connection conn = DriverManager.getConnection("", "", "");
-
-            // transactionsAppCLI app = new transactionsAppCLI(conn);
-            // app.executeApp();
     }
 }
