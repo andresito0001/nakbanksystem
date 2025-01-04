@@ -10,7 +10,10 @@ public class ConnectionPool {
     public static final Connection getConnection() throws SQLException {
         if (connection == null || connection.isClosed()) {
             try {
-                connection = DriverManager.getConnection();
+                String url = System.getenv("NAKBANK_DB_URL");
+                String user = System.getenv("NAKBANK_DB_USERNAME");
+                String password = System.getenv("NAKBANK_DB_PASSWORD");
+                connection = DriverManager.getConnection(url, user, password);
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -19,5 +22,5 @@ public class ConnectionPool {
         return connection;
     }
 
-    private static Connection connection;
+    private static Connection connection = null;
 }
