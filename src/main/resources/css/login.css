@@ -1,4 +1,4 @@
-#bganchorpane {
+#hboxpane {
     -fx-background-size: cover;
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
@@ -13,11 +13,17 @@
 }
 
 .text-field:focused {
-    -fx-border-color: #661b1c;
-    -fx-border-width: 2px;
+    -fx-border-color: #009cde;
+    -fx-border-width: 1px;
 }
 
 #loginButton {
-    -fx-background-color: #661b1c;
-    -fx-text-fill: #abb2bf;
+    -fx-background-color: #009cde;
+    -fx-text-fill: #12151c;
+    font-weight: bold;
+}
+
+#errorMsg {
+    -fx-text-fill: #ff0000;
+    -fx-font-size: 12px;
 }

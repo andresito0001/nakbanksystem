@@ -1,45 +1,54 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane fx:id="bganchorpane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="650.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="650.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Line fx:id="lineId" endX="-99.99996948242188" endY="-177.3333282470703" layoutX="363.0" layoutY="278.0" startX="-99.99996948242188" startY="44.666656494140625" stroke="#661b1c" />
-      <Pane layoutX="32.0" layoutY="106.0" prefHeight="200.0" prefWidth="200.0">
+      <Pane fx:id="hboxpane" prefHeight="400.0" prefWidth="650.0">
          <children>
-            <Text fill="#abb2bf" layoutX="53.0" layoutY="91.0" strokeType="OUTSIDE" strokeWidth="0.0" text="NakBank's">
+            <Text fill="#abb2bf" layoutX="88.0" layoutY="171.0" strokeType="OUTSIDE" strokeWidth="0.0" text="NakBank's">
                <font>
                   <Font name="Segoe UI" size="30.0" />
                </font>
             </Text>
-            <Text fill="#abb2bf" layoutX="53.0" layoutY="129.0" strokeType="OUTSIDE" strokeWidth="0.0" text="System">
+            <Text fill="#abb2bf" layoutX="88.0" layoutY="212.0" strokeType="OUTSIDE" strokeWidth="0.0" text="System">
                <font>
                   <Font name="Segoe UI" size="30.0" />
                </font>
             </Text>
+            <TextField fx:id="userNameId" layoutX="325.0" layoutY="129.0" prefHeight="37.0" prefWidth="245.0" promptText="Username">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </TextField>
+            <PasswordField fx:id="passwordId" layoutX="325.0" layoutY="191.0" prefHeight="37.0" prefWidth="245.0" promptText="Password">
+               <font>
+                  <Font name="Segoe UI" size="15.0" />
+               </font>
+            </PasswordField>
+            <Button fx:id="loginButton" layoutX="379.0" layoutY="263.0" mnemonicParsing="false" onAction="#loginUser" prefHeight="37.0" prefWidth="137.0" text="Login">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Button>
+            <Line fx:id="lineId" endX="82.00003051757812" endY="32.33331298828125" layoutX="210.0" layoutY="287.0" startX="82.00003051757812" startY="-188.33334350585938" stroke="#009cde" />
+            <ImageView fitHeight="76.0" fitWidth="79.0" layoutX="408.0" layoutY="32.0">
+               <image>
+                  <Image url="@../img/login.png" />
+               </image>
+            </ImageView>
+            <Label fx:id="errorMsg" layoutX="88.0" layoutY="263.0" />
          </children>
       </Pane>
-      <TextField fx:id="userNameId" layoutX="282.0" layoutY="129.0" prefHeight="37.0" prefWidth="245.0" promptText="Username" AnchorPane.bottomAnchor="283.66666666666663">
-         <font>
-            <Font size="15.0" />
-         </font>
-      </TextField>
-      <Button fx:id="loginButton" layoutX="336.0" layoutY="287.0" mnemonicParsing="false" onAction="#loginUser" prefHeight="37.0" prefWidth="137.0" text="Login">
-         <font>
-            <Font size="15.0" />
-         </font>
-      </Button>
-      <PasswordField fx:id="passwordId" layoutX="282.0" layoutY="206.0" prefHeight="37.0" prefWidth="245.0" promptText="Password">
-         <font>
-            <Font name="Segoe UI" size="15.0" />
-         </font>
-      </PasswordField>
    </children>
-</AnchorPane>
+</HBox>
