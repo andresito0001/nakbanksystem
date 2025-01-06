@@ -1,0 +1,66 @@
+.root{
+    -fx-background-color: #12151c;
+}
+
+.text-field {
+    -fx-background-color: #1b222c;
+    -fx-text-inner-color: #abb2bf;
+    -fx-prompt-text-fill: #354357;
+    -fx-border-color: #1b222c;
+}
+
+.text-field:focused {
+    -fx-border-color: #009cde;
+    -fx-border-width: 1px;
+}
+
+.button {
+    -fx-background-color: #009cde;
+    -fx-text-fill: #12151c;
+    font-weight: bold;
+}
+
+#errorMsg {
+    -fx-text-fill: #FF6F59;
+    -fx-font-size: 12px;
+}
+
+.menu-button {
+    -fx-border-color: #009cde;
+    -fx-background-color: #1b222c;
+}
+
+.label {
+    -fx-text-fill: #abb2bf;
+}
+
+.menu-item .label {
+    -fx-text-fill: #abb2bf;
+}
+
+.menu-item {
+    -fx-background-color: #354357;
+}
+
+.menu-item:hover {
+    -fx-background-color: #12151c;
+}
+
+
+#text {
+    -fx-fill: #abb2bf;
+    font-weight: bold;
+    -fx-font-size: 20 pt;
+    text-transform: uppercase;
+}
+
+.check-box {
+    -fx-text-fill: #abb2bf;
+}
+
+.context-menu {
+    -fx-skin: "com.sun.javafx.scene.control.skin.ContextMenuSkin";
+    -fx-background-color: #1b222c;
+    -fx-border-width: 0.2px;
+    -fx-border-color: black;
+}
