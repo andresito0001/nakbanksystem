@@ -16,12 +16,7 @@
    <children>
       <Pane fx:id="hboxpane" prefHeight="400.0" prefWidth="650.0">
          <children>
-            <Text fill="#abb2bf" layoutX="88.0" layoutY="171.0" strokeType="OUTSIDE" strokeWidth="0.0" text="NakBank's">
-               <font>
-                  <Font name="Segoe UI" size="30.0" />
-               </font>
-            </Text>
-            <Text fill="#abb2bf" layoutX="88.0" layoutY="212.0" strokeType="OUTSIDE" strokeWidth="0.0" text="System">
+            <Text fill="#abb2bf" layoutX="406.0" layoutY="90.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Log In">
                <font>
                   <Font name="Segoe UI" size="30.0" />
                </font>
@@ -47,7 +42,12 @@
                   <Image url="@../img/login.png" />
                </image>
             </ImageView>
-            <Label fx:id="errorMsg" layoutX="88.0" layoutY="263.0" />
+            <Label fx:id="errorMsg" layoutX="324.0" layoutY="320.0" prefHeight="17.0" prefWidth="208.0" />
+            <ImageView fitHeight="199.0" fitWidth="160.0" layoutX="67.0" layoutY="92.0">
+               <image>
+                  <Image url="@../img/nak-logo.png" />
+               </image>
+            </ImageView>
          </children>
       </Pane>
    </children>
