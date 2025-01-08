@@ -4,6 +4,7 @@ import javafx.fxml.FXML;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
+import main.java.Main;
 import main.java.util.SceneSwitcher;
 
 public class DashBoardController {
@@ -16,6 +17,19 @@ public class DashBoardController {
         }
 
         System.out.println("Load Transactions...");
+    }
+    @FXML
+    private void loadDashboard(MouseEvent event) {
+        Main.switchToDashboard();
+    }
+    @FXML
+    private void loadClients(MouseEvent event) {
+        try {
+            SceneSwitcher.switchPane(dashBoardPane, vBoxCenterPane, "/main/resources/fxml/clientsOptions.fxml", "/main/resources/css/clientOptions.css", new insertTransactionController());
+        } catch (Exception e ) {
+            e.printStackTrace();
+        }
+        System.out.println("Load clients...");
     }
 
     @FXML

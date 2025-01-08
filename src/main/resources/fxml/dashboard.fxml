@@ -15,7 +15,7 @@
    <left>
       <VBox fx:id="dasboardLeftPane" alignment="CENTER" prefHeight="600.0" prefWidth="193.0" spacing="20.0" BorderPane.alignment="CENTER">
          <children>
-            <HBox alignment="CENTER_LEFT" prefHeight="13.0" prefWidth="173.0" spacing="20.0">
+            <HBox alignment="CENTER_LEFT" onMouseClicked="#loadDashboard" prefHeight="13.0" prefWidth="173.0" spacing="20.0">
                <children>
                   <ImageView fitHeight="29.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -38,7 +38,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </HBox>
-            <HBox alignment="CENTER_LEFT" prefHeight="13.0" prefWidth="173.0" spacing="20.0">
+            <HBox alignment="CENTER_LEFT" onMouseClicked="#loadClients" prefHeight="13.0" prefWidth="173.0" spacing="20.0">
                <children>
                   <ImageView fitHeight="29.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
                      <image>
