@@ -3,6 +3,9 @@ package main.java.util;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class SceneSwitcher {
@@ -10,6 +13,9 @@ public class SceneSwitcher {
         try {
             Parent root = loadFXML(fxmlPath, controller);
             Scene scene = createScene(root, cssPath);
+            stage.setTitle("NAK BANK SYSTEM");
+            stage.getIcons().add(new Image(SceneSwitcher.class.getResourceAsStream("/main/resources/img/nak-logo.png")));
+
             stage.setScene(scene);
             stage.show();
         } catch (Exception e) {
@@ -32,4 +38,12 @@ public class SceneSwitcher {
         scene.getStylesheets().add(css);
         return scene;
     }
+
+    public static void switchPane(BorderPane borderPane, VBox vBox, String fxmlPath, String cssPath, Object controller) throws Exception {
+        Parent root = loadFXML(fxmlPath, controller);
+        Scene scene = createScene(root, cssPath);
+        vBox.getChildren().clear();
+        vBox.getChildren().add(root);
+        vBox.getChildren().get(0).applyCss();
+    } 
 }

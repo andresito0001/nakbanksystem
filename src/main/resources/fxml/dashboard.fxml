@@ -1,6 +1,274 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-
-<HBox fx:id="vBoxDashBoard" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="650.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" />
+<BorderPane fx:id="dashBoardPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="950.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <left>
+      <VBox fx:id="dasboardLeftPane" alignment="CENTER" prefHeight="600.0" prefWidth="193.0" spacing="20.0" BorderPane.alignment="CENTER">
+         <children>
+            <HBox alignment="CENTER_LEFT" prefHeight="13.0" prefWidth="173.0" spacing="20.0">
+               <children>
+                  <ImageView fitHeight="29.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../img/dashboard.png" />
+                     </image>
+                  </ImageView>
+                  <Label text="Dasboard" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" onMouseClicked="#loadTransactions" prefHeight="13.0" prefWidth="173.0" spacing="20.0">
+               <children>
+                  <ImageView fitHeight="29.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../img/register-icon.png" />
+                     </image>
+                  </ImageView>
+                  <Label text="Transacciones" />
+               </children>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" prefHeight="13.0" prefWidth="173.0" spacing="20.0">
+               <children>
+                  <ImageView fitHeight="29.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../img/clients-icon.png" />
+                     </image>
+                  </ImageView>
+                  <Label text="Clientes" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" prefHeight="13.0" prefWidth="173.0" spacing="20.0">
+               <children>
+                  <ImageView fitHeight="29.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../img/report-icon.png" />
+                     </image>
+                  </ImageView>
+                  <Label text="Reportes" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" prefHeight="13.0" prefWidth="173.0" spacing="20.0">
+               <children>
+                  <ImageView fitHeight="29.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../img/historial-icon.png" />
+                     </image>
+                  </ImageView>
+                  <Label text="Historial" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" prefHeight="13.0" prefWidth="173.0" spacing="20.0">
+               <children>
+                  <ImageView fitHeight="29.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../img/money-icon.png" />
+                     </image>
+                  </ImageView>
+                  <Label text="Contabilidad" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" prefHeight="13.0" prefWidth="173.0" spacing="20.0">
+               <children>
+                  <ImageView fitHeight="29.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../img/log-out-icon.png" />
+                     </image>
+                  </ImageView>
+                  <Label text="Log Out" />
+               </children>
+            </HBox>
+         </children>
+         <BorderPane.margin>
+            <Insets />
+         </BorderPane.margin>
+         <padding>
+            <Insets left="20.0" />
+         </padding>
+      </VBox>
+   </left>
+   <center>
+      <VBox prefHeight="675.0" prefWidth="757.0" BorderPane.alignment="CENTER">
+         <children>
+            <HBox prefHeight="54.0" prefWidth="767.0" />
+            <VBox fx:id="vBoxCenterPane" prefHeight="546.0" prefWidth="767.0" VBox.vgrow="ALWAYS">
+               <children>
+                  <Label prefHeight="43.0" prefWidth="113.0" text="Dashboard">
+                     <padding>
+                        <Insets bottom="5.0" left="10.0" right="20.0" top="20.0" />
+                     </padding>
+                     <font>
+                        <Font name="Segoe UI Bold" size="14.0" />
+                     </font>
+                  </Label>
+                  <VBox>
+                     <children>
+                        <HBox prefHeight="103.0" prefWidth="707.0" spacing="10.0">
+                           <children>
+                              <VBox fx:id="card" prefHeight="103.0" prefWidth="189.0" styleClass="card">
+                                 <children>
+                                    <HBox prefHeight="43.0" prefWidth="120.0">
+                                       <children>
+                                          <Label prefHeight="43.0" prefWidth="217.0" text="BE-WN-0006">
+                                             <padding>
+                                                <Insets bottom="5.0" left="5.0" right="20.0" top="20.0" />
+                                             </padding>
+                                             <font>
+                                                <Font name="Segoe UI" size="13.0" />
+                                             </font>
+                                          </Label>
+                                          <Pane prefHeight="43.0" prefWidth="121.0">
+                                             <children>
+                                                <ImageView fitHeight="16.0" fitWidth="14.0" layoutX="4.0" layoutY="22.0">
+                                                   <image>
+                                                      <Image url="@../img/archivo-factura-dolar.png" />
+                                                   </image>
+                                                </ImageView>
+                                             </children>
+                                          </Pane>
+                                       </children>
+                                    </HBox>
+                                    <Label prefHeight="28.0" prefWidth="186.0" text="0.00$ USDT">
+                                       <padding>
+                                          <Insets bottom="5.0" left="5.0" right="20.0" top="20.0" />
+                                       </padding>
+                                       <font>
+                                          <Font name="Segoe UI Bold" size="20.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </VBox>
+                              <VBox fx:id="card" prefHeight="103.0" prefWidth="189.0" styleClass="card">
+                                 <children>
+                                    <HBox prefHeight="43.0" prefWidth="120.0">
+                                       <children>
+                                          <Label prefHeight="43.0" prefWidth="217.0" text="BA-WN-0002">
+                                             <padding>
+                                                <Insets bottom="5.0" left="5.0" right="20.0" top="20.0" />
+                                             </padding>
+                                             <font>
+                                                <Font name="Segoe UI" size="13.0" />
+                                             </font>
+                                          </Label>
+                                          <Pane prefHeight="43.0" prefWidth="121.0">
+                                             <children>
+                                                <ImageView fitHeight="16.0" fitWidth="14.0" layoutX="4.0" layoutY="22.0">
+                                                   <image>
+                                                      <Image url="@../img/archivo-factura-dolar.png" />
+                                                   </image>
+                                                </ImageView>
+                                             </children>
+                                          </Pane>
+                                       </children>
+                                    </HBox>
+                                    <Label prefHeight="28.0" prefWidth="186.0" text="0.00Bs VEF">
+                                       <padding>
+                                          <Insets bottom="5.0" left="5.0" right="20.0" top="20.0" />
+                                       </padding>
+                                       <font>
+                                          <Font name="Segoe UI Bold" size="20.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                                 <opaqueInsets>
+                                    <Insets />
+                                 </opaqueInsets>
+                              </VBox>
+                              <VBox fx:id="card1" prefHeight="103.0" prefWidth="189.0" styleClass="card">
+                                 <children>
+                                    <HBox prefHeight="43.0" prefWidth="120.0">
+                                       <children>
+                                          <Label prefHeight="43.0" prefWidth="217.0" text="BE-WN-0006">
+                                             <padding>
+                                                <Insets bottom="5.0" left="5.0" right="20.0" top="20.0" />
+                                             </padding>
+                                             <font>
+                                                <Font name="Segoe UI" size="13.0" />
+                                             </font>
+                                          </Label>
+                                          <Pane prefHeight="43.0" prefWidth="121.0">
+                                             <children>
+                                                <ImageView fitHeight="16.0" fitWidth="14.0" layoutX="-7.0" layoutY="22.0">
+                                                   <image>
+                                                      <Image url="@../img/archivo-factura-dolar.png" />
+                                                   </image>
+                                                </ImageView>
+                                             </children>
+                                          </Pane>
+                                       </children>
+                                    </HBox>
+                                    <Label prefHeight="28.0" prefWidth="186.0" text="0.00$ USDT">
+                                       <padding>
+                                          <Insets bottom="5.0" left="5.0" right="20.0" top="20.0" />
+                                       </padding>
+                                       <font>
+                                          <Font name="Segoe UI Bold" size="20.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </VBox>
+                              <VBox fx:id="card2" prefHeight="103.0" prefWidth="189.0" styleClass="card">
+                                 <children>
+                                    <HBox prefHeight="43.0" prefWidth="120.0">
+                                       <children>
+                                          <Label prefHeight="43.0" prefWidth="217.0" text="BE-WN-0006">
+                                             <padding>
+                                                <Insets bottom="5.0" left="5.0" right="20.0" top="20.0" />
+                                             </padding>
+                                             <font>
+                                                <Font name="Segoe UI" size="13.0" />
+                                             </font>
+                                          </Label>
+                                          <Pane prefHeight="43.0" prefWidth="121.0">
+                                             <children>
+                                                <ImageView fitHeight="16.0" fitWidth="14.0" layoutX="5.0" layoutY="22.0">
+                                                   <image>
+                                                      <Image url="@../img/archivo-factura-dolar.png" />
+                                                   </image>
+                                                </ImageView>
+                                             </children>
+                                          </Pane>
+                                       </children>
+                                    </HBox>
+                                    <Label prefHeight="28.0" prefWidth="186.0" text="0.00$ USDT">
+                                       <padding>
+                                          <Insets bottom="5.0" left="5.0" right="20.0" top="20.0" />
+                                       </padding>
+                                       <font>
+                                          <Font name="Segoe UI Bold" size="20.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </VBox>
+                           </children>
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                        </HBox>
+                     </children>
+                     <padding>
+                        <Insets left="10.0" />
+                     </padding>
+                     <VBox.margin>
+                        <Insets right="100.0" />
+                     </VBox.margin>
+                  </VBox>
+               </children>
+            </VBox>
+         </children>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+      </VBox>
+   </center>
+</BorderPane>

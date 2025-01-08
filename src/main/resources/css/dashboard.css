@@ -1,6 +1,19 @@
-#vBoxDashBoard {
+#dashBoardPane {
     -fx-background-size: cover;
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
     -fx-background-color: #12151c;
+}
+
+.label {
+    -fx-text-fill: #abb2bf;
+}
+
+#dasboardLeftPane {
+    -fx-background-color: #2d3546;
+}
+
+.card {
+    -fx-background-color: #2d3546;
+    -fx-background-radius: 10px;
 }

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
@@ -16,7 +17,7 @@
    <children>
       <Pane fx:id="hboxpane" prefHeight="400.0" prefWidth="650.0">
          <children>
-            <Text fill="#abb2bf" layoutX="406.0" layoutY="90.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Log In">
+            <Text fill="#abb2bf" layoutX="325.0" layoutY="90.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome, Admin!" wrappingWidth="245.0">
                <font>
                   <Font name="Segoe UI" size="30.0" />
                </font>
@@ -35,13 +36,11 @@
                <font>
                   <Font size="15.0" />
                </font>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
             </Button>
             <Line fx:id="lineId" endX="82.00003051757812" endY="32.33331298828125" layoutX="210.0" layoutY="287.0" startX="82.00003051757812" startY="-188.33334350585938" stroke="#009cde" />
-            <ImageView fitHeight="76.0" fitWidth="79.0" layoutX="408.0" layoutY="32.0">
-               <image>
-                  <Image url="@../img/login.png" />
-               </image>
-            </ImageView>
             <Label fx:id="errorMsg" layoutX="324.0" layoutY="320.0" prefHeight="17.0" prefWidth="208.0" />
             <ImageView fitHeight="199.0" fitWidth="160.0" layoutX="67.0" layoutY="92.0">
                <image>
