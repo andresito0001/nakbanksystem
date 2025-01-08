@@ -47,6 +47,9 @@
                   </ImageView>
                   <Label text="Clientes" />
                </children>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
             </HBox>
             <HBox alignment="CENTER_LEFT" prefHeight="13.0" prefWidth="173.0" spacing="20.0">
                <children>
