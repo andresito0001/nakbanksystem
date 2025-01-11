@@ -1,10 +1,22 @@
 package main.java.controllers;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.List;
+
+import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import main.java.Main;
+import main.java.dao.BanksDAO;
+import main.java.util.ConnectionPool;
 import main.java.util.SceneSwitcher;
 
 public class DashBoardController {
@@ -33,11 +45,72 @@ public class DashBoardController {
         }
         System.out.println("Load clients...");
     }
+public void initialize() {
+    vBoxCenterPane.getChildren().clear();
+
+    Label loadingLabel = new Label("Loading...");
+    loadingLabel.setStyle("-fx-font-size: 16px; -fx-text-fill: gray;");
+    vBoxCenterPane.getChildren().add(loadingLabel);
+    
+
+    Task<Void> loadDashboardTask = new Task<>() {
+        @Override
+        protected Void call() throws Exception {
+            try (final Connection conn = ConnectionPool.getConnection()) {
+                PreparedStatement st = conn.prepareStatement("SELECT * FROM bancos");
+                ResultSet rs = st.executeQuery();
+
+                    HBox hBox = new HBox(10);
+                    int cardCount = 0;
+
+                while (rs.next()) {
+                   FXMLLoader loader = new FXMLLoader(getClass().getResource("/main/resources/fxml/card.fxml"));
+                   VBox card = loader.load();
+
+                   CardController cardController = loader.getController();
+                   cardController.setCodigo(rs.getString("codigo") + " - " + rs.getString("nombre_banco"));
+                   cardController.setSaldo(rs.getString("saldo_actual") + " " + rs.getString("moneda"));
+                   
+                   // Importante: actualizamos la interfaz usando Platform.runLater
+                    Platform.runLater(() -> {
+                        vBoxCenterPane.getChildren().remove(loadingLabel);
+                        vBoxCenterPane.getChildren().add(card);
+                    });
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw e; // Lanzamos la excepción para que se capture en el `Task`.
+            }
+            return null;
+        }
+    };
+
+        // Mostrar mensaje de carga mientras se ejecuta el Task
+        loadDashboardTask.setOnRunning(e -> {
+            vBoxCenterPane.getChildren().clear();
+            vBoxCenterPane.getChildren().add(loadingLabel);
+        });
+
+    // Manejamos el éxito o el fallo del Task
+    loadDashboardTask.setOnSucceeded(e -> {
+        System.out.println("Carga de datos completada");
+    });
+
+    loadDashboardTask.setOnFailed(e -> {
+        vBoxCenterPane.getChildren().clear();
+        loadDashboardTask.getException().printStackTrace();
+    });
+
+    // Iniciamos el Task en un nuevo hilo
+    new Thread(loadDashboardTask).start();
+}
+
 
     // . . .
     @FXML
     private BorderPane dashBoardPane;
     @FXML
     private VBox vBoxCenterPane;
+    
 
 }

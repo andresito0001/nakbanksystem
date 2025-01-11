@@ -10,9 +10,9 @@ public class ConnectionPool {
     public static final Connection getConnection() throws SQLException {
         if (connection == null || connection.isClosed()) {
             try {
-                String url = System.getenv("NAKBANK_DB_URL");
-                String user = System.getenv("NAKBANK_DB_USERNAME");
-                String password = System.getenv("NAKBANK_DB_PASSWORD");
+                String url = "jdbc:postgresql://autorack.proxy.rlwy.net:18835/railway";
+                String user ="postgres";
+                String password = "GIkVDzIIaAUzmJLTFrTMujbkkuyMkhKW";
                 connection = DriverManager.getConnection(url, user, password);
             } catch (SQLException e) {
                 e.printStackTrace();
