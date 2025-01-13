@@ -5,6 +5,8 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import main.java.entities.Clients;
 
@@ -151,6 +153,25 @@ public class ClientsDAO {
             st.executeUpdate();
             st.close();
         }
+    }
+
+    public List<Clients> getClientsAsList() throws SQLException {
+        final String query = "select nombre, apellido, cedula, alias from clientes";
+        List<Clients> clients = new ArrayList<>();
+
+        try (PreparedStatement st = conn.prepareStatement(query)) {
+            final ResultSet rs = st.executeQuery();
+
+            while (rs.next()) {
+                Clients client = new Clients(rs.getString("cedula"), rs.getString("nombre"), rs.getString("apellido"), rs.getString("alias"));
+                clients.add(client);
+            }
+
+            rs.close();
+            st.close();
+        }
+
+        return clients;
     }
 
     private final Connection conn;

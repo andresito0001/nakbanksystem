@@ -1,18 +1,18 @@
 package main.java.entities;
 
 public class Clients {
-    Clients(final String ci, final String name, final String lastName, final String alias) {
-        this.ci = ci;
+    public Clients(final String ci, final String name, final String lastName, final String alias) {
         this.name = name;
         this.lastName = lastName;
+        this.ci = ci;
         this.alias = alias;
     }
     
-    // getters
-    public String getCi() { return this.ci; }
-    public String getName() { return this.name; }
-    public String getLastName() { return this.lastName; }
-    public String getAlias() { return this.alias; }
+    // Getters
+    public String getName() { return name; }
+    public String getLastName() { return lastName; }
+    public String getCi() { return ci; }
+    public String getAlias() { return alias; }
 
     private final String ci;
     private final String name;

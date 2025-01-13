@@ -20,7 +20,7 @@
 #loginButton {
     -fx-background-color: #009cde;
     -fx-text-fill: #12151c;
-    font-weight: bold;
+    -fx-font-weight: bold;
 }
 
 #errorMsg {

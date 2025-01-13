@@ -1,5 +1,6 @@
 package main.java;
 
+import java.sql.SQLException;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import main.java.controllers.DashBoardController;
@@ -23,7 +24,7 @@ public class Main extends Application {
         SceneSwitcher.switchScene(primaryStage, "/main/resources/fxml/dashboard.fxml", "/main/resources/css/dashboard.css", new DashBoardController());
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException {
         launch(args);
     }
 }

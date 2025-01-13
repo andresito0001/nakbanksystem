@@ -23,7 +23,7 @@ public class DashBoardController {
     @FXML
     private void loadTransactions(MouseEvent event) {
         try {
-            SceneSwitcher.switchPane(dashBoardPane, vBoxCenterPane, "/main/resources/fxml/transactionsOptions.fxml", "/main/resources/css/transactionOptions.css", new TransactionsController());
+            SceneSwitcher.switchPane(vBoxCenterPane, "/main/resources/fxml/transactionsOptions.fxml", "/main/resources/css/transactionOptions.css", new TransactionsOptionsController());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -39,7 +39,7 @@ public class DashBoardController {
     @FXML
     private void loadClients(MouseEvent event) {
         try {
-            SceneSwitcher.switchPane(dashBoardPane, vBoxCenterPane, "/main/resources/fxml/clientsOptions.fxml", "/main/resources/css/clientOptions.css", new ClientsController());
+            SceneSwitcher.switchPane(vBoxCenterPane, "/main/resources/fxml/clientsOptions.fxml", "/main/resources/css/clientOptions.css", new ClientsController());
         } catch (Exception e ) {
             e.printStackTrace();
         }

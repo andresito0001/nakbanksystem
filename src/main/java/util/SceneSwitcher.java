@@ -4,8 +4,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 public class SceneSwitcher {
@@ -39,11 +38,10 @@ public class SceneSwitcher {
         return scene;
     }
 
-    public static void switchPane(BorderPane borderPane, VBox vBox, String fxmlPath, String cssPath, Object controller) throws Exception {
-        Parent root = loadFXML(fxmlPath, controller);
-        Scene scene = createScene(root, cssPath);
-        vBox.getChildren().clear();
-        vBox.getChildren().add(root);
-        vBox.getChildren().get(0).applyCss();
-    } 
+    public static void switchPane(Pane pane, String fxmlPath, String cssPath, Object controller) throws Exception {
+        Parent root = SceneSwitcher.loadFXML(fxmlPath, controller);
+        pane.getChildren().clear();
+        pane.getChildren().add(root);
+        root.applyCss();
+    }
 }
