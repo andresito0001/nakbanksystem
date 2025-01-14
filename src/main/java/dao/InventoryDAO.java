@@ -10,20 +10,21 @@ public class InventoryDAO {
         this.conn = conn;
     }
     
-    public void newRegister(final Date fecha, final java.sql.Timestamp hora, final String tipo_mov,
+    public void newRegister(final String referencia, final Date fecha, final java.sql.Timestamp hora, final String tipo_mov,
                                         final Double cantidad, final String moneda, final String metodo,
                                         final String tipo) throws SQLException {
-        final String query = "insert into simuinv(fecha, hora, tipo_movimiento, cantidad, moneda, metodo, tipo)" +
-                              "values (?, ?, ?, ?, ?, ?, ?);";
+        final String query = "insert into inventario(referencia, fecha, hora, tipo_movimiento, cantidad, moneda, metodo, tipo)" +
+                              "values (?,?, ?, ?, ?, ?, ?, ?);";
 
         try (final PreparedStatement st = conn.prepareStatement(query)) {
-            st.setDate(1, fecha);
-            st.setTimestamp(2, hora);
-            st.setString(3, tipo_mov);
-            st.setDouble(4, cantidad);
-            st.setString(5, moneda);
-            st.setString(6, metodo);
-            st.setString(7, tipo);
+            st.setString(1, referencia);
+            st.setDate(2, fecha);
+            st.setTimestamp(3, hora);
+            st.setString(4, tipo_mov);
+            st.setDouble(5, cantidad);
+            st.setString(6, moneda);
+            st.setString(7, metodo);
+            st.setString(8, tipo);
 
             st.executeUpdate();
             st.close();
