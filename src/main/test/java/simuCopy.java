@@ -579,6 +579,8 @@ public class simuCopy {
                 } break;
                 case 9: {
 
+                    final String query = "select * from CUENTASXCOBRAR where pendiente > 0 ";
+                    /*/
                     final String query = "select id_trans, concat(nombre, ' ', apellido, ' (', alias, ')') as Cliente, " + 
                     "cantidad_recibida as Monto_Transaccion, trans.moneda_recibida as moneda,sum(cantidad) as abonado, moneda, trans.tipo, " + 
                     "(cantidad_recibida - sum(cantidad)) as pendiente from trans " + 
@@ -586,7 +588,7 @@ public class simuCopy {
                     "left join inventario on inventario.id_trans = trans.id " + 
                     "where id_trans = trans.id and (tipo_movimiento = 'INGRESO' or tipo_movimiento = 'ABONO') and trans.status = 'ENVIADO' " + 
                     "group by id_trans, moneda, tipo_movimiento, trans.tipo, cantidad_recibida, clientes.nombre, clientes.apellido, clientes.alias, trans.moneda_recibida";
-                    
+                    */
                     /*final String query = "select id_trans, concat(nombre, ' ', apellido, '(', alias, ')') as cliente, trans.fecha, trans.tipo, concat(trans.cantidad_recibida, ' ', trans.moneda_recibida) as total, " + 
                     "concat(inventario.cantidad, ' ', inventario.moneda) as abonado, " + 
                     "concat ((sum(trans.cantidad_recibida) - sum(inventario.cantidad)), ' ', trans.moneda_recibida) as pendiente " +
@@ -611,7 +613,7 @@ public class simuCopy {
                         {
                             System.out.println("Escriba el id de la transaccion. ");
                             String numero = sc.nextLine();
-                            Double pendiente = 0.0;
+                            Double pendiente = 0.0, total = 0.0;
                             String id_trx = "";
                            /* final String consulta = "select id_trans, concat(nombre, ' ', apellido, '(', alias, ')') as cliente, trans.fecha, trans.tipo, concat(trans.cantidad_recibida, ' ', trans.moneda_recibida) as total, " + 
                     "concat(inventario.cantidad, ' ', inventario.moneda) as abonado, " + 
@@ -637,6 +639,7 @@ public class simuCopy {
                                 while (rs.next()) {
                                 System.out.println(rs.getString("id_trans") + ". Cliente: " + rs.getString("Cliente") + ", Total Transaccion: " + rs.getString("Monto_Transaccion") + ", Cantidad Abonada: " + rs.getString("abonado") + ", Pendiente: " + rs.getString("pendiente"));                                    
                                 pendiente = rs.getDouble("pendiente");
+                                total = rs.getDouble("Monto_Transaccion");
                                 id_trx = rs.getString("id_trans");
                                 }
 
@@ -660,7 +663,8 @@ public class simuCopy {
 
                                     while (res.next()) {                                    
                                         inventoryDAO.newRegister(idIngreso,res.getDate("hoy"), res.getTimestamp("hoy"), "INGRESO", Abono, moneda, "CH-NN-XXXX", "ABONO", id_trx);    
-                                    //Falta agregar que se debe actualizar el STATUS de la TRX a "OK" si completó el abono total.
+                                        pendiente = rs.getDouble("pendiente");
+                                        //Falta agregar que se debe actualizar el STATUS de la TRX a "OK" si completó el abono total.
                                     if (pendiente == 0)
                                         dbUtils.updateRegister("trans", "status", "OK", "id = '" + id_trx + "'");
                                     }
