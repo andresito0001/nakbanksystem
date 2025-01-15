@@ -282,10 +282,13 @@ public class simuCopy {
                                 try (final PreparedStatement stm = conn.prepareStatement(dateTimeQuery)) {
                                     ResultSet rs = stm.executeQuery();
                                     if (rs.next()) {
-                                        String idIngreso = "I-" + rs.getString("id");
-                                        String idEgreso = "E-" + rs.getString("id");
-                                        inventoryDAO.newRegister(idIngreso,rs.getDate("fecha"), rs.getTimestamp("hora"), "INGRESO", cantRecibidaAbono, typeMoneyReceived, metodoRecibido, transType);
-                                        inventoryDAO.newRegister(idEgreso,rs.getDate("fecha"), rs.getTimestamp("hora"), "EGRESO", cantEnviadaAbono, typeMoneySent, metodoEnviado, transType);
+                                        byte[] random = new byte[] { 0x1, 0x1, 0x2, 0x3, 0x4, 0x5, 0x6, 0x7, 0x8, 0x9 };
+                                        final String id_inventario = ULID.generate(System.currentTimeMillis(), random);
+                                        
+                                        String idIngreso = "I-" + id_inventario;
+                                        String idEgreso = "E-" + id_inventario;
+                                        inventoryDAO.newRegister(idIngreso,rs.getDate("fecha"), rs.getTimestamp("hora"), "INGRESO", cantRecibidaAbono, typeMoneyReceived, metodoRecibido, transType, rs.getString("id"));
+                                        inventoryDAO.newRegister(idEgreso,rs.getDate("fecha"), rs.getTimestamp("hora"), "EGRESO", cantEnviadaAbono, typeMoneySent, metodoEnviado, transType, rs.getString("id"));
                                     } else {
                                         System.err.println("No data found in simutrans table.");
                                     }
@@ -381,10 +384,12 @@ public class simuCopy {
                                 try (final PreparedStatement stm = conn.prepareStatement(dateTimeQuery)) {
                                     ResultSet rs = stm.executeQuery();
                                     if (rs.next()) {
-                                        String idIngreso = "I-" + rs.getString("id");
-                                        String idEgreso = "E-" + rs.getString("id");
-                                        inventoryDAO.newRegister(idIngreso,rs.getDate("fecha"), rs.getTimestamp("hora"), "INGRESO", cantRecibida, MoneyType.BOLIVARES.getNombre(), metodoRecibido, "COMPRA");
-                                        inventoryDAO.newRegister(idEgreso,rs.getDate("fecha"), rs.getTimestamp("hora"), "EGRESO", cantEnviada, MoneyType.BINANCE_USDT.getNombre(), PlataformasOnline.BINANCE.getNombre(), "VENTA");
+                                        byte[] random = new byte[] { 0x1, 0x1, 0x2, 0x3, 0x4, 0x5, 0x6, 0x7, 0x8, 0x9 };
+                                        final String id_inventario = ULID.generate(System.currentTimeMillis(), random);
+                                        String idIngreso = "I-" + id_inventario;
+                                        String idEgreso = "E-" + id_inventario;
+                                        inventoryDAO.newRegister(idIngreso,rs.getDate("fecha"), rs.getTimestamp("hora"), "INGRESO", cantRecibida, MoneyType.BOLIVARES.getNombre(), metodoRecibido, "COMPRA", rs.getString("id"));
+                                        inventoryDAO.newRegister(idEgreso,rs.getDate("fecha"), rs.getTimestamp("hora"), "EGRESO", cantEnviada, MoneyType.BINANCE_USDT.getNombre(), PlataformasOnline.BINANCE.getNombre(), "VENTA", rs.getString("id"));
                                         
                                         dbUtils.updateRegister("bancos", "saldo_actual", (totalBalanceUsdt - cantEnviada), "codigo = " + "'" + "BE-WN-0006" + "'");
                                         dbUtils.updateRegister("bancos", "saldo_actual", cantRecibida, "codigo = " + "'" + nCuenta + "'");
@@ -573,24 +578,106 @@ public class simuCopy {
                     + "Promedio de tasa de ciclos: " + averageCycles);
                 } break;
                 case 9: {
-                    System.out.println("Cuentas por cobrar: ");
-                    final String query = "select concat(nombre, ' ', apellido, '(', alias, ')') as cliente, trans.fecha, trans.tipo, concat(trans.cantidad_recibida, ' ', trans.moneda_recibida) as total, " + 
+
+                    final String query = "select id_trans, concat(nombre, ' ', apellido, ' (', alias, ')') as Cliente, " + 
+                    "cantidad_recibida as Monto_Transaccion, trans.moneda_recibida as moneda,sum(cantidad) as abonado, moneda, trans.tipo, " + 
+                    "(cantidad_recibida - sum(cantidad)) as pendiente from trans " + 
+                    "inner join clientes on trans.cedula_cliente = clientes.cedula " + 
+                    "left join inventario on inventario.id_trans = trans.id " + 
+                    "where id_trans = trans.id and (tipo_movimiento = 'INGRESO' or tipo_movimiento = 'ABONO') and trans.status = 'ENVIADO' " + 
+                    "group by id_trans, moneda, tipo_movimiento, trans.tipo, cantidad_recibida, clientes.nombre, clientes.apellido, clientes.alias, trans.moneda_recibida";
+                    
+                    /*final String query = "select id_trans, concat(nombre, ' ', apellido, '(', alias, ')') as cliente, trans.fecha, trans.tipo, concat(trans.cantidad_recibida, ' ', trans.moneda_recibida) as total, " + 
                     "concat(inventario.cantidad, ' ', inventario.moneda) as abonado, " + 
                     "concat ((sum(trans.cantidad_recibida) - sum(inventario.cantidad)), ' ', trans.moneda_recibida) as pendiente " +
                     "from trans inner join clientes on trans.cedula_cliente = clientes.cedula " +
-                    "left join inventario on inventario.referencia like concat('I-',trans.id) " + 
+                    "left join inventario on id_trans like trans.id " + 
                     "where inventario.tipo_movimiento = 'INGRESO' and trans.status = 'ENVIADO' " + 
-                    "group by trans.id,clientes.nombre, clientes.apellido, clientes.alias, trans.fecha, trans.tipo, trans.cantidad_recibida, trans.moneda_recibida, inventario.cantidad, inventario.moneda ";
-
+                    "group by id_trans, trans.id, clientes.nombre, clientes.apellido, clientes.alias, trans.fecha, trans.tipo, trans.cantidad_recibida, trans.moneda_recibida, inventario.cantidad, inventario.moneda ";
+                    */
                     try (final PreparedStatement stm = conn.prepareStatement(query)) {
                         ResultSet st = stm.executeQuery();
 
                         while (st.next()) {
-                            System.out.println("Cliente: " + st.getString("cliente") + ", Total Transaccion: " + st.getString("total") + ", Cantidad Abonada: " + st.getString("abonado") + ", Pendiente: " + st.getString("pendiente"));
+                            System.out.println(st.getString("id_trans") + ". Cliente: " + st.getString("Cliente") + ", Total Transaccion: " + st.getString("Monto_Transaccion") + ", Cantidad Abonada: " + st.getString("abonado") + ", Pendiente: " + st.getString("pendiente"));
                         }
-                    }
+                    st.close();
+                    stm.close();
+
+                    System.out.println("Presione 1 si quiere abonar una cuenta. ");
+                    int opciones = sc.nextInt(); sc.nextLine();
                     
-                } break;
+                    if (opciones == 1)
+                        {
+                            System.out.println("Escriba el id de la transaccion. ");
+                            String numero = sc.nextLine();
+                            Double pendiente = 0.0;
+                            String id_trx = "";
+                           /* final String consulta = "select id_trans, concat(nombre, ' ', apellido, '(', alias, ')') as cliente, trans.fecha, trans.tipo, concat(trans.cantidad_recibida, ' ', trans.moneda_recibida) as total, " + 
+                    "concat(inventario.cantidad, ' ', inventario.moneda) as abonado, " + 
+                    "(sum(trans.cantidad_recibida) - sum(inventario.cantidad)) as pendiente " +
+                    "from trans inner join clientes on trans.cedula_cliente = clientes.cedula " +
+                    "left join inventario on inventario.id_trans like trans.id " + 
+                    "where inventario.tipo_movimiento = 'INGRESO' and trans.status = 'ENVIADO' and id_trans = '" + numero + "' " + 
+                    "group by id_trans, trans.id,clientes.nombre, clientes.apellido, clientes.alias, trans.fecha, trans.tipo, trans.cantidad_recibida, trans.moneda_recibida, inventario.cantidad, inventario.moneda ";
+                                */
+
+                    final String consulta = "select id_trans, concat(nombre, ' ', apellido, ' (', alias, ')') as Cliente, " + 
+                    "cantidad_recibida as Monto_Transaccion, trans.moneda_recibida as moneda,sum(cantidad) as abonado, moneda, trans.tipo, " + 
+                    "(cantidad_recibida - sum(cantidad)) as pendiente from trans " + 
+                    "inner join clientes on trans.cedula_cliente = clientes.cedula " + 
+                    "left join inventario on inventario.id_trans = trans.id " + 
+                    "where id_trans = '" + numero + "' and (tipo_movimiento = 'INGRESO' or tipo_movimiento = 'ABONO') and trans.status = 'ENVIADO' " + 
+                    "group by id_trans, moneda, tipo_movimiento, trans.tipo, cantidad_recibida, clientes.nombre, clientes.apellido, clientes.alias, trans.moneda_recibida";
+                    
+                            try (final PreparedStatement sta = conn.prepareStatement(consulta)) {
+
+                                ResultSet rs = sta.executeQuery();
+
+                                while (rs.next()) {
+                                System.out.println(rs.getString("id_trans") + ". Cliente: " + rs.getString("Cliente") + ", Total Transaccion: " + rs.getString("Monto_Transaccion") + ", Cantidad Abonada: " + rs.getString("abonado") + ", Pendiente: " + rs.getString("pendiente"));                                    
+                                pendiente = rs.getDouble("pendiente");
+                                id_trx = rs.getString("id_trans");
+                                }
+
+                            System.out.println("Ingrese la cantidad abonada: ");
+                            Double Abono = sc.nextDouble(); sc.nextLine();
+
+                            if (Abono > pendiente) {
+                                System.out.println("Error. Debe ser menor o igual al monto pendiente. ");
+                            }
+                            else {
+                                System.out.println("Ingrese la moneda: ");
+                                String moneda = sc.nextLine(); 
+
+                                final String dateTimeQuery = "select now () as hoy";
+
+                                try (PreparedStatement pst = conn.prepareStatement(dateTimeQuery)) {
+                                    ResultSet res = pst.executeQuery();
+                                    byte[] random = new byte[] { 0x1, 0x1, 0x2, 0x3, 0x4, 0x5, 0x6, 0x7, 0x8, 0x9 };
+                                    final String id_inventario = ULID.generate(System.currentTimeMillis(), random);
+                                    String idIngreso = "I-" + id_inventario;
+
+                                    while (res.next()) {                                    
+                                        inventoryDAO.newRegister(idIngreso,res.getDate("hoy"), res.getTimestamp("hoy"), "INGRESO", Abono, moneda, "CH-NN-XXXX", "ABONO", id_trx);    
+                                    //Falta agregar que se debe actualizar el STATUS de la TRX a "OK" si completó el abono total.
+                                    if (pendiente == 0)
+                                        dbUtils.updateRegister("trans", "status", "OK", "id = '" + id_trx + "'");
+                                    }
+                                    res.close();
+                                    pst.close();                                
+                                }
+                            }
+
+                            rs.close();
+                            sta.close();
+                        } 
+                            
+                    }
+
+                }
+                    
+            } break;
                 case 10: {
                     System.out.println("Cuentas por pagar");
 
@@ -607,7 +694,7 @@ public class simuCopy {
                         ResultSet st = stm.executeQuery();
 
                         while (st.next()) {
-                            System.out.println("Cliente: " + st.getString("cliente") + ", Total Transaccion: " + st.getString("total") + ", Cantidad Abonada: " + st.getString("abonado") + ", Pendiente: " + st.getString("pendiente"));
+                            System.out.println("Cliente: " + st.getString("cliente") + ", Fecha: " + st.getString("trans.fecha") + ", Tipo: " + st.getString("trans.tipo") + ", Total Transaccion: " + st.getString("total") + ", Cantidad Abonada: " + st.getString("abonado") + ", Pendiente: " + st.getString("pendiente"));
                         }
                     }
 
