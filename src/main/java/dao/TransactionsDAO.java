@@ -5,6 +5,8 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TransactionsDAO {
     public TransactionsDAO(final Connection conn) {
@@ -105,6 +107,24 @@ public class TransactionsDAO {
             return total;
         }
     }
+
+    public List<String> getAccountsReceivable() {
+        List<String> accounts = new ArrayList<>();
+        return accounts;
+
+        
+    }
     
     private final Connection conn;
 }
+
+
+// select concat(nombre, ' ', apellido, '(', alias, ')') as cliente, trans.fecha, trans.tipo, concat(trans.cantidad_recibida, ' ', trans.moneda_recibida) as total,
+// concat(inventario.cantidad, ' ', inventario.moneda) as abonado,
+// concat ((sum(trans.cantidad_recibida) - sum(inventario.cantidad)), ' ', trans.moneda_recibida) as pendiente
+// from trans
+// inner join clientes on trans.cedula_cliente = clientes.cedula 
+// left join inventario on inventario.referencia like concat('I-',trans.id)
+// where inventario.tipo_movimiento = 'INGRESO' and trans.status = 'PENDIENTE'
+// group by clientes.nombre, clientes.apellido, clientes.alias, trans.fecha, trans.tipo, trans.cantidad_recibida, trans.moneda_recibida, inventario.cantidad, inventario.moneda
+

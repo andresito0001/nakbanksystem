@@ -3,16 +3,14 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
-<?import javafx.scene.control.ScrollPane?>
 
-<BorderPane fx:id="dashBoardPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="950.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane fx:id="dashBoardPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="950.0" stylesheets="@../css/dashboard.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <left>
       <VBox fx:id="dasboardLeftPane" alignment="CENTER" prefHeight="600.0" prefWidth="193.0" spacing="20.0" BorderPane.alignment="CENTER">
          <children>
@@ -105,21 +103,21 @@
       </VBox>
    </left>
    <center>
-      <VBox prefHeight="675.0" prefWidth="757.0" BorderPane.alignment="CENTER">
-         <children>
-         <ScrollPane fitToWidth="true" fitToHeight="true" VBox.vgrow="ALWAYS">
-            <content>
-            <VBox fx:id="vBoxCenterPane" prefHeight="546.0" prefWidth="767.0" VBox.vgrow="ALWAYS">
-               <children>
-
-               </children>
-            </VBox>
-            </content>
-            </ScrollPane>
-         </children>
+      <VBox fx:id="vBoxCenterPane" prefHeight="600.0" prefWidth="747.0" BorderPane.alignment="CENTER">
          <opaqueInsets>
             <Insets />
          </opaqueInsets>
+         <children>
+            <Label fx:id="centerPaneLabelTittle" prefHeight="35.0" prefWidth="163.0" text="Balance de cuentas" />
+            <ScrollPane fx:id="scrollPaneId" prefHeight="153.0" prefWidth="619.0" vbarPolicy="NEVER">
+               <content>
+                  <HBox fx:id="hBoxCenterScrollPane" prefHeight="140.0" prefWidth="735.0" />
+               </content>
+            </ScrollPane>
+         </children>
+         <padding>
+            <Insets left="10.0" right="10.0" />
+         </padding>
       </VBox>
    </center>
 </BorderPane>

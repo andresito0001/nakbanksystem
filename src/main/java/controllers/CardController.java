@@ -2,28 +2,25 @@ package main.java.controllers;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import main.java.entities.CardModel;
 
 public class CardController {
     @FXML
-    private Label codigoLabel;
-
+    private HBox hBoxMainBack;
     @FXML
-    private Label saldoLabel;
-
+    private VBox vBoxMainBack;
     @FXML
-    private ImageView iconImage;
+    private Label codeLabel;
+    @FXML
+    private Label bankNameLabel;
+    @FXML
+    private Label balanceLabelId;
 
-    public void setCodigo(String codigo) {
-        codigoLabel.setText(codigo);
-    }
-
-    public void setSaldo(String saldo) {
-        saldoLabel.setText(saldo);
-    }
-
-    public void setIconImage(String imagePath) {
-        iconImage.setImage(new Image(imagePath));
+    public void setData(CardModel cardModel) {
+        codeLabel.setText(cardModel.getCode());
+        bankNameLabel.setText(cardModel.getBankName());
+        balanceLabelId.setText(String.valueOf(cardModel.getBalance()));
     }
 }

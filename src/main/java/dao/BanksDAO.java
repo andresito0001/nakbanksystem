@@ -13,8 +13,14 @@ public class BanksDAO {
     }
 
     public List<String> getInfoOf(final String colum, final String key, final String value) throws SQLException {
-        final String query = "select " + colum + " from bancos where " + key + " = " + "'" + value + "'" + ";";
+        String query = null;
 
+        if (key == null || value == null) {
+            query = "select " + colum + " from bancos;";
+        } else {
+            query = "select " + colum + " from bancos where " + key + " = " + "'" + value + "'" + ";";
+        }
+        
         List<String> data = new ArrayList<>();
         
         try (PreparedStatement st = conn.prepareStatement(query)) {

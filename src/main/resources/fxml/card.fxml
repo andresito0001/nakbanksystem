@@ -1,46 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
 
-<VBox xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.controllers.CardController" prefHeight="103.0" prefWidth="189.0" styleClass="card" spacing="5">
-    <children>
-        <HBox prefHeight="43.0" prefWidth="120.0" spacing="10">
-            <children>
-                <Label fx:id="codigoLabel" prefHeight="43.0" prefWidth="217.0" text="">
-                    <padding>
-                        <Insets bottom="5.0" left="5.0" right="20.0" top="20.0" />
-                    </padding>
-                    <font>
-                        <Font name="Segoe UI" size="13.0" />
-                    </font>
-                </Label>
-                <Pane prefHeight="43.0" prefWidth="121.0">
-                    <children>
-                        <ImageView fx:id="iconImage" fitHeight="16.0" fitWidth="14.0" layoutX="4.0" layoutY="22.0">
-                            <image>
-                                <Image url="@../img/archivo-factura-dolar.png" />
-                            </image>
-                        </ImageView>
-                    </children>
-                </Pane>
-            </children>
-        </HBox>
-        <Label fx:id="saldoLabel" prefHeight="28.0" prefWidth="186.0" text="">
-            <padding>
-                <Insets bottom="5.0" left="5.0" right="20.0" top="20.0" />
-            </padding>
-            <font>
-                <Font name="Segoe UI Bold" size="20.0" />
-            </font>
-        </Label>
-    </children>
-</VBox>
+
+<HBox fx:id="hBoxMainBack" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="90.0" prefWidth="193.0" styleClass="hbox" stylesheets="@../css/card.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <VBox fx:id="vBoxMainBack" prefHeight="100.0" prefWidth="210.0" spacing="10.0" styleClass="hbox">
+         <children>
+            <Label fx:id="codeLabel" prefHeight="17.0" prefWidth="259.0" text="Code">
+               <padding>
+                  <Insets left="5.0" top="5.0" />
+               </padding>
+            </Label>
+            <Label fx:id="bankNameLabel" prefHeight="27.0" prefWidth="217.0" text="Bank Name">
+               <padding>
+                  <Insets left="5.0" />
+               </padding>
+            </Label>
+            <Label fx:id="balanceLabelId" prefHeight="51.0" prefWidth="193.0" text="Available Balance">
+               <padding>
+                  <Insets left="5.0" />
+               </padding>
+            </Label>
+         </children>
+      </VBox>
+   </children>
+</HBox>

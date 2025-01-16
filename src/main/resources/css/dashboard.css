@@ -7,13 +7,51 @@
 
 .label {
     -fx-text-fill: #abb2bf;
+    -fx-font-family: 'Souego UI'; 
+}
+
+#centerPaneLabelTittle {
+    -fx-text-fill: #abb2bf;
+    -fx-font-size: 16;
+    -fx-font-family: 'Souego UI'; 
+}
+
+#scrollPaneId {
+    -fx-background-color: #12151c;
+    -fx-border-radius: 10px;
+    -fx-border-width: 2px;
+}
+
+#hBoxCenterScrollPane {
+    -fx-background-color: #12151c;
+    -fx-border-radius: 10px;
+    -fx-border-width: 2px;
+
+}
+
+#scrollPaneId .scroll-bar {
+    -fx-background-color: #2d3546;
+
+}
+
+#scrollPaneId .scroll-bar:horizontal {
+    -fx-pref-height: 12px;
+}
+
+#scrollPaneId .thumb {
+    -fx-background-color: #4a4a4a;
+}
+
+#scrollPaneId .scroll-bar .increment-button,
+#scrollPaneId .scroll-bar .decrement-button {
+    -fx-opacity: 0;
+    -fx-padding: 0; 
+    -fx-min-width: 0; 
+    -fx-min-height: 0; 
+    -fx-pref-width: 0; 
+    -fx-pref-height: 0; 
 }
 
 #dasboardLeftPane {
     -fx-background-color: #2d3546;
-}
-
-.card {
-    -fx-background-color: #2d3546;
-    -fx-background-radius: 10px;
 }
