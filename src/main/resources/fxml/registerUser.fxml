@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.MenuButton?>
@@ -11,20 +12,18 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane fx:id="anchorPaneId" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@../css/registerClients.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Text fill="#abb2bf" layoutX="214.0" layoutY="48.0" strokeType="OUTSIDE" strokeWidth="0.0" text="REGISTRAR CLIENTE">
+      <Text fx:id="tittleId" fill="#abb2bf" layoutX="214.0" layoutY="48.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Registrar Cliente">
          <font>
             <Font size="20.0" />
          </font>
       </Text>
-      <TextField layoutX="47.0" layoutY="114.0" promptText="Cedula de Identidad" />
-      <TextField layoutX="225.0" layoutY="114.0" promptText="Nombre" />
-      <TextField layoutX="416.0" layoutY="114.0" promptText="Apellido" />
-      <TextField layoutX="47.0" layoutY="176.0" promptText="Alias" />
-      <TextField layoutX="225.0" layoutY="176.0" promptText="Numero de telefono" />
-      <Button layoutX="416.0" layoutY="176.0" mnemonicParsing="false" text="Registrar" />
-      <Label id="registerMsg" layoutX="39.0" layoutY="234.0" prefHeight="17.0" prefWidth="530.0" />
+      <TextField layoutX="47.0" layoutY="114.0" promptText="Cedula de Identidad" stylesheets="@../css/registerClients.css" />
+      <TextField layoutX="225.0" layoutY="114.0" promptText="Nombre" stylesheets="@../css/registerClients.css" />
+      <TextField layoutX="416.0" layoutY="114.0" promptText="Apellido" stylesheets="@../css/registerClients.css" />
+      <TextField layoutX="47.0" layoutY="176.0" promptText="Alias" stylesheets="@../css/registerTransaction.css" />
+      <Label id="registerMsg" layoutX="32.0" layoutY="285.0" prefHeight="17.0" prefWidth="530.0" />
       <ImageView fitHeight="45.0" fitWidth="46.0" layoutX="150.0" layoutY="15.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../img/add-client.png" />
@@ -42,5 +41,20 @@
             <MenuItem mnemonicParsing="false" text="J-" />
         </items>
       </MenuButton>
+      <ImageView fitHeight="25.0" fitWidth="26.0" layoutX="22.0" layoutY="36.0">
+         <image>
+            <Image url="@../img/back-icon.png" />
+         </image>
+      </ImageView>
+      <Button fx:id="registerButton" layoutX="47.0" layoutY="226.0" mnemonicParsing="false" stylesheets="@../css/registerClients.css" text="Confirmar">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Button>
+      <Button fx:id="cancelarButton" layoutX="133.0" layoutY="226.0" mnemonicParsing="false" stylesheets="@../css/registerClients.css" text="Cancelar">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Button>
    </children>
 </AnchorPane>

@@ -1,0 +1,67 @@
+#anchorPaneId {
+    -fx-background-color: #12151c;
+}
+
+.text-field {
+    -fx-background-color: #1b222c;
+    -fx-text-inner-color: #abb2bf;
+    -fx-prompt-text-fill: #354357;
+    -fx-border-color: #1b222c;
+}
+
+#registerButton {
+    -fx-background-color: #009cde;
+    -fx-text-fill: #12151c;
+    -fx-font-size: 12;
+    -fx-font-family: 'Souego UI'; 
+}
+
+#cancelarButton {
+    -fx-background-color: #FF6F59;
+    -fx-text-fill: #12151c;
+    -fx-font-size: 12;
+    -fx-font-family: 'Souego UI'; 
+}
+
+.combo-box-style {
+    -fx-background-color: #1b222c;
+    -fx-text-inner-color: #abb2bf;
+}
+
+.check-box {
+    -fx-text-fill: #abb2bf;
+    -fx-font-size: 12;
+    -fx-font-family: 'Souego UI'; 
+}
+
+.list-view {
+    -fx-background-color: #282c34;
+    -fx-control-inner-background: #282c34;
+    -fx-text-fill: #abb2bf;
+    -fx-font-size: 12;
+    -fx-font-family: 'Segoe UI';
+}
+
+.list-cell {
+    -fx-background-color: #282c34;
+    -fx-text-fill: #abb2bf;
+    -fx-font-size: 12;
+    -fx-font-family: 'Segoe UI';
+}
+
+/* Scroll bar styling */
+.scroll-bar:vertical .thumb {
+    -fx-background-color: #3c3f41;
+}
+
+.scroll-bar:horizontal .thumb {
+    -fx-background-color: #3c3f41;
+}
+
+.scroll-bar .track {
+    -fx-background-color: #3c3f41;
+}
+
+.scroll-bar .increment-button, .scroll-bar .decrement-button {
+    -fx-background-color: #3c3f41;
+}

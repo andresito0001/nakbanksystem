@@ -10,13 +10,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import javax.smartcardio.Card;
 
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
@@ -48,11 +48,20 @@ public class DashBoardController  implements Initializable{
     @FXML
     private void loadClients(MouseEvent event) {
         try {
-            SceneSwitcher.switchPane(vBoxCenterPane, "/main/resources/fxml/clientsOptions.fxml", "/main/resources/css/clientOptions.css", new ClientsController());
+            SceneSwitcher.switchPane(vBoxCenterPane, "/main/resources/fxml/clientsOptions.fxml", "/main/resources/css/clientsOptions.css", new ClientsOptionsController());
         } catch (Exception e ) {
             e.printStackTrace();
         }
         System.out.println("Load clients...");
+    }
+
+    @FXML
+    private void loadContabilidad(MouseEvent event) {
+        try {
+            SceneSwitcher.switchPane(vBoxCenterPane, "/main/resources/fxml/contabilidadOptions.fxml", "/main/resources/css/clientsOptions.css", new ContabilidadOptionsController());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 // public void initialize() {

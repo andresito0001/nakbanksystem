@@ -73,7 +73,7 @@
                   <Label text="Historial" />
                </children>
             </HBox>
-            <HBox alignment="CENTER_LEFT" prefHeight="13.0" prefWidth="173.0" spacing="20.0">
+            <HBox alignment="CENTER_LEFT" onMouseClicked="#loadContabilidad" prefHeight="13.0" prefWidth="173.0" spacing="20.0">
                <children>
                   <ImageView fitHeight="29.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -82,6 +82,9 @@
                   </ImageView>
                   <Label text="Contabilidad" />
                </children>
+                  <cursor>
+                     <Cursor fx:constant="HAND" />
+                  </cursor>
             </HBox>
             <HBox alignment="CENTER_LEFT" prefHeight="13.0" prefWidth="173.0" spacing="20.0">
                <children>

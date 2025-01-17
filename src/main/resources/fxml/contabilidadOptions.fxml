@@ -16,29 +16,29 @@
          <children>
             <HBox prefHeight="79.0" prefWidth="741.0" spacing="25.0">
                <children>
-                  <VBox fx:id="newClientButtonid" onMouseClicked="#newClient" prefHeight="79.0" prefWidth="220.0" styleClass="buttomCard">
+                  <VBox fx:id="cxcButtonid" onMouseClicked="#loadCxC" prefHeight="79.0" prefWidth="220.0" styleClass="buttomCard">
                      <cursor>
                         <Cursor fx:constant="HAND" />
                      </cursor>
                      <children>
-                        <Label alignment="CENTER" prefHeight="79.0" prefWidth="237.0" text="Agregar Cliente">
+                        <Label alignment="CENTER" prefHeight="79.0" prefWidth="237.0" text="Cuentas por Cobrar">
                            <graphic>
                               <ImageView fitHeight="50.0" fitWidth="81.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@../img/add-client.png" />
+                                    <Image url="@../img/cobrar.png" />
                                  </image>
                               </ImageView>
                            </graphic>
                         </Label>
                      </children>
                   </VBox>
-                  <VBox fx:id="editClientButtonid" prefHeight="79.0" prefWidth="220.0" styleClass="buttomCard">
+                  <VBox fx:id="cxpButtonid" prefHeight="79.0" prefWidth="220.0" styleClass="buttomCard">
                      <children>
-                        <Label alignment="CENTER" prefHeight="79.0" prefWidth="237.0" text="Editar Cliente">
+                        <Label alignment="CENTER" prefHeight="79.0" prefWidth="237.0" text="Cuentas por pagar">
                            <graphic>
                               <ImageView fitHeight="60.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@../img/edit-client.png" />
+                                    <Image url="@../img/gastos.png" />
                                  </image>
                               </ImageView>
                            </graphic>
@@ -48,16 +48,16 @@
                         <Cursor fx:constant="HAND" />
                      </cursor>
                   </VBox>
-                  <VBox fx:id="findClientButtonid" onMouseClicked="#findClient" prefHeight="79.0" prefWidth="220.0" styleClass="buttomCard">
+                  <VBox fx:id="ieButtonId" prefHeight="79.0" prefWidth="220.0" styleClass="buttomCard">
                      <cursor>
                         <Cursor fx:constant="HAND" />
                      </cursor>
                      <children>
-                        <Label alignment="CENTER" prefHeight="79.0" prefWidth="237.0" text="Buscar Cliente">
+                        <Label alignment="CENTER" prefHeight="79.0" prefWidth="237.0" text="Ingresos y Egresos">
                            <graphic>
                               <ImageView fitHeight="60.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@../img/find.png" />
+                                    <Image url="@../img/ingreso.png" />
                                  </image>
                               </ImageView>
                            </graphic>
@@ -79,6 +79,6 @@
       </VBox>
    </top>
    <center>
-      <AnchorPane onMouseClicked="#newClient" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+      <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
    </center>
 </BorderPane>
