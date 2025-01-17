@@ -118,7 +118,7 @@ public class simuCopy {
 
                     
                     do {
-                        System.err.println("Que tipo de moneda se ha recibido?\n\t[B] Bolivares\n\t[D] Dolares\n\t[T] USDT\n\t[Z] Zelle\n\t Tu seleccion: ");
+                        System.err.println("Que tipo de moneda se ha recibido?\n\t[B] Bolivares\n\t[D] Dolares\n\t[T] USDT\n\t[Z] Zelle\n\t\n\t[U] DESCONOCIDO\n\tTu seleccion: ");
                         op = sc.next().toUpperCase().charAt(0);
                         
                         if (!(!op.equals('B') && !op.equals('D') && !op.equals('T') && !op.equals('Z')))
@@ -599,7 +599,6 @@ public class simuCopy {
                     */
                     try (final PreparedStatement stm = conn.prepareStatement(query)) {
                         ResultSet st = stm.executeQuery();
-
                         while (st.next()) {
                             System.out.println(st.getString("id_trans") + ". Cliente: " + st.getString("Cliente") + ", Total Transaccion: " + st.getString("Monto_Transaccion") + ", Cantidad Abonada: " + st.getString("abonado") + ", Pendiente: " + st.getString("pendiente"));
                         }
@@ -624,14 +623,7 @@ public class simuCopy {
                     "group by id_trans, trans.id,clientes.nombre, clientes.apellido, clientes.alias, trans.fecha, trans.tipo, trans.cantidad_recibida, trans.moneda_recibida, inventario.cantidad, inventario.moneda ";
                                 */
 
-                    final String consulta = "select id_trans, concat(nombre, ' ', apellido, ' (', alias, ')') as Cliente, " + 
-                    "cantidad_recibida as Monto_Transaccion, trans.moneda_recibida as moneda,sum(cantidad) as abonado, moneda, trans.tipo, " + 
-                    "(cantidad_recibida - sum(cantidad)) as pendiente from trans " + 
-                    "inner join clientes on trans.cedula_cliente = clientes.cedula " + 
-                    "left join inventario on inventario.id_trans = trans.id " + 
-                    "where id_trans = '" + numero + "' and (tipo_movimiento = 'INGRESO' or tipo_movimiento = 'ABONO') and trans.status = 'ENVIADO' " + 
-                    "group by id_trans, moneda, tipo_movimiento, trans.tipo, cantidad_recibida, clientes.nombre, clientes.apellido, clientes.alias, trans.moneda_recibida";
-                    
+                    final String consulta = "select * from CUENTASXCOBRAR where id_trans = '" + numero + "'";
                             try (final PreparedStatement sta = conn.prepareStatement(consulta)) {
 
                                 ResultSet rs = sta.executeQuery();
@@ -652,6 +644,31 @@ public class simuCopy {
                             else {
                                 System.out.println("Ingrese la moneda: ");
                                 String moneda = sc.nextLine(); 
+                                int opcBanco = 0;
+                                /*INGRESE EL METODO A ABONAR*/
+
+                                List<String> nombreBanco = banksDAO.getInfoOf("nombre_banco", "moneda", moneda);
+                                List<String> codigos = banksDAO.getInfoOf("codigo", "moneda", moneda);
+                    
+                                     do {
+                                         System.out.println("Indique cual fue el metodo recibido?\n");
+                                
+                                        System.out.printf("%-30s%-30s%n", "Banco", "Codigo");
+                                
+                                        for (int index = 0; index < Math.min(nombreBanco.size(), codigos.size()); index++) {
+                                             System.out.printf("%-30s%-30s%n", (index + 1) + ". " + nombreBanco.get(index), codigos.get(index));
+                                        }
+                        
+                                            opcBanco = sc.nextInt(); sc.nextLine();
+
+                                            if (!(opcBanco >= 1 && opcBanco <= Math.min(nombreBanco.size(), codigos.size()))) {
+                                                 System.out.println("[WARNING]: debe elegir una opcion en el rango establecido");
+                                            }
+
+                                        } while (!(opcBanco >= 1 && opcBanco <= Math.min(nombreBanco.size(), codigos.size())));
+                    
+                                metodoRecibido = codigos.get(opcBanco - 1);
+
 
                                 final String dateTimeQuery = "select now () as hoy";
 
@@ -662,11 +679,15 @@ public class simuCopy {
                                     String idIngreso = "I-" + id_inventario;
 
                                     while (res.next()) {                                    
-                                        inventoryDAO.newRegister(idIngreso,res.getDate("hoy"), res.getTimestamp("hoy"), "INGRESO", Abono, moneda, "CH-NN-XXXX", "ABONO", id_trx);    
-                                        pendiente = rs.getDouble("pendiente");
+                                        inventoryDAO.newRegister(idIngreso,res.getDate("hoy"), res.getTimestamp("hoy"), "INGRESO", Abono, moneda, metodoRecibido, "ABONO", id_trx);    
+                                        rs = sta.executeQuery();
+                                        while (rs.next()) {
+                                            pendiente = rs.getDouble("pendiente");
+                                        }
                                         //Falta agregar que se debe actualizar el STATUS de la TRX a "OK" si completó el abono total.
                                     if (pendiente == 0)
                                         dbUtils.updateRegister("trans", "status", "OK", "id = '" + id_trx + "'");
+                                        dbUtils.updateRegister("trans", "metodo_recibido", metodoRecibido, "id = '" + id_trx + "'");
                                     }
                                     res.close();
                                     pst.close();                                

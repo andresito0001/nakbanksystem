@@ -6,9 +6,9 @@
     -fx-background-color: transparent;
 }
 
-#titleid {
+#titleLabelid {
     -fx-text-fill: #abb2bf;
-    -fx-font: 20px "Segoe UI";
+    -fx-font: 15 "Segoe UI";
 }
 
 .table-cell {

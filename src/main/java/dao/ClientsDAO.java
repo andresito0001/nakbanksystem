@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javafx.collections.ObservableList;
 import main.java.entities.Clients;
 
 public class ClientsDAO {
@@ -172,6 +173,19 @@ public class ClientsDAO {
         }
 
         return clients;
+    }
+
+    public void generarLista (ObservableList<Clients> listaClients, String filtro, String value) throws SQLException {
+        final String query = "select cedula, nombre, apellido, alias where " + filtro + " = '" + value + "'";
+
+        try (PreparedStatement st = conn.prepareStatement(query)) {
+            final ResultSet rs = st.executeQuery();
+
+            while(rs.next()) {
+                Clients client = new Clients(rs.getString("cedula"), rs.getString("nombre"), rs.getString("apellido"), rs.getString("alias"));
+                listaClients.add(client);
+            }
+        }
     }
 
     private final Connection conn;
