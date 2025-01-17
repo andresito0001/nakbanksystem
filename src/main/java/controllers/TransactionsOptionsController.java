@@ -16,6 +16,14 @@ public class TransactionsOptionsController {
         }
     }
 
+    public void consultTransaction(MouseEvent event) {
+        try {
+            SceneSwitcher.switchPane(borderPane, "/main/resources/fxml/consultTransactions.fxml", "/main/resources/css/consultTransaction.css", new ConsultTransactionController());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     @FXML
     private Pane borderPane;
 }
