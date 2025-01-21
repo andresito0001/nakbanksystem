@@ -9,6 +9,13 @@
     -fx-border-color: #1b222c;
 }
 
+#registerMessageId {
+    -fx-text-fill: #abb2bf;
+}
+#errorMessageId {
+    -fx-text-fill: #FF6F59;
+}
+
 #registerButton {
     -fx-background-color: #009cde;
     -fx-text-fill: #12151c;

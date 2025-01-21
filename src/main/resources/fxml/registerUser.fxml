@@ -2,9 +2,8 @@
 
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.MenuButton?>
-<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -19,10 +18,10 @@
             <Font size="20.0" />
          </font>
       </Text>
-      <TextField layoutX="47.0" layoutY="114.0" promptText="Cedula de Identidad" stylesheets="@../css/registerClients.css" />
-      <TextField layoutX="225.0" layoutY="114.0" promptText="Nombre" stylesheets="@../css/registerClients.css" />
-      <TextField layoutX="416.0" layoutY="114.0" promptText="Apellido" stylesheets="@../css/registerClients.css" />
-      <TextField layoutX="47.0" layoutY="176.0" promptText="Alias" stylesheets="@../css/registerTransaction.css" />
+      <TextField fx:id="cedulaId" layoutX="77.0" layoutY="127.0" promptText="Cedula de Identidad" stylesheets="@../css/registerClients.css" />
+      <TextField fx:id="nombreId" layoutX="250.0" layoutY="127.0" promptText="Nombre" stylesheets="@../css/registerClients.css" />
+      <TextField fx:id="apellidoId" layoutX="430.0" layoutY="127.0" promptText="Apellido" stylesheets="@../css/registerClients.css" />
+      <TextField fx:id="aliasId" layoutX="77.0" layoutY="191.0" promptText="Alias" stylesheets="@../css/registerTransaction.css" />
       <Label id="registerMsg" layoutX="32.0" layoutY="285.0" prefHeight="17.0" prefWidth="530.0" />
       <ImageView fitHeight="45.0" fitWidth="46.0" layoutX="150.0" layoutY="15.0" pickOnBounds="true" preserveRatio="true">
          <image>
@@ -34,27 +33,22 @@
             <Font name="System Bold" size="12.0" />
          </font>
       </Text>
-      <MenuButton fx:id="type" layoutX="8.0" layoutY="113.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="22.0">
-        <items>
-          <MenuItem mnemonicParsing="false" text="V-" />
-          <MenuItem mnemonicParsing="false" text="E-" />
-            <MenuItem mnemonicParsing="false" text="J-" />
-        </items>
-      </MenuButton>
       <ImageView fitHeight="25.0" fitWidth="26.0" layoutX="22.0" layoutY="36.0">
          <image>
             <Image url="@../img/back-icon.png" />
          </image>
       </ImageView>
-      <Button fx:id="registerButton" layoutX="47.0" layoutY="226.0" mnemonicParsing="false" stylesheets="@../css/registerClients.css" text="Confirmar">
+      <Button fx:id="registerButton" onMouseClicked="#registerClient" layoutX="77.0" layoutY="241.0" mnemonicParsing="false" stylesheets="@../css/registerClients.css" text="Confirmar">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>
       </Button>
-      <Button fx:id="cancelarButton" layoutX="133.0" layoutY="226.0" mnemonicParsing="false" stylesheets="@../css/registerClients.css" text="Cancelar">
+      <Button fx:id="cancelarButton" layoutX="166.0" layoutY="241.0" mnemonicParsing="false" stylesheets="@../css/registerClients.css" text="Cancelar">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>
       </Button>
+      <ComboBox fx:id="filterTypeId" layoutX="6.0" layoutY="127.0" prefHeight="23.0" prefWidth="62.0" promptText="V" />
+      <Label fx:id="registerMessageId" layoutX="76.0" layoutY="294.0" />
    </children>
 </AnchorPane>

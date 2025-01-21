@@ -10,8 +10,10 @@ import java.util.List;
 
 import javafx.collections.ObservableList;
 import main.java.entities.Clients;
+import main.java.util.ConnectionPool;
 
 public class ClientsDAO {
+
     public ClientsDAO(final Connection conn) {
         this.conn = conn;
     }
@@ -144,10 +146,10 @@ public class ClientsDAO {
      * @param cedula
      */
     public void insertClient(final Clients client) throws SQLException {
-        final String query = "insert into cliente(alias, nombre, apellido, cedula) values (?, ?, ?, ?)";
+        final String query = "insert into clientes(alias, nombre, apellido, cedula) values (?, ?, ?, ?)";
         try (PreparedStatement st = conn.prepareStatement(query)){
             st.setString(1, client.getAlias());
-            st.setString(2, client.getLastName());
+            st.setString(2, client.getName());
             st.setString(3, client.getLastName());
             st.setString(4, client.getCi());
 
@@ -174,19 +176,36 @@ public class ClientsDAO {
 
         return clients;
     }
+    public void getClientsFilter(String filtro, String value, ObservableList<Clients> listaClientes) throws SQLException {
+        final String query = "select cedula, nombre, apellido, alias from clientes where " + filtro + " ~ " +  "'" + "\\" + "m" + value + "' ";
 
-    public void generarLista (ObservableList<Clients> listaClients, String filtro, String value) throws SQLException {
+       // List<Clients> clients = new ArrayList<>();
+        try (PreparedStatement st = ConnectionPool.getConnection().prepareStatement(query)) {
+            final ResultSet rs = st.executeQuery();
+            while(rs.next()) {
+                Clients cliente = new Clients(rs.getString("cedula"), rs.getString("nombre"), rs.getString("apellido"), rs.getString("alias"));
+                listaClientes.add(cliente);
+            }
+            rs.close();
+            st.close();
+        }
+       // return clients;
+    }
+/*
+    public static void generarLista (ObservableList<ClientsDAO> listaClients, String filtro, String value) throws SQLException {
         final String query = "select cedula, nombre, apellido, alias where " + filtro + " = '" + value + "'";
 
         try (PreparedStatement st = conn.prepareStatement(query)) {
             final ResultSet rs = st.executeQuery();
 
             while(rs.next()) {
-                Clients client = new Clients(rs.getString("cedula"), rs.getString("nombre"), rs.getString("apellido"), rs.getString("alias"));
-                listaClients.add(client);
+                listaClients.add()
+                //Clients client = new Clients(rs.getString("cedula"), rs.getString("nombre"), rs.getString("apellido"), rs.getString("alias"));
+                //listaClients.add(client);
             }
         }
     }
+    */
 
     private final Connection conn;
 }

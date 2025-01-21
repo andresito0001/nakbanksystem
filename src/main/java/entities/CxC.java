@@ -1,13 +1,10 @@
 package main.java.entities;
 
-import java.beans.Statement;
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import javax.naming.spi.DirStateFactory.Result;
 
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
@@ -53,7 +50,7 @@ public class CxC {
             PreparedStatement st = conn.prepareStatement(query);
             ResultSet rs = st.executeQuery();
 
-            while (rs.next()){
+            while (rs.next()) {
                 listaCxC.add(
                     new CxC(rs.getString("id_trans"), rs.getString("cliente"), rs.getDouble("monto_transaccion"), rs.getDouble("abonado"), rs.getDouble("pendiente"))
                 );

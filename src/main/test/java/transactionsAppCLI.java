@@ -248,8 +248,8 @@ public class transactionsAppCLI {
                                 try (final PreparedStatement stm = conn.prepareStatement(dateTimeQuery)) {
                                     ResultSet rs = stm.executeQuery();
                                     if (rs.next()) {
-                                        inventoryDAO.newRegister(rs.getDate("fecha"), rs.getTimestamp("hora"), "INGRESO", cantRecibida, typeMoneySent, metodoRecibido, transType);
-                                        inventoryDAO.newRegister(rs.getDate("fecha"), rs.getTimestamp("hora"), "EGRESO", cantEnviada, typeMoneyReceived, metodoEnviado, transType);
+                                      //  inventoryDAO.newRegister(rs.getDate("fecha"), rs.getTimestamp("hora"), "INGRESO", cantRecibida, typeMoneySent, metodoRecibido, transType);
+                                       // inventoryDAO.newRegister(rs.getDate("fecha"), rs.getTimestamp("hora"), "EGRESO", cantEnviada, typeMoneyReceived, metodoEnviado, transType);
                                     } else {
                                         System.err.println("No data found in simutrans table.");
                                     }
@@ -345,8 +345,8 @@ public class transactionsAppCLI {
                                 try (final PreparedStatement stm = conn.prepareStatement(dateTimeQuery)) {
                                     ResultSet rs = stm.executeQuery();
                                     if (rs.next()) {
-                                        inventoryDAO.newRegister(rs.getDate("fecha"), rs.getTimestamp("hora"), "INGRESO", cantRecibida, MoneyType.BOLIVARES.getNombre(), metodoRecibido, "COMPRA");
-                                        inventoryDAO.newRegister(rs.getDate("fecha"), rs.getTimestamp("hora"), "EGRESO", cantEnviada, MoneyType.BINANCE_USDT.getNombre(), PlataformasOnline.BINANCE.getNombre(), "VENTA");
+                                     //   inventoryDAO.newRegister(rs.getDate("fecha"), rs.getTimestamp("hora"), "INGRESO", cantRecibida, MoneyType.BOLIVARES.getNombre(), metodoRecibido, "COMPRA");
+                                     //   inventoryDAO.newRegister(rs.getDate("fecha"), rs.getTimestamp("hora"), "EGRESO", cantEnviada, MoneyType.BINANCE_USDT.getNombre(), PlataformasOnline.BINANCE.getNombre(), "VENTA");
                                         
                                         dbUtils.updateRegister("bancos", "saldo_actual", (totalBalanceUsdt - cantEnviada), "codigo = " + "'" + "BE-WN-0006" + "'");
                                         dbUtils.updateRegister("bancos", "saldo_actual", cantRecibida, "codigo = " + "'" + nCuenta + "'");
