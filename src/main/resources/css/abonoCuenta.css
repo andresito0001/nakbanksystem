@@ -1,0 +1,47 @@
+.anchor-pane {
+    -fx-background-color: #12151c;
+}
+
+.text-field {
+    -fx-background-color: #1b222c;
+    -fx-text-inner-color: #abb2bf;
+    -fx-prompt-text-fill: #354357;
+    -fx-border-color: #1b222c;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+}
+
+#abonarButton {
+    -fx-background-color: #009cde;
+    -fx-text-fill: #12151c;
+    -fx-font-size: 12;
+    -fx-font-family: 'Souego UI'; 
+    -fx-background-radius: 10;
+}
+
+#cancelarButton {
+    -fx-background-color: #FF6F59;
+    -fx-text-fill: #12151c;
+    -fx-font-size: 12;
+    -fx-font-family: 'Souego UI'; 
+    -fx-background-radius: 10;
+}
+
+.combo-box {
+    -fx-background-color: #1b222c;
+    -fx-text-inner-color: #abb2bf;
+    -fx-background-radius: 10;
+}
+.label {
+    -fx-text-fill: #abb2bf;
+    -fx-font-size: 12;
+    -fx-font-family: 'Souego UI'; 
+}
+
+.button:hover {
+    -fx-border-color: white;
+    -fx-border-radius: 10;
+    -fx-border-width: 1.5;
+    -fx-background-radius: 9;
+}
+

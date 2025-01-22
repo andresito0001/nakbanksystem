@@ -18,10 +18,14 @@ public class CxC {
     private DoubleProperty montoTransaccion;
     private DoubleProperty abonadoTransaccion;
     private DoubleProperty pendienteTransaccion;
+    private StringProperty moneda;
+    private StringProperty tipo;
 
-    public CxC (String idTrans, String cliente, Double monto, Double abonado, Double pendiente) {
+    public CxC (String idTrans, String cliente, Double monto, String moneda, Double abonado, Double pendiente, String tipo) {
         this.idTransaction = new SimpleStringProperty(idTrans);
         this.cliente = new SimpleStringProperty(cliente);
+        this.moneda = new SimpleStringProperty(moneda);
+        this.tipo = new SimpleStringProperty(tipo);
         this.montoTransaccion = new SimpleDoubleProperty(monto);
         this.abonadoTransaccion = new SimpleDoubleProperty(abonado);
         this.pendienteTransaccion = new SimpleDoubleProperty(pendiente);
@@ -42,17 +46,23 @@ public class CxC {
     public Double getPendienteTransaccion() {
         return pendienteTransaccion.get();
     }
+    public String getMonedaTransaccion() {
+        return moneda.get();
+    }
+    public String getTipoTransaccion() {
+        return tipo.get();
+    }
     public static void generarLista (Connection conn, ObservableList<CxC> listaCxC)
     {
 
         try {
-            String query = "select id_trans, cliente, monto_transaccion, abonado, pendiente from CUENTASXCOBRAR where pendiente > 0";
+            String query = "select id_trans, cliente, monto_transaccion, moneda_trans, tipo, abonado, pendiente from CUENTASXCOBRAR where pendiente > 0";
             PreparedStatement st = conn.prepareStatement(query);
             ResultSet rs = st.executeQuery();
 
             while (rs.next()) {
                 listaCxC.add(
-                    new CxC(rs.getString("id_trans"), rs.getString("cliente"), rs.getDouble("monto_transaccion"), rs.getDouble("abonado"), rs.getDouble("pendiente"))
+                    new CxC(rs.getString("id_trans"), rs.getString("cliente"), rs.getDouble("monto_transaccion"),rs.getString("moneda_trans") ,rs.getDouble("abonado"), rs.getDouble("pendiente"), rs.getString("tipo"))
                 );
             }
         } catch (SQLException exception) {

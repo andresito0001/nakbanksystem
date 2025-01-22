@@ -5,9 +5,19 @@
     -fx-background-color: transparent;
 }
 
+.table-column {
+    -fx-background-color: transparent;
+}
+
 #titleId {
     -fx-text-fill: #abb2bf;
     -fx-font-size: 20;
+    -fx-font-family: "Segoe UI";
+}
+
+#labelInfoId {
+    -fx-text-fill: #abb2bf;
+    -fx-font-size: 15;
     -fx-font-family: "Segoe UI";
 }
 
@@ -19,7 +29,7 @@
 }
 
 .table-row-cell:empty, .table-cell-empty:hover {
-    -fx-background-color: #abb2bf;
+    -fx-background-color: transparent;
 }
 
 .table-row-cell:empty .table-cell {
