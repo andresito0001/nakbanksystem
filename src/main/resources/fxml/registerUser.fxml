@@ -11,24 +11,24 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane fx:id="anchorPaneId" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@../css/registerClients.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane fx:id="anchorPaneId" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="747.0" stylesheets="@../css/registerClients.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Text fx:id="tittleId" fill="#abb2bf" layoutX="214.0" layoutY="48.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Registrar Cliente">
+      <Text fx:id="tittleId" fill="#abb2bf" layoutX="316.0" layoutY="76.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Registrar Cliente">
          <font>
             <Font size="20.0" />
          </font>
       </Text>
-      <TextField fx:id="cedulaId" layoutX="77.0" layoutY="127.0" promptText="Cedula de Identidad" stylesheets="@../css/registerClients.css" />
-      <TextField fx:id="nombreId" layoutX="250.0" layoutY="127.0" promptText="Nombre" stylesheets="@../css/registerClients.css" />
-      <TextField fx:id="apellidoId" layoutX="430.0" layoutY="127.0" promptText="Apellido" stylesheets="@../css/registerClients.css" />
-      <TextField fx:id="aliasId" layoutX="77.0" layoutY="191.0" promptText="Alias" stylesheets="@../css/registerTransaction.css" />
-      <Label id="registerMsg" layoutX="32.0" layoutY="285.0" prefHeight="17.0" prefWidth="530.0" />
-      <ImageView fitHeight="45.0" fitWidth="46.0" layoutX="150.0" layoutY="15.0" pickOnBounds="true" preserveRatio="true">
+      <TextField fx:id="cedulaId" layoutX="404.0" layoutY="144.0" promptText="Cedula de Identidad" stylesheets="@../css/registerClients.css" />
+      <TextField fx:id="nombreId" layoutX="193.0" layoutY="209.0" promptText="Nombre" stylesheets="@../css/registerClients.css" />
+      <TextField fx:id="apellidoId" layoutX="404.0" layoutY="209.0" promptText="Apellido" stylesheets="@../css/registerClients.css" />
+      <TextField fx:id="aliasId" layoutX="193.0" layoutY="262.0" prefHeight="27.0" prefWidth="363.0" promptText="Alias" stylesheets="@../css/registerTransaction.css" />
+      <Label id="registerMsg" layoutX="49.0" layoutY="362.0" prefHeight="17.0" prefWidth="530.0" />
+      <ImageView fitHeight="45.0" fitWidth="46.0" layoutX="252.0" layoutY="42.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../img/add-client.png" />
          </image>
       </ImageView>
-      <Text fill="#abb2bf" layoutX="119.0" layoutY="77.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Llene los datos para completar el registro de un nuevo cliente">
+      <Text fill="#abb2bf" layoutX="205.0" layoutY="104.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Llene los datos para completar el registro de un nuevo cliente">
          <font>
             <Font name="System Bold" size="12.0" />
          </font>
@@ -38,17 +38,21 @@
             <Image url="@../img/back-icon.png" />
          </image>
       </ImageView>
-      <Button fx:id="registerButton" onMouseClicked="#registerClient" layoutX="77.0" layoutY="241.0" mnemonicParsing="false" stylesheets="@../css/registerClients.css" text="Confirmar">
+      <Button fx:id="registerButton" layoutX="195.0" layoutY="308.0" mnemonicParsing="false" onMouseClicked="#registerClient" stylesheets="@../css/registerClients.css" text="Confirmar">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>
       </Button>
-      <Button fx:id="cancelarButton" layoutX="166.0" layoutY="241.0" mnemonicParsing="false" stylesheets="@../css/registerClients.css" text="Cancelar">
+      <Button fx:id="cancelarButton" layoutX="490.0" layoutY="308.0" mnemonicParsing="false" stylesheets="@../css/registerClients.css" text="Cancelar">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>
       </Button>
-      <ComboBox fx:id="filterTypeId" layoutX="6.0" layoutY="127.0" prefHeight="23.0" prefWidth="62.0" promptText="V" />
-      <Label fx:id="registerMessageId" layoutX="76.0" layoutY="294.0" />
+      <ComboBox fx:id="filterTypeId" layoutX="193.0" layoutY="145.0" prefHeight="23.0" prefWidth="148.0" promptText="Tipo de Documento" />
+      <Label fx:id="registerMessageId" layoutX="186.0" layoutY="370.0" prefHeight="17.0" prefWidth="375.0" />
+      <Label layoutX="407.0" layoutY="125.0" prefHeight="17.0" prefWidth="153.0" text="Cedula" textFill="#abb2bf" />
+      <Label layoutX="195.0" layoutY="191.0" prefHeight="17.0" prefWidth="144.0" text="Nombre" textFill="#abb2bf" />
+      <Label layoutX="405.0" layoutY="191.0" prefHeight="17.0" prefWidth="144.0" text="Apellido" textFill="#abb2bf" />
+      <Label layoutX="194.0" layoutY="244.0" prefHeight="17.0" prefWidth="144.0" text="Alias / Sobrenombre" textFill="#abb2bf" />
    </children>
 </AnchorPane>

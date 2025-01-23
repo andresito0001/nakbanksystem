@@ -36,12 +36,12 @@ public class RegisterClientController {
     }
     @FXML
     public void registerClient(MouseEvent event) throws SQLException {
-        if (cedulaId.getText().isEmpty() == true) {
+        if (cedulaId.getText().isEmpty() == true || documentType == null) {
             registerMessageId.setId("errorMessageId");
             registerMessageId.setText("Error. Debe ingresar la cedula del cliente para su registro. ");
         }
         else {
-            registerMessageId.setId("registerMessageId");
+                registerMessageId.setId("registerMessageId");
                 ClientsDAO clientsDAO = new ClientsDAO(ConnectionPool.getConnection());
                 Clients cliente = new Clients(documentType + cedulaId.getText().toString(), nombreId.getText().toString(), apellidoId.getText().toString(), aliasId.getText().toString());
                 clientsDAO.insertClient(cliente);
