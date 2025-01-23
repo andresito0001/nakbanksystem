@@ -1,9 +1,7 @@
 package main.java.entities;
 
-import java.sql.Connection;
-
-public class Cicle {
-    public Cicle (final Connection conn, final String id, final Clients client, final Admin admin,
+public class Cycle {
+    public Cycle (final String id, final Clients client, final String adminUsername,
     final String date, final String time,
     final Double quantityReceived, final String currencyReceived, final String receivedMethod,
     final Double sentQuantity, final String sentCurrency, final String sentMethod, final String status, 
@@ -11,7 +9,7 @@ public class Cicle {
         
         this.id = id;
         this.client = client;
-        this.admin = admin;
+        this.adminUsername = adminUsername;
         this.date = date;
         this.time = time;
         this.quantityReceived = quantityReceived;
@@ -25,9 +23,25 @@ public class Cicle {
         this.bankRef = bankRef;
     }
     
+    //getters 
+    public String getId() { return id; }
+    public Clients getClient() { return client; }
+    public String getAdmin() { return adminUsername; }
+    public String getDate() { return date; }
+    public String getTime() { return time; }
+    public Double getQuantityReceived() { return quantityReceived; }
+    public String getCurrencyReceived() { return currencyReceived; }
+    public String getReceivedMethod() { return receivedMethod;}
+    public String getSentCurrency() { return sentCurrency; }
+    public String getSentMethod() { return sentMethod; }
+    public Double getSentQuantity() { return sentQuantity; }
+    public String getStatus() { return status; }
+    public Double getRate() { return rate; }
+    public String getBankRef() { return bankRef;}
+
     private final String id;
     private final Clients client;
-    private final Admin admin;
+    private final String adminUsername;
     private final String date;
     private final String time;
     private final Double quantityReceived;

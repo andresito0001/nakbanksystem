@@ -117,14 +117,3 @@ public class TransactionsDAO {
     
     private final Connection conn;
 }
-
-
-// select concat(nombre, ' ', apellido, '(', alias, ')') as cliente, trans.fecha, trans.tipo, concat(trans.cantidad_recibida, ' ', trans.moneda_recibida) as total,
-// concat(inventario.cantidad, ' ', inventario.moneda) as abonado,
-// concat ((sum(trans.cantidad_recibida) - sum(inventario.cantidad)), ' ', trans.moneda_recibida) as pendiente
-// from trans
-// inner join clientes on trans.cedula_cliente = clientes.cedula 
-// left join inventario on inventario.referencia like concat('I-',trans.id)
-// where inventario.tipo_movimiento = 'INGRESO' and trans.status = 'PENDIENTE'
-// group by clientes.nombre, clientes.apellido, clientes.alias, trans.fecha, trans.tipo, trans.cantidad_recibida, trans.moneda_recibida, inventario.cantidad, inventario.moneda
-

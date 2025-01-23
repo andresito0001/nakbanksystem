@@ -13,32 +13,32 @@
 
 <AnchorPane fx:id="borderPaneId" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="546.0" prefWidth="757.0" stylesheets="@../css/registerTransaction.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <TextField fx:id="searchClientsBar" layoutX="26.0" layoutY="143.0" prefHeight="25.0" prefWidth="287.0" promptText="Nombre, Apellido, Cedula, Alias" />
+      <TextField fx:id="searchClientsBar" layoutX="81.0" layoutY="134.0" prefHeight="25.0" prefWidth="287.0" promptText="Nombre, Apellido, Cedula, Alias" />
       <Label fx:id="tittleId" layoutX="27.0" layoutY="77.0" text="Registrar Transacción" />
-      <Label layoutX="28.0" layoutY="125.0" text="Cliente" />
+      <Label layoutX="30.0" layoutY="139.0" text="Cliente" />
       <ComboBox fx:id="receivedCheckBox" layoutX="27.0" layoutY="203.0" prefHeight="25.0" prefWidth="165.0" promptText="Codigo" styleClass="combo-box-style" />
       <Label layoutX="26.0" layoutY="182.0" text="Recibido en:" />
-      <TextField fx:id="receivedTextField" layoutX="280.0" layoutY="202.0" prefHeight="25.0" prefWidth="165.0" />
-      <Label layoutX="281.0" layoutY="182.0" text="Cantidad Recibida" />
+      <TextField fx:id="receivedTextField" layoutX="268.0" layoutY="202.0" prefHeight="25.0" prefWidth="165.0" promptText="0.00" />
+      <Label layoutX="272.0" layoutY="182.0" text="Cantidad Recibida" />
       <ComboBox fx:id="checkboxSent" layoutX="30.0" layoutY="273.0" prefHeight="25.0" prefWidth="165.0" promptText="Codigo" styleClass="combo-box-style" />
       <Label layoutX="30.0" layoutY="255.0" text="Enviado desde:" />
-      <TextField fx:id="sentTextField" layoutX="281.0" layoutY="272.0" prefHeight="25.0" prefWidth="165.0" />
-      <Label layoutX="283.0" layoutY="255.0" text="Cantidad Enviada" />
-      <ListView fx:id="listViewId" layoutX="26.0" layoutY="169.0" prefHeight="137.0" prefWidth="287.0" />
+      <TextField fx:id="sentTextField" layoutX="268.0" layoutY="272.0" prefHeight="25.0" prefWidth="165.0" promptText="0.00" />
+      <Label layoutX="274.0" layoutY="255.0" text="Cantidad Enviada" />
+      <ListView fx:id="listViewId" layoutX="81.0" layoutY="161.0" prefHeight="137.0" prefWidth="287.0" />
       <Label layoutX="26.0" layoutY="324.0" text="Transacción tipo" />
       <ComboBox fx:id="typeTransBox" layoutX="29.0" layoutY="342.0" prefHeight="23.0" prefWidth="165.0" promptText="COMPRA - VENTA" styleClass="combo-box-style" />
-      <CheckBox fx:id="fullPayment" layoutX="33.0" layoutY="397.0" mnemonicParsing="false" text="Pago Completo" />
-      <Button fx:id="confirmButton" layoutX="35.0" layoutY="452.0" mnemonicParsing="false" text="Confirmar">
+      <CheckBox fx:id="fullPayment" layoutX="29.0" layoutY="436.0" mnemonicParsing="false" text="Pago Completo" />
+      <Button fx:id="confirmButton" layoutX="35.0" layoutY="477.0" mnemonicParsing="false" text="Confirmar">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>
       </Button>
-      <Button fx:id="cancelButton" layoutX="120.0" layoutY="452.0" mnemonicParsing="false" text="Cancelar">
+      <Button fx:id="cancelButton" layoutX="124.0" layoutY="477.0" mnemonicParsing="false" text="Cancelar">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>
       </Button>
-      <ImageView fitHeight="23.0" fitWidth="26.0" layoutX="283.0" layoutY="146.0">
+      <ImageView fitHeight="23.0" fitWidth="26.0" layoutX="338.0" layoutY="136.0">
          <image>
             <Image url="@../img/search-icon.png" />
          </image>
@@ -48,9 +48,15 @@
             <Image url="@../img/back-icon.png" />
          </image>
       </ImageView>
-      <TextField fx:id="amountTextField" layoutX="513.0" layoutY="202.0" prefHeight="25.0" prefWidth="165.0" />
-      <Label layoutX="513.0" layoutY="182.0" text="Tasa $" />
-      <TextField fx:id="initialPaymentTextField" layoutX="513.0" layoutY="272.0" prefHeight="25.0" prefWidth="165.0" />
-      <Label layoutX="515.0" layoutY="255.0" text="Pago inicial:" />
+      <TextField fx:id="amountTextField" layoutX="268.0" layoutY="340.0" prefHeight="25.0" prefWidth="165.0" promptText="0.00" />
+      <Label layoutX="268.0" layoutY="324.0" text="Tasa $" />
+      <TextField fx:id="initialPaymentTextField" layoutX="155.0" layoutY="431.0" prefHeight="25.0" prefWidth="165.0" promptText="0.00" />
+      <Label layoutX="155.0" layoutY="413.0" text="Pago inicial" />
+      <TextField layoutX="513.0" layoutY="340.0" prefHeight="28.0" prefWidth="165.0" promptText="#" />
+      <ComboBox fx:id="currencyReceivedComboBox" layoutX="513.0" layoutY="203.0" prefHeight="25.0" prefWidth="165.0" promptText="-" styleClass="combo-box-style" />
+      <ComboBox fx:id="sentCurrencyComboBox" layoutX="513.0" layoutY="273.0" prefHeight="25.0" prefWidth="165.0" promptText="-" styleClass="combo-box-style" />
+      <Label layoutX="513.0" layoutY="182.0" text="Moneda" />
+      <Label layoutX="513.0" layoutY="255.0" text="Moneda" />
+      <Label layoutX="513.0" layoutY="324.0" text="Referencia" />
    </children>
 </AnchorPane>

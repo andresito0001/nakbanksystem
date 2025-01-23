@@ -30,6 +30,7 @@ public class LoginController {
             protected Boolean call() throws Exception {
                 try (final Connection conn = ConnectionPool.getConnection()) {
                     AdminDAO admin = new AdminDAO(conn);
+
                     return admin.authenticateUser(userNameId.getText(), passwordId.getText());
                 }
             }
@@ -45,7 +46,7 @@ public class LoginController {
             }
         });
 
-        loginTask.setOnFailed(e -> {
+        loginTask.setOnFailed(_ -> {
             loginTask.getException().printStackTrace();
         });
 

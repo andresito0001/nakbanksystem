@@ -16,7 +16,10 @@ import javafx.event.ActionEvent;
 import main.java.dao.BanksDAO;
 import main.java.dao.ClientsDAO;
 import main.java.entities.Clients;
+import main.java.entities.Transactions;
 import main.java.util.ConnectionPool;
+import main.java.util.DatabaseUtils;
+import main.java.util.ULID;
 
 public class RegisterTransactionController{
     @FXML
@@ -31,6 +34,10 @@ public class RegisterTransactionController{
     private ComboBox<String> checkboxSent;
     @FXML
     private ComboBox<String> typeTransBox;
+    @FXML
+    private ComboBox<String> currencyReceivedComboBox;
+    @FXML
+    private ComboBox<String> sentCurrencyComboBox;
     @FXML
     private TextField receivedTextField;
     @FXML
@@ -149,11 +156,9 @@ public class RegisterTransactionController{
         String sent = sentTextField.getText();
         String received = receivedTextField.getText();
         String amount = amountTextField.getText();
-        String client = searchClientsBar.getText();
-        List<String> clientSplit = List.of(client.split(" "));
-        String ID  = clientSplit.get(2);
-        
-        
+        String clientString = searchClientsBar.getText();
+        List<String> clientSplit = List.of(clientString.split(" "));
+
         // System.out.println("Sent bank: " + sentBank + "\nReceived bank: " + receivedBank + "\nTransaction type: " + transactionType + "\nSent: " + sent + "\nReceived: " + received + "\nAmount: " + amount + "\nClient: " + ID);
         clearFields();
     }
@@ -177,5 +182,11 @@ public class RegisterTransactionController{
         checkboxSent.setValue(null);
         receivedCheckBox.setValue(null);
         typeTransBox.setValue(null);
+    }
+
+    private void addCurrencyReceivedComboBox() {
+        String[] code = { "VES", "USD - EFECTIVO", "ZELLE",  }
+        currencyReceivedComboBox.getItems().addAll(code);
+        
     }
 }
