@@ -98,6 +98,10 @@ public class AbonoCuentaController {
                     dbUtils.updateRegister("trans", "metodo_recibido", metodoId.getSelectionModel().getSelectedItem(), "id = '" + cuentaXAbonar.getIdTransaction() + "'");
                     cuentaXAbonar.actualizarPendiente(ConnectionPool.getConnection());
                 }
+                BanksDAO banksDAO = new BanksDAO(ConnectionPool.getConnection());
+                final Double totalBalance = banksDAO.getTotalBalanceOf(metodoId.getSelectionModel().getSelectedItem());
+                dbUtils.updateRegister("bancos", "saldo_actual", (totalBalance + monto), "codigo = '" + metodoId.getSelectionModel().getSelectedItem() + "'");
+
                 if (cuentaXAbonar.getPendienteTransaccion() == 0) {
                     dbUtils.updateRegister("trans", "status", "OK", "id = '" + cuentaXAbonar.getIdTransaction() + "'");
                     Alert alert = new Alert(AlertType.INFORMATION, "Cuenta por el monto " + monto.toString() + " " + cuentaXAbonar.getMonedaTransaccion() + " saldada completamente! ");
