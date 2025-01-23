@@ -69,4 +69,18 @@ public class CxC {
             exception.printStackTrace();
         }
     }
+    public void actualizarPendiente (Connection conn) {
+        try {
+            String query = "select pendiente from CUENTASXCOBRAR where id_trans = '" + idTransaction.get() + "'";
+            PreparedStatement st = conn.prepareStatement(query);
+            ResultSet rs = st.executeQuery();
+
+            if (rs.next()) {
+                pendienteTransaccion.set(rs.getDouble("pendiente"));
+            }
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
+        
+    }
 }

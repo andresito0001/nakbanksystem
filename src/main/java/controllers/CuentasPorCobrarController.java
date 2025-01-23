@@ -60,9 +60,7 @@ public class CuentasPorCobrarController {
         pendienteId.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getPendienteTransaccion().toString() + " " + param.getValue().getMonedaTransaccion()));
 
         if (listaCxC.isEmpty() == true) {
-            transactionIdAbono.setVisible(false);
-            abonoLabelId.setVisible(false);
-            abonoButtonId.setVisible(false);
+            System.out.println("No hay cuentas por cobrar");
         }
 
         

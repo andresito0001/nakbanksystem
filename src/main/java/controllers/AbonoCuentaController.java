@@ -1,8 +1,12 @@
 package main.java.controllers;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -10,10 +14,16 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.Pane;
 import javafx.scene.control.Alert.AlertType;
 import main.java.dao.BanksDAO;
+import main.java.dao.InventoryDAO;
 import main.java.entities.CxC;
+import main.java.entities.Inventory;
 import main.java.util.ConnectionPool;
+import main.java.util.DatabaseUtils;
+import main.java.util.SceneSwitcher;
+import main.java.util.ULID;
 
 
 public class AbonoCuentaController {
@@ -35,35 +45,86 @@ public class AbonoCuentaController {
     private Label montoMaxId;
 
     private static CxC cuentaXAbonar;
-    
-    public void initialize () throws SQLException {
+
+    private InventoryDAO inventoryDAO;
+        
+        public void initialize () throws SQLException {
+
+        String typeMoneyReceived = cuentaXAbonar.getMonedaTransaccion();
         List<String> bankCodes = new ArrayList<>();
-        bankCodes = new BanksDAO(ConnectionPool.getConnection()).getInfoOf("codigo", null, null);
+        bankCodes = new BanksDAO(ConnectionPool.getConnection()).getInfoOf("codigo", "moneda", typeMoneyReceived);
+        
         metodoId.getItems().addAll(bankCodes); 
+       
         montoMaxId.setText("Monto debe ser menor o igual a " + cuentaXAbonar.getPendienteTransaccion());
         infoTransactionId.setText("Cuenta #" + cuentaXAbonar.getIdTransaction() + ". Cliente: " + cuentaXAbonar.getCliente() + ". ");       
         infoTransactionId1.setText("Monto Total: " + cuentaXAbonar.getMontoTransaccion() + " " + cuentaXAbonar.getMonedaTransaccion() + ". Total Abonado: " + cuentaXAbonar.getAbonadoTransaccion() + ". Pendiente: " + cuentaXAbonar.getPendienteTransaccion());
+       
+        metodoId.setOnAction(e -> {
+            try {
+                String codeBank = metodoId.getSelectionModel().getSelectedItem();
+                DatabaseUtils dbUtils = new DatabaseUtils(ConnectionPool.getConnection());
+                String nameBank = dbUtils.getValueOf("nombre_banco", "bancos", "codigo = '" + codeBank + "'").toString();
+        
+                bankInfoId.setText(codeBank + " " + nameBank);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+
+        });
     }
 
     public static void setCuenta(CxC cuentaXCobrar) {
         cuentaXAbonar = cuentaXCobrar;
     }
 
-    public void abonarCuenta () {
+    public void abonarCuenta () throws SQLException{
         Double monto = Double.parseDouble(montoId.getText());
         if(monto <= cuentaXAbonar.getPendienteTransaccion())
         {
+            inventoryDAO = new InventoryDAO(ConnectionPool.getConnection());
+            DatabaseUtils dbUtils = new DatabaseUtils(ConnectionPool.getConnection());
             
-            Alert alert = new Alert(AlertType.INFORMATION, "Monto a abonar: " + monto.toString());
-            alert.showAndWait();
+            try (PreparedStatement st = ConnectionPool.getConnection().prepareStatement("select now () as hoy")) {
+                ResultSet rs = st.executeQuery();
+
+                byte[] random = new byte[] { 0x1, 0x1, 0x2, 0x3, 0x4, 0x5, 0x6, 0x7, 0x8, 0x9 };
+                final String id_inventario = ULID.generate(System.currentTimeMillis(), random);
+                
+                String idIngreso = "I-" + id_inventario;
+
+                while (rs.next()) {
+                    inventoryDAO.newRegister(idIngreso, rs.getDate("hoy"), rs.getTimestamp("hoy"), "INGRESO", monto, cuentaXAbonar.getMonedaTransaccion(), metodoId.getSelectionModel().getSelectedItem(), "ABONO", cuentaXAbonar.getIdTransaction());
+                    dbUtils.updateRegister("trans", "metodo_recibido", metodoId.getSelectionModel().getSelectedItem(), "id = '" + cuentaXAbonar.getIdTransaction() + "'");
+                    cuentaXAbonar.actualizarPendiente(ConnectionPool.getConnection());
+                }
+                if (cuentaXAbonar.getPendienteTransaccion() == 0) {
+                    dbUtils.updateRegister("trans", "status", "OK", "id = '" + cuentaXAbonar.getIdTransaction() + "'");
+                    Alert alert = new Alert(AlertType.INFORMATION, "Cuenta por el monto " + monto.toString() + " " + cuentaXAbonar.getMonedaTransaccion() + " saldada completamente! ");
+                    alert.showAndWait();
+                }
+                else {
+                    System.out.println("Le queda un pendiente de " + cuentaXAbonar.getPendienteTransaccion());
+                }
+                rs.close();
+                st.close();
+            }
         }
         else {
             Alert alert = new Alert(AlertType.INFORMATION, "Error en: " + monto.toString());
             alert.showAndWait();
         }
 
+        try {
+            SceneSwitcher.switchPane(AnchorPane, "/main/resources/fxml/cuentasPorCobrar.fxml", "/main/resources/css/cxc.css", new CuentasPorCobrarController());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
     }
 
-
-
+    @FXML
+    private Pane AnchorPane;
+    
 }
