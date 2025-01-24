@@ -146,17 +146,17 @@ public class DashBoardController  implements Initializable{
 
     private List<CardModel> accountBalance() throws SQLException {
         List<CardModel> cardModels = new ArrayList<>();
-        List<String> codesList, bankNamesList, balancesList;
+        List<String> codesList, bankNamesList, balancesList, typeMoneyList;
 
         BanksDAO banksDAO = new BanksDAO(ConnectionPool.getConnection());
         codesList = banksDAO.getInfoOf("codigo", null, null);
         bankNamesList = banksDAO.getInfoOf("nombre_banco", null, null);
         balancesList = banksDAO.getInfoOf("saldo_actual", null, null);
-
+        typeMoneyList = banksDAO.getInfoOf("moneda", null, null);
         for (int i = 0; i < codesList.size(); i++) {
             cardModels.add(new CardModel(codesList.get(i),
             bankNamesList.get(i),
-            balancesList.get(i)));
+            balancesList.get(i) + " " + typeMoneyList.get(i)));
         }
 
         return cardModels;
