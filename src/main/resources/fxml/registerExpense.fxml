@@ -1,21 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
-<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuButton?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Text?>
 
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane fx:id="paneGastos" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="747.0" stylesheets="@../css/registerExpense.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <TextField disable="true" layoutX="272.0" layoutY="71.0" promptText="Tipo de gasto" />
-      <Text layoutX="241.0" layoutY="39.0" strokeType="OUTSIDE" strokeWidth="0.0" text="REGISTRAR GASTOS" />
-      <MenuButton layoutX="152.0" layoutY="71.0" mnemonicParsing="false" text="Departamento">
+      <TextField fx:id="tipoGastoId" disable="true" layoutX="405.0" layoutY="137.0" prefHeight="25.0" prefWidth="146.0" promptText="Tipo de gasto" />
+      <Text fx:id="tituloGastoId" fill="#abb2bf" layoutX="44.0" layoutY="94.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Registrar Gasto" />
+      <MenuButton fx:id="departamentoMenuId" layoutX="220.0" layoutY="137.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="160.0" text="Departamento">
         <items>
             <Menu mnemonicParsing="false" text="Recursos Humanos">
               <items>
@@ -72,17 +73,24 @@
             </Menu>
         </items>
       </MenuButton>
-      <DatePicker layoutX="14.0" layoutY="71.0" prefHeight="25.0" prefWidth="124.0" promptText="Fecha" />
-      <TextField layoutX="14.0" layoutY="122.0" prefHeight="25.0" prefWidth="124.0" promptText="Descripcion" />
-      <TextField layoutX="288.0" layoutY="121.0" prefHeight="25.0" prefWidth="132.0" promptText="Monto" />
-      <MenuButton layoutX="152.0" layoutY="121.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="125.0" text="Metodo de pago">
-         <items>
-            <MenuItem mnemonicParsing="false" text="ZE-MZ-0001" />
-         </items>
-      </MenuButton>
-      <TextField layoutX="432.0" layoutY="121.0" promptText="USD Equivalente" />
-      <Button layoutX="14.0" layoutY="164.0" mnemonicParsing="false" text="Registrar" />
-      <Label layoutX="14.0" layoutY="196.0" prefHeight="17.0" prefWidth="543.0" text="Gasto registrado exitosamente" />
-      <TextField layoutX="433.0" layoutY="71.0" promptText="Proveedor" />
+      <DatePicker fx:id="fechaGastoId" layoutX="40.0" layoutY="137.0" prefHeight="25.0" prefWidth="160.0" promptText="Fecha" />
+      <TextField fx:id="descripcionId" layoutX="40.0" layoutY="188.0" prefHeight="16.0" prefWidth="160.0" promptText="Descripcion" />
+      <TextField fx:id="montoGastoId" layoutX="405.0" layoutY="187.0" prefHeight="25.0" prefWidth="146.0" promptText="Monto" />
+      <TextField fx:id="equivalenteId" layoutX="565.0" layoutY="187.0" promptText="USD Equivalente" />
+      <Button fx:id="registerPagoButton" layoutX="40.0" layoutY="230.0" mnemonicParsing="false" stylesheets="@../css/registerExpense.css" text="Registrar" />
+      <TextField fx:id="proveedorId" layoutX="564.0" layoutY="137.0" prefHeight="25.0" prefWidth="150.0" promptText="Proveedor" />
+      <ComboBox fx:id="metodoPagoId" layoutX="220.0" layoutY="188.0" prefHeight="25.0" prefWidth="160.0" promptText="Metodo de pago" stylesheets="@../css/registerExpense.css" />
+      <Button fx:id="cancelPagoButton" layoutX="134.0" layoutY="230.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="66.0" stylesheets="@../css/registerExpense.css" text="Cancelar" />
+      <ImageView fitHeight="25.0" fitWidth="26.0" layoutX="32.0" layoutY="46.0">
+         <image>
+            <Image url="@../img/back-icon.png" />
+         </image>
+      </ImageView>
+      <Text fx:id="insId" fill="#abb2bf" layoutX="44.0" layoutY="123.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Ingrese todos los campos para registrar un gasto" />
+      <ImageView fitHeight="79.0" fitWidth="75.0" layoutX="637.0" layoutY="49.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../img/add-gasto.png" />
+         </image>
+      </ImageView>
    </children>
 </AnchorPane>
