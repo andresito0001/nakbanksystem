@@ -33,6 +33,8 @@ public class CuentasPorCobrarController {
     @FXML
     private TableColumn<CxC, String> pendienteId;
     @FXML
+    private TableColumn<CxC, String> tipoId;
+    @FXML
     private TableView<CxC> cxcTableId;
     @FXML
     private TextField transactionIdAbono;
@@ -53,9 +55,10 @@ public class CuentasPorCobrarController {
         trxId.setCellValueFactory(new PropertyValueFactory<CxC, String>("idTransaction"));
         clientId.setCellValueFactory(new PropertyValueFactory<CxC, String>("cliente"));
         montoId.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getMontoTransaccion().toString() + " " + param.getValue().getMonedaTransaccion()));
-        //montoId.setCellValueFactory(new PropertyValueFactory<CxC, Double>("montoTransaccion"));
         abonadoId.setCellValueFactory(new PropertyValueFactory<CxC, Double>("abonadoTransaccion"));
         pendienteId.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getPendienteTransaccion().toString() + " " + param.getValue().getMonedaTransaccion()));
+        tipoId.setCellValueFactory(new PropertyValueFactory<CxC, String>("tipo"));
+
 
         if (listaCxC.isEmpty() == true) {
             System.out.println("No hay cuentas por cobrar");
@@ -94,6 +97,15 @@ public class CuentasPorCobrarController {
                 System.out.println("Abono cancelado");
             }
         }      
+    }
+
+    @FXML
+    public void backButton(MouseEvent event) {
+        try {
+            SceneSwitcher.switchPane(anchorPane, "/main/resources/fxml/contabilidadOptions.fxml", "/main/resources/css/clientOptions.css", new ContabilidadOptionsController());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML

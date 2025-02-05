@@ -152,12 +152,10 @@ public class AbonoCuentaController {
         }
 
         try {
-            String ruta = "";
             if (tipoCuenta == "CUENTASXCOBRAR")
                 SceneSwitcher.switchPane(AnchorPane, "/main/resources/fxml/cuentasPorCobrar.fxml", "/main/resources/css/cxc.css", new CuentasPorCobrarController());
             else if (tipoCuenta == "CUENTASXPAGAR")
                 SceneSwitcher.switchPane(AnchorPane, "/main/resources/fxml/cuentasPorPagar.fxml", "/main/resources/css/cxc.css", new CuentasPorPagarController());
-
             } catch (Exception e) {
             e.printStackTrace();
         }
@@ -167,7 +165,10 @@ public class AbonoCuentaController {
     @FXML
     public void backButton(MouseEvent event) {
         try {
+            if (tipoCuenta == "CUENTASXCOBRAR")
             SceneSwitcher.switchPane(AnchorPane, "/main/resources/fxml/cuentasPorCobrar.fxml", "/main/resources/css/cxc.css", new CuentasPorCobrarController());
+        else if (tipoCuenta == "CUENTASXPAGAR")
+            SceneSwitcher.switchPane(AnchorPane, "/main/resources/fxml/cuentasPorPagar.fxml", "/main/resources/css/cxc.css", new CuentasPorPagarController());
         } catch (Exception e) {
             e.printStackTrace();
         }
