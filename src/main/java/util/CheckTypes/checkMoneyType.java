@@ -1,5 +1,6 @@
 package main.java.util.CheckTypes;
 
+import java.util.List;
 import java.util.Map;
 import main.java.util.monedas.MoneyType;
 
@@ -15,5 +16,14 @@ public class checkMoneyType {
         );
 
         return moneyType.getOrDefault(ch, null);
+    }
+
+    public static List<String> getMoneyTypes() {
+        return List.of (
+            MoneyType.BOLIVARES.getCodigo(),
+            MoneyType.DOLARES_EFECTIVO.getCodigo(),
+            MoneyType.BINANCE_USDT.getCodigo(),
+            MoneyType.ZELLE.getCodigo()
+        );
     }
 }

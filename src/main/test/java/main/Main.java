@@ -1,24 +1,39 @@
 package main.test.java.main;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.List;
-import main.java.dao.ClientsDAO;
+import javafx.beans.property.StringProperty;
 import main.java.entities.Clients;
-import main.java.services.TransactionService;
-import main.java.util.ConnectionPool;
-import main.test.java.transactionsAppCLI;
+import main.java.entities.Transactions;
+import javafx.beans.property.SimpleStringProperty;
 
 public class Main {
-    public static void main(String[] args) throws SQLException {
-        // ClientsDAO clientsDAO = new ClientsDAO(ConnectionPool.getConnection());
-        
-        // List<Clients> clients = clientsDAO.getClientsAsList();
-        // for (Clients client : clients) {
-        //     System.out.println("Cedula: " + client.getCi() + ", Alias: " + client.getAlias() + ", Nombre: " + client.getName() + ", Apellido: " + client.getLastName());
-        // }
+    public static void main(String[] args) {
+        Clients andresito = new Clients("28057599", "Andres", "Rebanales", "andresito");
+        Transactions t = new Transactions (
+            "12345687888",
+            "1234567888888", 
+            andresito,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+        );
 
-        transactionsAppCLI app = new transactionsAppCLI(ConnectionPool.getConnection());
-        app.executeApp();
+        System.out.println(andresito.getName());
+        final String date = t.getDate();
+
+        //... los demas parametros que quieras
+
+        StringProperty nameProperty = new SimpleStringProperty(date);
+        System.out.println(nameProperty.get());
     }
 }

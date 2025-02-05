@@ -1,5 +1,21 @@
-#anchorPaneId {
+#paneGastos {
     -fx-background-color: #12151c;
+}
+
+#tituloGastoId {
+    -fx-text-fill: #abb2bf;
+    -fx-font-size: 20;
+}
+
+.label {
+    -fx-text-fill: #abb2bf;
+    -fx-font-size: 12;
+    -fx-font-family: 'Souego UI'; 
+}
+
+#insId {
+    -fx-text-fill: #abb2bf;
+    -fx-font-size: 12;
 }
 
 .text-field {
@@ -9,44 +25,31 @@
     -fx-border-color: #1b222c;
 }
 
-#registerMessageId {
-    -fx-text-fill: #abb2bf;
-}
-#errorMessageId {
-    -fx-text-fill: #FF6F59;
-}
-
-#registerButton {
+#registerPagoButton {
     -fx-background-color: #009cde;
     -fx-text-fill: #12151c;
     -fx-font-size: 12;
     -fx-font-family: 'Souego UI'; 
-    -fx-background-radius: 10;
 }
 
-#cancelarButton {
+#cancelPagoButton {
     -fx-background-color: #FF6F59;
     -fx-text-fill: #12151c;
     -fx-font-size: 12;
     -fx-font-family: 'Souego UI'; 
-    -fx-border-radius: 10;
-}
-
-.button:hover {
-    -fx-border-color: white;
-    -fx-border-radius: 10;
-    -fx-border-width: 1.5;
-    -fx-background-radius: 9;
-}
-
-.text-field:focused {
-    -fx-border-color: #009cde;
-    -fx-border-width: 1px;
 }
 
 .combo-box-style {
     -fx-background-color: #1b222c;
     -fx-text-inner-color: #abb2bf;
+}
+
+.menu-button {
+    -fx-background-color: #1b222c;
+    -fx-text-inner-color: #abb2bf;
+}
+.menu-button  {
+    -fx-text-inner-color: #1b222c;
 }
 
 .check-box {

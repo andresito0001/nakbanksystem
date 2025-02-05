@@ -4,6 +4,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -11,29 +12,39 @@
 
 <AnchorPane fx:id="borderPaneId" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="546.0" prefWidth="757.0" stylesheets="@../css/newCycle.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Label fx:id="tittleId" layoutX="33.0" layoutY="83.0" text="Nuevo ciclo" />
-      <ComboBox fx:id="receivedCheckBox" layoutX="33.0" layoutY="156.0" prefHeight="25.0" prefWidth="165.0" promptText="Codigo" styleClass="combo-box-style" />
-      <Label layoutX="33.0" layoutY="138.0" text="Recibido en:" />
-      <TextField fx:id="receivedTextField" layoutX="281.0" layoutY="155.0" prefHeight="25.0" prefWidth="165.0" />
-      <Label layoutX="281.0" layoutY="138.0" text="Cantidad Enviada en USDT" />
-      <Button fx:id="confirmButton" layoutX="31.0" layoutY="377.0" mnemonicParsing="false" text="Confirmar">
+      <Label fx:id="tittleId" layoutX="31.0" layoutY="67.0" text="Nuevo ciclo" />
+      <ComboBox fx:id="receivedCheckBox" layoutX="284.0" layoutY="197.0" prefHeight="28.0" prefWidth="165.0" promptText="-" styleClass="combo-box-style" />
+      <Label layoutX="284.0" layoutY="179.0" text="Recibido en" />
+      <TextField fx:id="sentTextField" layoutX="33.0" layoutY="197.0" prefHeight="25.0" prefWidth="165.0" promptText="0.00" />
+      <Label layoutX="35.0" layoutY="179.0" text="Cantidad Enviada en USDT" />
+      <Button fx:id="confirmButton" layoutX="36.0" layoutY="439.0" mnemonicParsing="false" text="Confirmar">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>
       </Button>
-      <Button fx:id="cancelButton" layoutX="116.0" layoutY="377.0" mnemonicParsing="false" text="Cancelar">
+      <Button fx:id="cancelButton" layoutX="128.0" layoutY="439.0" mnemonicParsing="false" text="Cancelar">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>
       </Button>
-      <ImageView fitHeight="25.0" fitWidth="26.0" layoutX="31.0" layoutY="44.0">
+      <ImageView fitHeight="25.0" fitWidth="26.0" layoutX="32.0" layoutY="25.0">
          <image>
             <Image url="@../img/back-icon.png" />
          </image>
       </ImageView>
-      <TextField fx:id="amountTextField" layoutX="520.0" layoutY="155.0" prefHeight="25.0" prefWidth="165.0" />
-      <Label layoutX="520.0" layoutY="138.0" prefHeight="7.0" prefWidth="34.0" text="Tasa $" />
-      <TextField layoutX="33.0" layoutY="245.0" prefHeight="28.0" prefWidth="165.0" />
-      <Label layoutX="33.0" layoutY="227.0" text="Referencia" />
+      <TextField fx:id="rate" layoutX="541.0" layoutY="197.0" prefHeight="25.0" prefWidth="165.0" promptText="0.00" />
+      <Label layoutX="541.0" layoutY="179.0" prefHeight="7.0" prefWidth="34.0" text="Tasa $" />
+      <TextField fx:id="refTextField" layoutX="33.0" layoutY="356.0" prefHeight="28.0" prefWidth="165.0" promptText="#" />
+      <Label layoutX="30.0" layoutY="338.0" text="Referencia" />
+      <TextField fx:id="amountToReceive" layoutX="33.0" layoutY="273.0" prefHeight="28.0" prefWidth="165.0" promptText="0.00" />
+      <Label layoutX="34.0" layoutY="255.0" text="Cantidad a recibir en Bs" />
+      <TextField fx:id="searchClientsBar" layoutX="80.0" layoutY="126.0" prefHeight="25.0" prefWidth="287.0" promptText="Nombre, Apellido, Cedula, Alias" />
+      <Label layoutX="34.0" layoutY="131.0" text="Cliente" />
+      <ListView fx:id="listViewId" layoutX="80.0" layoutY="154.0" prefHeight="137.0" prefWidth="287.0" />
+      <ImageView fitHeight="23.0" fitWidth="26.0" layoutX="334.0" layoutY="128.0">
+         <image>
+            <Image url="@../img/search-icon.png" />
+         </image>
+      </ImageView>
    </children>
 </AnchorPane>

@@ -19,11 +19,11 @@
       <ComboBox fx:id="receivedCheckBox" layoutX="27.0" layoutY="203.0" prefHeight="25.0" prefWidth="165.0" promptText="Codigo" styleClass="combo-box-style" />
       <Label layoutX="26.0" layoutY="182.0" text="Recibido en:" />
       <TextField fx:id="receivedTextField" layoutX="268.0" layoutY="202.0" prefHeight="25.0" prefWidth="165.0" promptText="0.00" />
-      <Label layoutX="272.0" layoutY="182.0" text="Cantidad Recibida" />
+      <Label layoutX="268.0" layoutY="182.0" text="Cantidad Recibida" />
       <ComboBox fx:id="checkboxSent" layoutX="30.0" layoutY="273.0" prefHeight="25.0" prefWidth="165.0" promptText="Codigo" styleClass="combo-box-style" />
       <Label layoutX="30.0" layoutY="255.0" text="Enviado desde:" />
       <TextField fx:id="sentTextField" layoutX="268.0" layoutY="272.0" prefHeight="25.0" prefWidth="165.0" promptText="0.00" />
-      <Label layoutX="274.0" layoutY="255.0" text="Cantidad Enviada" />
+      <Label layoutX="270.0" layoutY="255.0" text="Cantidad Enviada" />
       <ListView fx:id="listViewId" layoutX="81.0" layoutY="161.0" prefHeight="137.0" prefWidth="287.0" />
       <Label layoutX="26.0" layoutY="324.0" text="Transacción tipo" />
       <ComboBox fx:id="typeTransBox" layoutX="29.0" layoutY="342.0" prefHeight="23.0" prefWidth="165.0" promptText="COMPRA - VENTA" styleClass="combo-box-style" />

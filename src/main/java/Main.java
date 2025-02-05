@@ -9,6 +9,7 @@ import main.java.util.SceneSwitcher;
 
 public class Main extends Application {
     private static Stage primaryStage;
+    private static String username;
 
     @Override
     public void start(Stage stage) {
@@ -24,6 +25,14 @@ public class Main extends Application {
         SceneSwitcher.switchScene(primaryStage, "/main/resources/fxml/dashboard.fxml", "/main/resources/css/dashboard.css", new DashBoardController());
     }
 
+    public static void setUsername(String username) {
+        Main.username = username;
+    }
+
+    public static String getUsername() {
+        return username;
+    }
+    
     public static void main(String[] args) throws SQLException {
         launch(args);
     }
