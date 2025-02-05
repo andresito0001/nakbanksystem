@@ -30,15 +30,17 @@ public class LoginController {
             protected Boolean call() throws Exception {
                 try (final Connection conn = ConnectionPool.getConnection()) {
                     AdminDAO admin = new AdminDAO(conn);
-
                     return admin.authenticateUser(userNameId.getText(), passwordId.getText());
                 }
             }
         };
 
-        loginTask.setOnSucceeded(e -> {
+        loginTask.setOnSucceeded(_ -> {
             if (loginTask.getValue()) {
                 errorMsg.setText("");
+                Main.setUsername(userNameId.getText());
+                userNameId.clear();
+                passwordId.clear();
                 Main.switchToDashboard();
                 System.out.println("Usuario autenticado");
             } else {

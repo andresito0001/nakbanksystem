@@ -13,6 +13,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
+import main.java.Main;
 import main.java.dao.BanksDAO;
 import main.java.dao.ClientsDAO;
 import main.java.entities.Clients;
@@ -20,6 +21,7 @@ import main.java.entities.Transactions;
 import main.java.util.ConnectionPool;
 import main.java.util.DatabaseUtils;
 import main.java.util.ULID;
+import main.java.util.CheckTypes.checkMoneyType;
 
 public class RegisterTransactionController{
     @FXML
@@ -49,17 +51,22 @@ public class RegisterTransactionController{
     @FXML
     List<String> bankCodes = new ArrayList<>();
     @FXML
+    private final List<String> moneyTypes = checkMoneyType.getMoneyTypes();
+    @FXML
     private Button confirmButton;
     @FXML
     private Button cancelButton;
     @FXML
     private CheckBox fullPayment;
+
     
     @FXML
     public void initialize() throws SQLException {
         listViewId.setVisible(false);
 
         receivedCheckBox.getItems().add("DESCONOCIDO");
+        currencyReceivedComboBox.getItems().addAll(moneyTypes);
+        sentCurrencyComboBox.getItems().addAll(moneyTypes);
         
         bankCodes = new BanksDAO(ConnectionPool.getConnection()).getInfoOf("codigo", null, null);
         receivedCheckBox.getItems().addAll(bankCodes);
@@ -158,7 +165,7 @@ public class RegisterTransactionController{
         String amount = amountTextField.getText();
         String clientString = searchClientsBar.getText();
         List<String> clientSplit = List.of(clientString.split(" "));
-
+       
         // System.out.println("Sent bank: " + sentBank + "\nReceived bank: " + receivedBank + "\nTransaction type: " + transactionType + "\nSent: " + sent + "\nReceived: " + received + "\nAmount: " + amount + "\nClient: " + ID);
         clearFields();
     }

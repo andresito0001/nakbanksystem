@@ -1,7 +1,7 @@
 package main.java.entities;
 
 public class Transactions extends Cycle {
-    Transactions(final String id, final String parent_id, final Clients client, final String adminUsername, final String date, final String time, final String type,
+    public Transactions(final String id, final String parent_id, final Clients client, final String adminUsername, final String date, final String time, final String type,
     final Double quantityReceived, final String currencyReceived, final String receivedMethod,
     final Double sentQuantity, final String sentCurrency, final String sentMethod, final String status, 
     final Double rate, final Double revenue, final String bankRef) {

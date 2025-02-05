@@ -16,6 +16,14 @@ public class TransactionsOptionsController {
         }
     }
 
+    public void newCycle(MouseEvent event) {
+        try {
+            SceneSwitcher.switchPane(borderPane, "/main/resources/fxml/newCycle.fxml", "/main/resources/css/newCycle.css", new newCycleController());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public void consultTransaction(MouseEvent event) {
         try {
             SceneSwitcher.switchPane(borderPane, "/main/resources/fxml/consultTransactions.fxml", "/main/resources/css/consultTransaction.css", new ConsultTransactionController());
