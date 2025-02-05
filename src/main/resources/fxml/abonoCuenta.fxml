@@ -20,7 +20,7 @@
       <TextField fx:id="montoId" layoutX="22.0" layoutY="213.0" promptText="Monto" stylesheets="@../css/abonoCuenta.css" />
       <ComboBox fx:id="metodoId" layoutX="261.0" layoutY="213.0" prefWidth="150.0" promptText="Metodo" stylesheets="@../css/abonoCuenta.css" />
       <Label fx:id="infoTransactionId" layoutX="22.0" layoutY="99.0" prefHeight="17.0" prefWidth="697.0" />
-      <Button fx:id="abonarButton" onMouseClicked="#abonarCuenta" layoutX="22.0" layoutY="270.0" mnemonicParsing="false" stylesheets="@../css/abonoCuenta.css" text="Confirmar">
+      <Button fx:id="abonarButton" layoutX="22.0" layoutY="270.0" mnemonicParsing="false" onMouseClicked="#abonarCuenta" stylesheets="@../css/abonoCuenta.css" text="Confirmar">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>
@@ -35,8 +35,8 @@
             <Image url="@../img/cobrar.png" />
          </image>
       </ImageView>
-      <Label fx:id="bankInfoId" layoutX="426.0" layoutY="218.0" prefHeight="17.0" prefWidth="233.0" />
+      <Label fx:id="bankInfoId" layoutX="426.0" layoutY="218.0" prefHeight="17.0" prefWidth="302.0" />
       <Label fx:id="infoTransactionId1" layoutX="22.0" layoutY="129.0" prefHeight="17.0" prefWidth="697.0" />
-      <Label fx:id="montoMaxId" layoutX="22.0" layoutY="188.0" prefHeight="17.0" prefWidth="196.0" />
+      <Label fx:id="montoMaxId" layoutX="22.0" layoutY="188.0" prefHeight="17.0" prefWidth="697.0" />
    </children>
 </AnchorPane>

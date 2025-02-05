@@ -7,13 +7,13 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
@@ -21,7 +21,7 @@ import main.java.entities.CxC;
 import main.java.util.ConnectionPool;
 import main.java.util.SceneSwitcher;
 
-public class CuentasPorCobrarController {
+public class CuentasPorPagarController {
     @FXML
     private TableColumn<CxC, String> trxId;
     @FXML
@@ -42,30 +42,35 @@ public class CuentasPorCobrarController {
     private Button abonoButtonId;
 
     private ObservableList<CxC> listaCxC;
+
     @FXML
     public void initialize() throws SQLException {
-        cxcTableId.setPlaceholder(new Label("No hay cuentas por cobrar pendientes"));
+        cxcTableId.setPlaceholder(new Label("No hay cuentas por pagar pendientes"));
+        
         listaCxC = FXCollections.observableArrayList();
-    
-        CxC.generarLista(ConnectionPool.getConnection(), listaCxC, "CUENTASXCOBRAR");
-        cxcTableId.setItems(listaCxC);
+        
 
-        trxId.setCellValueFactory(new PropertyValueFactory<CxC, String>("idTransaction"));
-        clientId.setCellValueFactory(new PropertyValueFactory<CxC, String>("cliente"));
-        montoId.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getMontoTransaccion().toString() + " " + param.getValue().getMonedaTransaccion()));
-        //montoId.setCellValueFactory(new PropertyValueFactory<CxC, Double>("montoTransaccion"));
-        abonadoId.setCellValueFactory(new PropertyValueFactory<CxC, Double>("abonadoTransaccion"));
-        pendienteId.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getPendienteTransaccion().toString() + " " + param.getValue().getMonedaTransaccion()));
-
+        CxC.generarLista(ConnectionPool.getConnection(), listaCxC, "CUENTASXPAGAR");
+        
         if (listaCxC.isEmpty() == true) {
             System.out.println("No hay cuentas por cobrar");
         }
+        else {
+            cxcTableId.setItems(listaCxC);
 
+            trxId.setCellValueFactory(new PropertyValueFactory<CxC, String>("idTransaction"));
+            clientId.setCellValueFactory(new PropertyValueFactory<CxC, String>("cliente"));
+            montoId.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getMontoTransaccion().toString() + " " + param.getValue().getMonedaTransaccion()));
+            abonadoId.setCellValueFactory(new PropertyValueFactory<CxC, Double>("abonadoTransaccion"));
+            pendienteId.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getPendienteTransaccion().toString() + " " + param.getValue().getMonedaTransaccion()));
         
-    }
-    @FXML
-    public void mostrarContenido(MouseEvent event) {
+        }
+        
 
+    }
+
+    @FXML
+    public void mostrarContenido (MouseEvent event) {
         CxC cuenta = cxcTableId.getSelectionModel().getSelectedItem();
 
         if (cuenta == null) {
@@ -93,10 +98,11 @@ public class CuentasPorCobrarController {
                 cxcTableId.getSelectionModel().clearSelection();
                 System.out.println("Abono cancelado");
             }
-        }      
+        }
+
     }
 
     @FXML
     private Pane anchorPane;
-    
+
 }

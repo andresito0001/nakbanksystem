@@ -20,43 +20,47 @@ public class CxC {
     private DoubleProperty pendienteTransaccion;
     private StringProperty moneda;
     private StringProperty tipo;
-
-    public CxC (String idTrans, String cliente, Double monto, String moneda, Double abonado, Double pendiente, String tipo) {
-        this.idTransaction = new SimpleStringProperty(idTrans);
-        this.cliente = new SimpleStringProperty(cliente);
-        this.moneda = new SimpleStringProperty(moneda);
-        this.tipo = new SimpleStringProperty(tipo);
-        this.montoTransaccion = new SimpleDoubleProperty(monto);
-        this.abonadoTransaccion = new SimpleDoubleProperty(abonado);
-        this.pendienteTransaccion = new SimpleDoubleProperty(pendiente);
-    }
-
-    public String getIdTransaction () {
-        return idTransaction.get();
-    }
-    public String getCliente() {
-        return cliente.get();
-    }
-    public Double getMontoTransaccion() {
-        return montoTransaccion.get();
-    }
-    public Double getAbonadoTransaccion() {
-        return abonadoTransaccion.get();
-    }
-    public Double getPendienteTransaccion() {
-        return pendienteTransaccion.get();
-    }
-    public String getMonedaTransaccion() {
-        return moneda.get();
-    }
-    public String getTipoTransaccion() {
-        return tipo.get();
-    }
-    public static void generarLista (Connection conn, ObservableList<CxC> listaCxC)
-    {
-
+    private static String tipoDeCuenta;
+    
+        public CxC (String idTrans, String cliente, Double monto, String moneda, Double abonado, Double pendiente, String tipo) {
+            this.idTransaction = new SimpleStringProperty(idTrans);
+            this.cliente = new SimpleStringProperty(cliente);
+            this.moneda = new SimpleStringProperty(moneda);
+            this.tipo = new SimpleStringProperty(tipo);
+            this.montoTransaccion = new SimpleDoubleProperty(monto);
+            this.abonadoTransaccion = new SimpleDoubleProperty(abonado);
+            this.pendienteTransaccion = new SimpleDoubleProperty(pendiente);
+        }
+    
+        public String getIdTransaction () {
+            return idTransaction.get();
+        }
+        public String getCliente() {
+            return cliente.get();
+        }
+        public Double getMontoTransaccion() {
+            return montoTransaccion.get();
+        }
+        public Double getAbonadoTransaccion() {
+            return abonadoTransaccion.get();
+        }
+        public Double getPendienteTransaccion() {
+            return pendienteTransaccion.get();
+        }
+        public String getMonedaTransaccion() {
+            return moneda.get();
+        }
+        public String getTipoTransaccion() {
+            return tipo.get();
+        }
+        public String getTipoCuenta() {
+            return tipoDeCuenta;
+        }
+        public static void generarLista (Connection conn, ObservableList<CxC> listaCxC, String tipoCuenta)
+        {
+            tipoDeCuenta = tipoCuenta;
         try {
-            String query = "select id_trans, cliente, monto_transaccion, moneda_trans, tipo, abonado, pendiente from CUENTASXCOBRAR where pendiente > 0";
+            String query = "select id_trans, cliente, monto_transaccion, moneda_trans, tipo, abonado, pendiente from " + tipoCuenta  + " where pendiente > 0";
             PreparedStatement st = conn.prepareStatement(query);
             ResultSet rs = st.executeQuery();
 
@@ -68,10 +72,15 @@ public class CxC {
         } catch (SQLException exception) {
             exception.printStackTrace();
         }
+
+
     }
-    public void actualizarPendiente (Connection conn) {
+
+    
+
+    public void actualizarPendiente (Connection conn, String tipoCuenta) {
         try {
-            String query = "select pendiente from CUENTASXCOBRAR where id_trans = '" + idTransaction.get() + "'";
+            String query = "select pendiente from " + tipoCuenta + " where id_trans = '" + idTransaction.get() + "'";
             PreparedStatement st = conn.prepareStatement(query);
             ResultSet rs = st.executeQuery();
 

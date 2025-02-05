@@ -32,7 +32,7 @@
                         </Label>
                      </children>
                   </VBox>
-                  <VBox fx:id="cxpButtonid" prefHeight="79.0" prefWidth="220.0" styleClass="buttomCard">
+                  <VBox fx:id="cxpButtonid" onMouseClicked="#loadCxP" prefHeight="79.0" prefWidth="220.0" styleClass="buttomCard">
                      <children>
                         <Label alignment="CENTER" prefHeight="79.0" prefWidth="237.0" text="Cuentas por pagar">
                            <graphic>
@@ -48,7 +48,7 @@
                         <Cursor fx:constant="HAND" />
                      </cursor>
                   </VBox>
-                  <VBox fx:id="inversionButtonId" prefHeight="79.0" prefWidth="220.0" styleClass="buttomCard">
+                  <VBox fx:id="inversionButtonId" onMouseClicked="#loadInversion" prefHeight="79.0" prefWidth="220.0" styleClass="buttomCard">
                      <cursor>
                         <Cursor fx:constant="HAND" />
                      </cursor>

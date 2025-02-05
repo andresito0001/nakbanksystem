@@ -11,13 +11,13 @@
 <AnchorPane fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="747.0" stylesheets="@../css/cxc.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <TableView fx:id="cxcTableId" layoutX="7.0" layoutY="131.0" onMouseClicked="#mostrarContenido" prefHeight="435.0" prefWidth="736.0" stylesheets="@../css/cxc.css">
-        <columns>
+         <columns>
             <TableColumn fx:id="clientId" prefWidth="148.66668701171875" sortable="false" text="Cliente" />
             <TableColumn fx:id="abonadoId" prefWidth="71.0" sortable="false" text="Abonado" />
             <TableColumn fx:id="pendienteId" prefWidth="105.0" sortable="false" text="Pendiente" />
-          <TableColumn fx:id="trxId" prefWidth="290.0" sortable="false" text="Transaccion" />
+            <TableColumn fx:id="trxId" prefWidth="290.0" sortable="false" text="Transaccion" />
             <TableColumn fx:id="montoId" prefWidth="115.0" sortable="false" text="Monto" />
-        </columns>
+         </columns>
          <columnResizePolicy>
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
          </columnResizePolicy>
@@ -30,8 +30,8 @@
             <Cursor fx:constant="HAND" />
          </cursor>
       </ImageView>
-      <Label fx:id="titleId" layoutX="20.0" layoutY="67.0" stylesheets="@../css/cxc.css" text="Cuentas por Cobrar" />
-      <Label fx:id="labelInfoId" layoutX="20.0" layoutY="91.0" prefHeight="24.0" prefWidth="708.0" stylesheets="@../css/cxc.css" text="Seleccione una cuenta por cobrar para abonar en ella" textAlignment="CENTER" />
+      <Label fx:id="titleId" layoutX="20.0" layoutY="67.0" stylesheets="@../css/cxc.css" text="Cuentas por Pagar" />
+      <Label fx:id="labelInfoId" layoutX="20.0" layoutY="91.0" prefHeight="24.0" prefWidth="708.0" stylesheets="@../css/cxc.css" text="Seleccione una cuenta por pagar para abonar en ella" textAlignment="CENTER" />
       <ImageView fitHeight="94.0" fitWidth="74.0" layoutX="643.0" layoutY="42.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../img/find.png" />
