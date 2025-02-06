@@ -44,20 +44,6 @@
     -fx-text-inner-color: #abb2bf;
 }
 
-.menu-button {
-    -fx-background-color: #1b222c;
-    -fx-text-inner-color: #abb2bf;
-}
-.menu-button  {
-    -fx-text-inner-color: #1b222c;
-}
-
-.check-box {
-    -fx-text-fill: #abb2bf;
-    -fx-font-size: 12;
-    -fx-font-family: 'Souego UI'; 
-}
-
 .list-view {
     -fx-background-color: #282c34;
     -fx-control-inner-background: #282c34;
@@ -65,6 +51,28 @@
     -fx-font-size: 12;
     -fx-font-family: 'Segoe UI';
 }
+
+.menu-button {
+    -fx-background-color: #1b222c;
+    -fx-text-inner-color: #abb2bf;
+}
+
+.menu {
+    -fx-background-color: #1b222c;
+
+}
+
+.menu-item {
+    -fx-background-color: #1b222c;
+}
+
+
+.check-box {
+    -fx-text-fill: #abb2bf;
+    -fx-font-size: 12;
+    -fx-font-family: 'Souego UI'; 
+}
+
 
 .list-cell {
     -fx-background-color: #282c34;

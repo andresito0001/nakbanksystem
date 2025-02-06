@@ -14,7 +14,7 @@
 
 <AnchorPane fx:id="paneGastos" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="747.0" stylesheets="@../css/registerExpense.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <TextField fx:id="tipoGastoId" disable="true" layoutX="405.0" layoutY="137.0" prefHeight="25.0" prefWidth="146.0" promptText="Tipo de gasto" />
+      <TextField fx:id="tipoGastoId" editable="false" layoutX="405.0" layoutY="137.0" prefHeight="25.0" prefWidth="146.0" promptText="Tipo de gasto" />
       <Text fx:id="tituloGastoId" fill="#abb2bf" layoutX="44.0" layoutY="94.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Registrar Gasto" />
       <MenuButton fx:id="departamentoMenuId" layoutX="220.0" layoutY="137.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="160.0" text="Departamento">
         <items>
