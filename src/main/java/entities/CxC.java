@@ -50,7 +50,7 @@ public class CxC {
         public String getMonedaTransaccion() {
             return moneda.get();
         }
-        public String getTipoTransaccion() {
+        public String getTipo() {
             return tipo.get();
         }
         public String getTipoCuenta() {
