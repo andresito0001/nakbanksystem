@@ -2,6 +2,7 @@
 
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
@@ -20,12 +21,12 @@
       <TextField fx:id="montoId" layoutX="22.0" layoutY="213.0" promptText="Monto" stylesheets="@../css/abonoCuenta.css" />
       <ComboBox fx:id="metodoId" layoutX="261.0" layoutY="213.0" prefWidth="150.0" promptText="Metodo" stylesheets="@../css/abonoCuenta.css" />
       <Label fx:id="infoTransactionId" layoutX="22.0" layoutY="99.0" prefHeight="17.0" prefWidth="697.0" />
-      <Button fx:id="abonarButton" layoutX="22.0" layoutY="270.0" mnemonicParsing="false" onMouseClicked="#abonarCuenta" stylesheets="@../css/abonoCuenta.css" text="Confirmar">
+      <Button fx:id="abonarButton" layoutX="29.0" layoutY="343.0" mnemonicParsing="false" onMouseClicked="#abonarCuenta" stylesheets="@../css/abonoCuenta.css" text="Confirmar">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>
       </Button>
-      <Button fx:id="cancelarButton" layoutX="107.0" layoutY="270.0" mnemonicParsing="false" stylesheets="@../css/abonoCuenta.css" text="Cancelar">
+      <Button fx:id="cancelarButton" layoutX="114.0" layoutY="343.0" mnemonicParsing="false" stylesheets="@../css/abonoCuenta.css" text="Cancelar">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>
@@ -38,5 +39,8 @@
       <Label fx:id="bankInfoId" layoutX="426.0" layoutY="218.0" prefHeight="17.0" prefWidth="302.0" />
       <Label fx:id="infoTransactionId1" layoutX="22.0" layoutY="129.0" prefHeight="17.0" prefWidth="697.0" />
       <Label fx:id="montoMaxId" layoutX="22.0" layoutY="188.0" prefHeight="17.0" prefWidth="697.0" />
+      <TextField fx:id="porcentajePM" layoutX="28.0" layoutY="298.0" prefHeight="25.0" prefWidth="272.0" promptText="Porcentaje pago movil" stylesheets="@../css/abonoCuenta.css" visible="false" />
+      <CheckBox fx:id="checkPMId" layoutX="28.0" layoutY="271.0" mnemonicParsing="false" stylesheets="@../css/abonoCuenta.css" text="Se realizo pago movil o transferencia a terceros" visible="false" />
+      <Label fx:id="comisionPM" layoutX="308.0" layoutY="303.0" prefHeight="17.0" prefWidth="347.0" />
    </children>
 </AnchorPane>

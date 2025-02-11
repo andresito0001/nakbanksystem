@@ -6,14 +6,17 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import main.java.dao.BanksDAO;
 import main.java.dao.InventoryDAO;
@@ -41,20 +44,26 @@ public class AbonoCuentaController {
     private Label infoTransactionId1;
     @FXML
     private Label montoMaxId;
+    @FXML
+    private CheckBox checkPMId;
+    @FXML
+    private TextField porcentajePM;
+    @FXML
+    private Label comisionPM;
 
-    private String tipoCuenta;
+    private String tipoCuenta, comision;
+
 
     private static CxC cuentaXAbonar;
 
     private InventoryDAO inventoryDAO;
         
         public void initialize () throws SQLException {
-            
 
         String typeMoneyReceived = cuentaXAbonar.getMonedaTransaccion(); 
         List<String> bankCodes = new ArrayList<>();
         bankCodes = new BanksDAO(ConnectionPool.getConnection()).getInfoOf("codigo","moneda", typeMoneyReceived); //query = "select " + colum + " from bancos where " + key + " = " + "'" + USD' OR MONEDA = 'USDT + "'" + ";";
-        if (typeMoneyReceived.equals("USD"))
+        if (typeMoneyReceived.equals("USD") || typeMoneyReceived.equals("USDT"))
             {
                 bankCodes = new BanksDAO(ConnectionPool.getConnection()).getInfoOf("codigo", "moneda", "USD' or moneda = 'USDT");
             }
@@ -63,7 +72,45 @@ public class AbonoCuentaController {
         montoMaxId.setText("Monto debe ser menor o igual a " + cuentaXAbonar.getPendienteTransaccion());
         infoTransactionId.setText("Cuenta #" + cuentaXAbonar.getIdTransaction() + ". Cliente: " + cuentaXAbonar.getCliente() + ". ");       
         infoTransactionId1.setText("Monto Total: " + cuentaXAbonar.getMontoTransaccion() + " " + cuentaXAbonar.getMonedaTransaccion() + ". Total Abonado: " + cuentaXAbonar.getAbonadoTransaccion() + ". Pendiente: " + cuentaXAbonar.getPendienteTransaccion());
-       
+        if (typeMoneyReceived.equals("VES")) {
+            checkPMId.setVisible(true);
+            abonarButton.setLayoutY(343);
+            cancelarButton.setLayoutY(343);
+        }
+        checkPMId.setOnAction(_ -> {
+            if (checkPMId.isSelected()) {
+                porcentajePM.setVisible(true);
+                porcentajePM.setDisable(false);
+            } else {
+                porcentajePM.setVisible(false);
+                porcentajePM.setDisable(true);
+                porcentajePM.setText("");
+            }
+        });
+
+
+
+        porcentajePM.textProperty().addListener((observable, oldValue, newValue) -> {
+            if(!porcentajePM.getText().isEmpty() && !montoId.getText().isEmpty()) {
+                Double porcentaje = 0.0;
+                porcentaje = Double.parseDouble(newValue)/100;
+                porcentaje = porcentaje * Double.parseDouble(montoId.getText());
+                comisionPM.setText(porcentaje.toString() + " VES");
+            }
+            else 
+            comisionPM.setText("");
+        });
+        
+        montoId.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!porcentajePM.getText().isEmpty() && !montoId.getText().isEmpty()) {
+                Double porcentaje = (Double.parseDouble(porcentajePM.getText()))/100;
+                porcentaje = porcentaje * Double.parseDouble(newValue);
+                comisionPM.setText(porcentaje.toString() + " VES");
+            }
+            else 
+            comisionPM.setText("");
+        });
+        
         metodoId.setOnAction(e -> {
             try {
                 String codeBank = metodoId.getSelectionModel().getSelectedItem();
@@ -176,6 +223,7 @@ public class AbonoCuentaController {
             e.printStackTrace();
         }
     }
+
 
     @FXML
     private Pane AnchorPane;
