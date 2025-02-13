@@ -11,6 +11,7 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.ObservableList;
+import main.java.util.ConnectionPool;
 
 public class CxC {
     private StringProperty idTransaction;
@@ -56,12 +57,12 @@ public class CxC {
         public String getTipoCuenta() {
             return tipoDeCuenta;
         }
-        public static void generarLista (Connection conn, ObservableList<CxC> listaCxC, String tipoCuenta)
+        public static void generarLista (ObservableList<CxC> listaCxC, String tipoCuenta)
         {
             tipoDeCuenta = tipoCuenta;
         try {
             String query = "select id_trans, cliente, monto_transaccion, moneda_trans, tipo, abonado, pendiente from " + tipoCuenta  + " where pendiente > 0";
-            PreparedStatement st = conn.prepareStatement(query);
+            PreparedStatement st = ConnectionPool.getConnection().prepareStatement(query);
             ResultSet rs = st.executeQuery();
 
             while (rs.next()) {
@@ -69,6 +70,8 @@ public class CxC {
                     new CxC(rs.getString("id_trans"), rs.getString("cliente"), rs.getDouble("monto_transaccion"),rs.getString("moneda_trans") ,rs.getDouble("abonado"), rs.getDouble("pendiente"), rs.getString("tipo"))
                 );
             }
+            rs.close();
+            st.close();
         } catch (SQLException exception) {
             exception.printStackTrace();
         }
@@ -78,15 +81,17 @@ public class CxC {
 
     
 
-    public void actualizarPendiente (Connection conn, String tipoCuenta) {
+    public void actualizarPendiente (String tipoCuenta) {
         try {
             String query = "select pendiente from " + tipoCuenta + " where id_trans = '" + idTransaction.get() + "'";
-            PreparedStatement st = conn.prepareStatement(query);
+            PreparedStatement st = ConnectionPool.getConnection().prepareStatement(query);
             ResultSet rs = st.executeQuery();
 
             if (rs.next()) {
                 pendienteTransaccion.set(rs.getDouble("pendiente"));
             }
+            rs.close();
+            st.close();
         } catch (SQLException exception) {
             exception.printStackTrace();
         }

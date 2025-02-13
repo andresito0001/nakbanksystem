@@ -18,7 +18,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import main.java.entities.CxC;
-import main.java.util.ConnectionPool;
 import main.java.util.SceneSwitcher;
 
 public class CuentasPorPagarController {
@@ -47,12 +46,13 @@ public class CuentasPorPagarController {
 
     @FXML
     public void initialize() throws SQLException {
+
         cxcTableId.setPlaceholder(new Label("No hay cuentas por pagar pendientes"));
         
         listaCxC = FXCollections.observableArrayList();
         
 
-        CxC.generarLista(ConnectionPool.getConnection(), listaCxC, "CUENTASXPAGAR");
+        CxC.generarLista(listaCxC, "CUENTASXPAGAR");
         
         if (listaCxC.isEmpty() == true) {
             System.out.println("No hay cuentas por cobrar");
@@ -68,8 +68,7 @@ public class CuentasPorPagarController {
             tipoId.setCellValueFactory(new PropertyValueFactory<CxC, String>("tipo"));
 
         }
-        
-
+    
     }
 
     @FXML
@@ -91,8 +90,8 @@ public class CuentasPorPagarController {
             if(alert.getResult() == ButtonType.OK) {
                 System.out.println("loading 'modulo de abono'");
                 try {
-                    AbonoCuentaController.setCuenta(cuenta);
-                    SceneSwitcher.switchPane(anchorPane, "/main/resources/fxml/abonoCuenta.fxml", "/main/resources/css/abonoCuenta.css", new AbonoCuentaController());
+                    AbonoContableController.setCuenta(cuenta);
+                    SceneSwitcher.switchPane(anchorPane, "/main/resources/fxml/abonoCuenta.fxml", "/main/resources/css/abonoCuenta.css", new AbonoContableController());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
