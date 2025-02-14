@@ -1,15 +1,5 @@
 package main.java.entities;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.util.List;
-
-import javax.naming.spi.DirStateFactory.Result;
-
-import main.java.util.ConnectionPool;
-import main.java.util.DatabaseUtils;
-
 public class Banks {
     
     public Banks (String codigo, String nombre, String moneda, Double saldo) {

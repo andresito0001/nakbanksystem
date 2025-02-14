@@ -70,6 +70,10 @@
     -fx-font-size: 12;
     -fx-font-family: 'Segoe UI';
 }
+.list-cell:hover {
+    -fx-border-color: #abb2bf;
+    -fx-cursor: hand;
+}
 
 /* Scroll bar styling */
 .scroll-bar:vertical .thumb {

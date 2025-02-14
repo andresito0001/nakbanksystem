@@ -9,24 +9,31 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
 <AnchorPane fx:id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="747.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Label layoutX="22.0" layoutY="75.0" text="Abono de cuenta" />
-      <ImageView fitHeight="25.0" fitWidth="26.0" layoutX="22.0" layoutY="36.0">
+      <Label layoutX="22.0" layoutY="71.0" text="Abono de cuenta">
+         <font>
+            <Font size="18.0" />
+         </font></Label>
+      <ImageView fitHeight="25.0" fitWidth="26.0" layoutX="22.0" layoutY="36.0" onMouseClicked="#backButton">
          <image>
             <Image url="@../img/back-icon.png" />
          </image>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
       </ImageView>
       <TextField fx:id="montoId" layoutX="22.0" layoutY="213.0" promptText="Monto" stylesheets="@../css/abonoCuenta.css" />
       <ComboBox fx:id="metodoId" layoutX="261.0" layoutY="213.0" prefWidth="150.0" promptText="Metodo" stylesheets="@../css/abonoCuenta.css" />
       <Label fx:id="infoTransactionId" layoutX="22.0" layoutY="99.0" prefHeight="17.0" prefWidth="697.0" />
-      <Button fx:id="abonarButton" layoutX="29.0" layoutY="343.0" mnemonicParsing="false" onMouseClicked="#abonarCuenta" stylesheets="@../css/abonoCuenta.css" text="Confirmar">
+      <Button fx:id="abonarButton" layoutX="29.0" layoutY="280.0" mnemonicParsing="false" onMouseClicked="#abonarCuenta" stylesheets="@../css/abonoCuenta.css" text="Confirmar">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>
       </Button>
-      <Button fx:id="cancelarButton" layoutX="114.0" layoutY="343.0" mnemonicParsing="false" stylesheets="@../css/abonoCuenta.css" text="Cancelar">
+      <Button fx:id="cancelarButton" layoutX="114.0" layoutY="280.0" mnemonicParsing="false" onMouseClicked="#backButton" stylesheets="@../css/abonoCuenta.css" text="Cancelar">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>
@@ -39,8 +46,8 @@
       <Label fx:id="bankInfoId" layoutX="426.0" layoutY="218.0" prefHeight="17.0" prefWidth="302.0" />
       <Label fx:id="infoTransactionId1" layoutX="22.0" layoutY="129.0" prefHeight="17.0" prefWidth="697.0" />
       <Label fx:id="montoMaxId" layoutX="22.0" layoutY="188.0" prefHeight="17.0" prefWidth="697.0" />
-      <TextField fx:id="porcentajePM" layoutX="28.0" layoutY="298.0" prefHeight="25.0" prefWidth="272.0" promptText="Porcentaje pago movil" stylesheets="@../css/abonoCuenta.css" visible="false" />
-      <CheckBox fx:id="checkPMId" layoutX="28.0" layoutY="271.0" mnemonicParsing="false" stylesheets="@../css/abonoCuenta.css" text="Se realizo pago movil o transferencia a terceros" visible="false" />
-      <Label fx:id="comisionPM" layoutX="308.0" layoutY="303.0" prefHeight="17.0" prefWidth="347.0" />
+      <TextField fx:id="porcentajePM" layoutX="28.0" layoutY="287.0" prefHeight="25.0" prefWidth="272.0" promptText="Porcentaje pago movil" stylesheets="@../css/abonoCuenta.css" visible="false" />
+      <CheckBox fx:id="checkPMId" layoutX="28.0" layoutY="260.0" mnemonicParsing="false" stylesheets="@../css/abonoCuenta.css" text="Se realizo pago movil o transferencia a terceros" visible="false" />
+      <Label fx:id="comisionPM" layoutX="308.0" layoutY="292.0" prefHeight="17.0" prefWidth="347.0" />
    </children>
 </AnchorPane>
