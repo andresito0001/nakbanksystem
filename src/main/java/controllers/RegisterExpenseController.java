@@ -165,7 +165,10 @@ public class RegisterExpenseController {
                         crearItem(Accounts.ACEITES_LUBRICANTES),
                         crearItem(Accounts.MEDICAL_SUPP),
                         crearItem(Accounts.ADMINISTRATIVE_TRANSPORT),
-                        crearItem(Accounts.AUDIT_ACC_FEES)
+                        crearItem(Accounts.AUDIT_ACC_FEES),
+                        crearItem(Accounts.DONACIONES),
+                        crearItem(Accounts.OFFICE_REPAIR),
+                        crearItem(Accounts.MOVING_EXPENSES)
                     );
                     
                     break;
@@ -173,7 +176,9 @@ public class RegisterExpenseController {
                     menu.getItems().addAll(
                         crearItem(Accounts.FOOD_DRINKS),
                         crearItem(Accounts.CATER_ACCOM_SERV),
-                        crearItem(Accounts.TEMP_STAFF)
+                        crearItem(Accounts.TEMP_STAFF),
+                        crearItem(Accounts.ADV_PROMOTIONS),
+                        crearItem(Accounts.TRAVEL_EXPENSES)
                     );
                     break;
 
@@ -182,7 +187,14 @@ public class RegisterExpenseController {
                         crearItem(Accounts.TEMP_STAFF),
                         crearItem(Accounts.MEDICAL_FEES),
                         crearItem(Accounts.GASTOSVARIOS),
-                        crearItem(Accounts.SALARY)
+                        crearItem(Accounts.SALARY),
+                        crearItem(Accounts.BONUS),
+                        crearItem(Accounts.VACATIONS_BONUS),
+                        crearItem(Accounts.VACATIONS_PAY),
+                        crearItem(Accounts.TRAINING_LENGUAJE),
+                        crearItem(Accounts.TRAINING_NO_TECH),
+                        crearItem(Accounts.TRAINING_TECH),
+                        crearItem(Accounts.CESTATICKETS)
                     );
                     break;
             

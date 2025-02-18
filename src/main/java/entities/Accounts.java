@@ -32,7 +32,21 @@ public enum Accounts {
     BANK_TRANS_TT("635813", "Comision Otros Bancos"),
     TELEPHONE("626200", "Telefono"),
     SALARY("641100", "Sueldos y Salarios"),
-    ADMINISTRATIVE_TRANSPORT("624400", "Transporte Administrativo")
+    ADMINISTRATIVE_TRANSPORT("624400", "Transporte Administrativo"),
+    INTERESES("635815", "Intereses"),
+    SUBSCRIPTIONS("628200", "Subscripciones"),
+    UTILIDADES("641120", "Bono de aguinaldo"),
+    BONUS("641300", "Bono"),
+    TRAINING_TECH("622812", "Capacitación - Técnica / Profesional"),
+    TRAINING_LENGUAJE("622814", "Capacitación - Lenguaje"),
+    TRAINING_NO_TECH("622813", "Capacitación - No técnica"),
+    ADV_PROMOTIONS("623100", "Publicidad y promociones"),
+    TRAVEL_EXPENSES("625122", "Gastos de Viaje"),
+    MOVING_EXPENSES("625500", "Gastos de mudanza"),
+    VACATIONS_PAY("641200", "Pago de Vacaciones"),
+    VACATIONS_BONUS("641220", "Bono de vacaciones"),
+    CESTATICKETS("648400", "Tickets de Comida y Compensación"),
+    DONACIONES("671300", "Donaciones y generosidades")
     ;
 
     Accounts(String costElementId, String costElementName) {
