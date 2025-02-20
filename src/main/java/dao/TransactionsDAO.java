@@ -8,6 +8,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import main.java.Main;
+import main.java.entities.Transactions;
+import main.java.util.ConnectionPool;
+import main.java.util.TimeZone;
+
 public class TransactionsDAO {
     public TransactionsDAO(final Connection conn) {
         this.conn = conn;
@@ -115,5 +120,43 @@ public class TransactionsDAO {
         
     }
     
+    public void newTransaction(Transactions transaction) throws SQLException {
+        final String query = "INSERT INTO trans (id, cicle_id, cedula_cliente, admin, fecha, tipo, "
+        + "cantidad_recibida, moneda_recibida, metodo_recibido, cantidad_enviada, "
+        + "moneda_enviada, metodo_enviado, status, tasa, ganancia, ref_bancaria) "
+        + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+        try (Connection connection = ConnectionPool.getConnection();
+        PreparedStatement st = connection.prepareStatement(query);) {
+            st.setString(1, transaction.getId());
+            st.setString(2, transaction.getParent_id());
+            st.setString(3, transaction.getClient().getCi());
+            st.setString(4, Main.getUsername());
+            st.setDate(5, Date.valueOf(TimeZone.getDateZoneCaracas()));
+            st.setString(6, transaction.getType());
+            st.setDouble(7, transaction.getQuantityReceived());
+            st.setString(8, transaction.getCurrencyReceived());
+            st.setString(9, transaction.getReceivedMethod());
+            st.setDouble(10, transaction.getSentQuantity());
+            st.setString(11, transaction.getSentCurrency());
+            st.setString(12, transaction.getSentMethod());
+            st.setString(13, transaction.getStatus());
+            st.setDouble(14, transaction.getRate());
+            st.setDouble(15, transaction.getRevenue());
+            st.setString(16, transaction.getBankRef());
+
+            Integer isu = st.executeUpdate();
+
+            st.close();
+            if (connection != null)
+                ConnectionPool.releaseConnection(connection);
+        } catch (SQLException e) {
+            System.err.println("[ERROR] Mensaje: " + e.getMessage());
+            System.err.println("[ERROR] Estado SQL: " + e.getSQLState());
+            System.err.println("[ERROR] Código de error: " + e.getErrorCode());
+            e.printStackTrace();
+        }
+    }
+
     private final Connection conn;
 }

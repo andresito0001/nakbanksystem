@@ -83,7 +83,7 @@ public class AbonoContableController {
          * Inicializar bancos donde enviar / recibir el abono. 
          */
 
-        banksDAO = new BanksDAO(ConnectionPool.getConnection());
+        banksDAO = new BanksDAO();
         dbUtils = new DatabaseUtils(ConnectionPool.getConnection());
 
         typeMoney = cuentaXAbonar.getMonedaTransaccion();

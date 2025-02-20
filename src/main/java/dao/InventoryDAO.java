@@ -4,6 +4,10 @@ import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Time;
+
+import main.java.entities.Inventory;
+import main.java.util.ConnectionPool;
 
 public class InventoryDAO {
     public InventoryDAO(final Connection conn) {
@@ -32,5 +36,35 @@ public class InventoryDAO {
         }
     }
 
+    public void newRegister(Inventory inventory) throws SQLException {
+        final String query = "insert into inventario(referencia, fecha, hora, tipo_movimiento, cantidad, moneda, metodo, tipo, id_trans)" +
+                              "values (?, ?, ?, ?, ?, ?, ?, ?, ?);";
+
+        try (final Connection connection = ConnectionPool.getConnection();
+             final PreparedStatement st = connection.prepareStatement(query)) {
+            st.setString(1, inventory.getReference());
+            st.setDate(2, Date.valueOf(inventory.getDate()));
+            st.setTime(3, Time.valueOf(inventory.getTime()));
+            st.setString(4, inventory.getMovementType());
+            st.setDouble(5, inventory.getQuantity());
+            st.setString(6, inventory.getMoneyType());
+            st.setString(7, inventory.getMethod());
+            st.setString(8, inventory.getOperationType());
+            st.setString(9, inventory.getTransId());
+
+            st.executeUpdate();
+            st.close();
+
+            if (connection != null) {
+                ConnectionPool.releaseConnection(connection);
+            }
+        } catch (SQLException e) {
+            System.err.println("[ERROR] Mensaje: " + e.getMessage());
+            System.err.println("[ERROR] Estado SQL: " + e.getSQLState());
+            System.err.println("[ERROR] Código de error: " + e.getErrorCode());
+            e.printStackTrace();
+        }
+        
+    }
     private final Connection conn;
 }

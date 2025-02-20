@@ -1,8 +1,6 @@
 package main.java.controllers;
 
 import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDate;
@@ -45,7 +43,7 @@ public class RegisterInversionController {
 
         List<Banks> listaBanks = new ArrayList<>();
 
-        BanksDAO banksDAO = new BanksDAO(ConnectionPool.getConnection());
+        BanksDAO banksDAO = new BanksDAO();
         banksDAO.setBank(listaBanks, null, null);
 
         bancosBox.getItems().addAll(listaBanks);

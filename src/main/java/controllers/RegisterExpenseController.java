@@ -18,7 +18,7 @@ import javafx.scene.input.MouseEvent;
 import main.java.dao.BanksDAO;
 import main.java.entities.Accounts;
 import main.java.entities.Banks;
-import main.java.entities.Gastos;
+// import main.java.entities.Gastos;
 import main.java.util.ConnectionPool;
 
 public class RegisterExpenseController {
@@ -36,7 +36,7 @@ public class RegisterExpenseController {
     public void initialize() throws SQLException{
 
         List<Banks> listaBanks = new ArrayList<>();
-        BanksDAO banksDAO = new BanksDAO(ConnectionPool.getConnection());
+        BanksDAO banksDAO = new BanksDAO();
         banksDAO.setBank(listaBanks, null, null);
 
         metodoPagoId.getItems().addAll(listaBanks);

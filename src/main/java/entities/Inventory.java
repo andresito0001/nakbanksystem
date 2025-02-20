@@ -1,31 +1,37 @@
 package main.java.entities;
 
 public class Inventory {
-    Inventory(final String date, final String time, final String typeMov, final Double quantity, 
-            final String typeMoney, final String method, final String type) {
+    public Inventory(String reference, String date, String movementType, Double quantity,
+    String moneyType, String method, String operationType, String time, String transId) {
+        this.reference = reference;
         this.date = date;
-        this.time = time;
-        this.typeMov = typeMov;
+        this.movementType = movementType;
         this.quantity = quantity;
-        this.typeMoney = typeMoney;
+        this.moneyType = moneyType;
         this.method = method;
-        this.type = type;
+        this.operationType = operationType;
+        this.time = time;
+        this.transId = transId;
     }
-    
-    // getters
-    public String getDate() { return this.date; }
-    public String getTime() { return time; }
-    public String getMethod() { return this.method; }
-    public Double getQuantity() { return this.quantity; }
-    public String getType() { return this.type; }
-    public String getTypeMoney() { return this.typeMoney; }
-    public String getTypeMov() { return this.typeMov; }
 
-    private final String date;
-    private final String time;
-    private final String typeMov;
-    private final Double quantity;
-    private final String typeMoney;
-    private final String method;
-    private final String type;
+    // getters
+    public String getDate() { return date; }
+    public String getMethod() { return method; }
+    public String getMoneyType() { return moneyType; }
+    public String getMovementType() { return movementType; }
+    public String getOperationType() { return operationType; }
+    public Double getQuantity() { return quantity; }
+    public String getReference() { return reference; }
+    public String getTime() { return time; }
+    public String getTransId() { return transId; }
+
+    private String reference;
+    private String date;
+    private String movementType;
+    private Double quantity;
+    private String moneyType;
+    private String method;
+    private String operationType;
+    private String time;
+    private String transId;
 }

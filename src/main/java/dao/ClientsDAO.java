@@ -8,6 +8,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.postgresql.core.SqlCommand;
+
 import javafx.collections.ObservableList;
 import main.java.entities.Clients;
 import main.java.util.ConnectionPool;
@@ -191,6 +193,32 @@ public class ClientsDAO {
         }
        // return clients;
     }
+
+    public final Clients getCLientBy(final String condition) throws SQLException {
+        final String query = "select cedula, nombre, apellido, alias from clientes "
+        .concat(condition)
+        .concat(" limit 1");
+        
+        final Connection cpnn = ConnectionPool.getConnection();
+
+        try (final PreparedStatement st = cpnn.prepareStatement(query);
+        final ResultSet rs = st.executeQuery(); ) {
+            if (rs.next()) {
+                Clients client = new Clients(rs.getString("cedula"),
+                rs.getString("nombre"), rs.getString("apellido"),
+                rs.getString("alias"));
+
+                return client;
+            } else {
+                return null;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al intentar obtener datos del cliente");
+        } finally { 
+            if (cpnn != null)
+                ConnectionPool.releaseConnection(cpnn);
+        }
+    }
 /*
     public static void generarLista (ObservableList<ClientsDAO> listaClients, String filtro, String value) throws SQLException {
         final String query = "select cedula, nombre, apellido, alias where " + filtro + " = '" + value + "'";
@@ -206,6 +234,7 @@ public class ClientsDAO {
         }
     }
     */
+
 
     private final Connection conn;
 }

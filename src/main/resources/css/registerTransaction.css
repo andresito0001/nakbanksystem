@@ -23,17 +23,26 @@
 }
 
 #confirmButton {
-    -fx-background-color: #009cde;
-    -fx-text-fill: #12151c;
+    -fx-background-color: #1b222c;
+    -fx-text-fill: #523cdd;
     -fx-font-size: 12;
     -fx-font-family: 'Souego UI'; 
 }
 
+#confirmButton:hover {
+    -fx-background-color: #303b4b;
+
+}
+
 #cancelButton {
-    -fx-background-color: #FF6F59;
-    -fx-text-fill: #12151c;
+    -fx-background-color: #1b222c;
+    -fx-text-fill: #FF6F59;
     -fx-font-size: 12;
     -fx-font-family: 'Souego UI'; 
+}
+
+#cancelButton:hover {
+    -fx-background-color: #303b4b;
 }
 
 .combo-box-style {
