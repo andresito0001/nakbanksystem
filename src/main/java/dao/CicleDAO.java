@@ -16,7 +16,7 @@ public class CicleDAO {
     public StringBuilder fillByDate(final Date beginDate, final Date endDate) throws SQLException {
         final String query = "select c.cedula, a.nombre_usuario, t.id, t.fecha, t.cantidad_recibida, t.moneda_recibida, " +
             "t.metodo_recibido, t.cantidad_enviada, t.moneda_enviada, t.metodo_enviado, t.status, t.tasa " +
-            "from cicles t " +
+            "from ciclos t " +
             "inner join clientes c on t.cedula_cliente = c.cedula " +
             "inner join administradores a on t.admin = a.nombre_usuario " +
             "where t.fecha >= ? AND t.fecha <= ?";
@@ -46,7 +46,7 @@ public class CicleDAO {
 
     public final List<String> getIdsByDate(final Date beginDate, final Date endDate) throws SQLException {
         List<String> ids =  new ArrayList<>();
-        final String query = "select id from cicles where fecha between ? and ?";
+        final String query = "select id from ciclos where fecha between ? and ?";
 
         try (final PreparedStatement st = this.conn.prepareStatement(query)) {
             st.setDate(1, beginDate);

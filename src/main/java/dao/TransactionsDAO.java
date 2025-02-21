@@ -7,7 +7,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
 import main.java.Main;
 import main.java.entities.Transactions;
 import main.java.util.ConnectionPool;
@@ -19,7 +18,7 @@ public class TransactionsDAO {
     }
 
     public void fillByClient(final String cedula, Date beginDate, Date endDate) throws SQLException {
-        final String query = "select * from transaccion where cedula_cliente = ? and fecha between ? and ?";
+        final String query = "select * from transacciones where cedula_cliente = ? and fecha between ? and ?";
         try (PreparedStatement st = this.conn.prepareStatement(query);) {
             st.setString(1, cedula);
             st.setDate(2, beginDate);
@@ -48,7 +47,7 @@ public class TransactionsDAO {
     public void fillByDate(final Date beginDate, final Date endDate) throws SQLException {
         String query = "select c.nombre, c.apellido, c.cedula, t.fecha, t.tipo, t.cantidad_recibida, t.moneda_recibida, " +
         "t.metodo_recibido, t.cantidad_enviada, t.moneda_enviada, t.metodo_enviado, t.status " +
-        "from trans t " +
+        "from transacciones t " +
         "inner join clientes c on t.cedula_cliente = c.cedula " +
         "where t.fecha between ? and ?";
 
@@ -73,7 +72,7 @@ public class TransactionsDAO {
 
     public Integer getNumOftTransByTypeAndDate(final String type, final Date beginDate, final Date endDate) throws SQLException {
         final String query = "select tipo, count(*) as total_transacciones " +
-                        "from transaccion where tipo = ? and fecha between ? and ? group by tipo;";
+                        "from transacciones where tipo = ? and fecha between ? and ? group by tipo;";
 
         try (final PreparedStatement st = conn.prepareStatement(query)) {
             st.setString(1, type);
@@ -94,7 +93,7 @@ public class TransactionsDAO {
     public Float getAllAmountReceivedBy(final String transType, final String currencyReceived,
                                                 final String receivedMethod) throws SQLException {
         final String query = "select sum(cantidad_recibida) as total "
-                              + "from transaccion " 
+                              + "from transacciones " 
                               + "where tipo = ? and moneda_recibida = ? and metodo_recibido = ? ";
         
         try (final PreparedStatement st = this.conn.prepareStatement(query)) {
@@ -121,7 +120,7 @@ public class TransactionsDAO {
     }
     
     public void newTransaction(Transactions transaction) throws SQLException {
-        final String query = "INSERT INTO trans (id, cicle_id, cedula_cliente, admin, fecha, tipo, "
+        final String query = "insert into transacciones (id, cicle_id, cedula_cliente, admin, fecha, tipo, "
         + "cantidad_recibida, moneda_recibida, metodo_recibido, cantidad_enviada, "
         + "moneda_enviada, metodo_enviado, status, tasa, ganancia, ref_bancaria) "
         + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";

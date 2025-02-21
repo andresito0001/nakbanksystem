@@ -79,6 +79,7 @@ public class DBConstants {
 
     public static final List<String> INVENTORY_COLUMNS_LIST = List.of (        
         "referencia",
+        "id_trans",
         "fecha",
         "hora",
         "tipo_movimiento",
@@ -90,6 +91,7 @@ public class DBConstants {
 
     public static final List<String> INVENTORY_TYPES_LIST = List.of(
         "serial primary key",
+        "text references transacciones(id)",
         "date not null",
         "time with time zone",
         "text",
@@ -121,13 +123,15 @@ public class DBConstants {
         "id_administrador",
         "nombre_usuario",
         "password",
-        "estado"
+        "estado",
+        "rol"
     );
         
     public static final List<String> ADMIN_TYPES_LIST = List.of (
-        "text unique not null",
+        "primary key text unique not null",
         "text unique not null",
         "text not null",
+        "text",
         "text"
     );
 
