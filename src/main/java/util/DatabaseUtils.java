@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class DatabaseUtils {
@@ -34,7 +35,7 @@ public class DatabaseUtils {
 
     public void createTable(final String name, final List<String> colums,
                                     final List<String> types) throws SQLException {
-        StringBuilder sql = new StringBuilder("create table " + name + " (");
+        StringBuilder sql = new StringBuilder("create table if not exists " + name + " (");
 
         for (int i = 0; i < colums.size(); i++) {
             sql.append(colums.get(i)).append(" ").append(types.get(i));
@@ -107,6 +108,31 @@ public class DatabaseUtils {
                 return 0.0;
             }
         }
+    }
+
+    public final List<String> getTableSchemaAsList() throws SQLException {
+        final String sql = "select table_name from information_schema.tables where table_schema = 'public';";
+
+        final List<String> results = new ArrayList<>();
+        
+        try (final Connection connection = ConnectionPool.getConnection();
+            final PreparedStatement st = connection.prepareStatement(sql); 
+            final ResultSet rs = st.executeQuery()) {
+
+                while (rs.next()) {
+                    results.add(rs.getString("table_name"));
+                }
+
+                rs.close();
+                st.close();
+                
+                if (connection != null) 
+                    ConnectionPool.releaseConnection(connection);
+            } catch (SQLException e) {
+                throw new SQLException("Error al obtener el esquema de la base de datos", e);
+            }
+
+        return results;
     }
 
     private final Connection conn;

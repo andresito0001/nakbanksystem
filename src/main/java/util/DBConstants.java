@@ -3,7 +3,7 @@ package main.java.util;
 import java.util.List;
 
 public class DBConstants {
-    public static final List<String> CICLES_COLUM_LIST = List.of(
+    public static final List<String> CYCLES_COLUM_LIST = List.of(
         "id",
         "cedula_cliente",
         "admin",
@@ -20,7 +20,7 @@ public class DBConstants {
         "ref_bancaria" 
     );
 
-    public static final List<String> CICLES_TYPES_LIST = List.of (     
+    public static final List<String> CYCLES_TYPES_LIST = List.of (     
 "text primary key unique not null",
         "text references clienteS(cedula)",
         "text references administradores(nombre_usuario)",
@@ -59,7 +59,7 @@ public class DBConstants {
 
     public static final List<String> TRANS_TYPES_LIST = List.of (
         "text primary key unique not null",
-        "text references cicles(id)",
+        "text references ciclos(id)",
         "text references clienteS(cedula)",
         "text references administradores(nombre_usuario)",
         "date not null",
@@ -77,7 +77,7 @@ public class DBConstants {
         "text not null"
     );
 
-    public static final List<String> INVENTORY_COLUM_LIST = List.of (        
+    public static final List<String> INVENTORY_COLUMNS_LIST = List.of (        
         "referencia",
         "fecha",
         "hora",
@@ -99,21 +99,22 @@ public class DBConstants {
         "text"
     );
 
-    public static final List<String> BANKS_COLUMS_LIST = List.of (
+    public static final List<String> BANKS_COLUMNS_LIST = List.of (
         "codigo",
         "nombre_banco",
         "numero_cuenta",
         "moneda",
-        "saldo_actual"
+        "saldo_actual",
+        "correo"
     );
 
     public static final List<String> BANKS_TYPES_LIST = List.of (
-        "serial primary key",
-        "text unique not null",
+        "text primary key unique not null",
         "text",
         "text",
         "text",
-        "double precision"
+        "double precision",
+        "text"
     );
     
     public static final List<String> ADMIN_COLUMS_LIST = List.of (
@@ -126,6 +127,20 @@ public class DBConstants {
     public static final List<String> ADMIN_TYPES_LIST = List.of (
         "text unique not null",
         "text unique not null",
+        "text not null",
+        "text"
+    );
+
+    public static List<String> CLIENTS_COLUMNS_LIST = List.of (
+        "cedula",
+        "nombre",
+        "apellido",
+        "alias"
+    );
+
+    public static List<String> CLIENTS_TYPES_LIST = List.of (
+        "text primary key unique not null",
+        "text not null",
         "text not null",
         "text"
     );
