@@ -1,7 +1,10 @@
 #anchorPaneId {
     -fx-background-color: #12151c;
 }
-
+.combo-box {
+    -fx-background-color: #1b222c;
+    -fx-text-inner-color: #abb2bf;
+}
 .text-field {
     -fx-background-color: #1b222c;
     -fx-text-inner-color: #abb2bf;
@@ -68,6 +71,11 @@
     -fx-text-fill: #abb2bf;
     -fx-font-size: 12;
     -fx-font-family: 'Segoe UI';
+}
+
+.list-cell:hover {
+    -fx-cursor: hand;
+    -fx-text-fill: #009cde;
 }
 
 /* Scroll bar styling */

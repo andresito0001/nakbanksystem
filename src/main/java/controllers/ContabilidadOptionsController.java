@@ -18,6 +18,8 @@ public class ContabilidadOptionsController {
     private VBox ingresosButtonId;
     @FXML
     private VBox gastosButtonId;
+    @FXML
+    private VBox dividendosButton;
 
     public void initialize () throws SQLException {
         AdminDAO admin = new AdminDAO(ConnectionPool.getConnection());
@@ -27,6 +29,7 @@ public class ContabilidadOptionsController {
             inversionButtonId.setVisible(false);
             ingresosButtonId.setVisible(false);
             gastosButtonId.setVisible(false);
+            dividendosButton.setVisible(false);
         }
 
     }

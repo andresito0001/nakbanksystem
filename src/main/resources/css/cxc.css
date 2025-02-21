@@ -1,6 +1,43 @@
 #anchorPane {
     -fx-background-color: #12151c;
 }
+
+.dialog-pane {
+    -fx-background-color: linear-gradient(#12151c 0%, #354357 100%);
+
+}
+
+.dialog-pane .content {
+    -fx-text-fill: #abb2bf;
+}
+
+.dialog-pane .header-panel {
+    -fx-background-color: #12151c;
+    -fx-text-fill: #abb2bf;
+}
+
+.dialog-pane .header-panel .label {
+    -fx-font-size: 16;
+    -fx-font-weight: bold;
+    -fx-text-fill: #abb2bf;
+}
+
+.dialog-pane .button {
+    -fx-background-color: #abb2bf;
+    -fx-text-fill: #12151c;
+    -fx-border-radius: 3px;
+    -fx-background-radius: 3px;
+    -fx-padding: 5px 10px;
+}
+
+.dialog-pane .button:hover {
+    -fx-background-color: #12151c;
+    -fx-text-fill: #abb2bf;
+    -fx-cursor: hand;
+}
+
+
+
 .table-view {
     -fx-background-color: transparent;
 }
@@ -58,15 +95,18 @@
 .table-row-cell {
     -fx-background-color: transparent;
 }
+
 .table-view .table-cell {
     -fx-text-fill: #abb2bf;
     -fx-border-color: transparent #354357 transparent transparent;
 }
+
 .table-row-cell:selected .text,
 .table-row-cell:hover .text{
     -fx-fill: #009cde;
     -fx-cursor: HAND;
 }
+
 .table-row-cell .text {
     -fx-fill: #abb2bf;
 }
@@ -84,9 +124,11 @@
     -fx-background-color:  transparent;
 }
 
+
 .table-view > .virtual-flow > .scroll-bar:vertical > .thumb {
     -fx-background-color: #009cde;
 }
+
 
 .table-view > .virtual-flow > .scroll-bar > .increment-button,
 .table-view > .virtual-flow > .scroll-bar > .decrement-button { 

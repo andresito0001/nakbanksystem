@@ -85,6 +85,9 @@ public class CuentasPorPagarController {
             Alert alert = new Alert (AlertType.CONFIRMATION,infoCuenta);
             alert.setHeaderText(headerMensaje);
             alert.setTitle("Abono de Cuenta");
+            alert.getDialogPane().getStylesheets().addAll(
+                getClass().getResource("/main/resources/css/cxc.css").toExternalForm()
+            );
             alert.showAndWait();
 
             if(alert.getResult() == ButtonType.OK) {

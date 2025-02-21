@@ -79,7 +79,7 @@
                         <Cursor fx:constant="HAND" />
                      </cursor>
                      <children>
-                        <Label alignment="CENTER" prefHeight="90.0" prefWidth="220.0" text="Registrar Ingreso">
+                        <Label alignment="CENTER" prefHeight="90.0" prefWidth="220.0" text="Prestamos">
                            <graphic>
                               <ImageView fitHeight="50.0" fitWidth="81.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -108,6 +108,22 @@
                      <HBox.margin>
                         <Insets />
                      </HBox.margin>
+                  </VBox>
+                  <VBox fx:id="dividendosButton" prefHeight="79.0" prefWidth="220.0" styleClass="buttomCard">
+                     <children>
+                        <Label fx:id="gastosButton1" alignment="CENTER" prefHeight="79.0" prefWidth="237.0" text="Pago de Dividendos">
+                           <graphic>
+                              <ImageView fitHeight="60.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../img/dividendo.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Label>
+                     </children>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
                   </VBox>
                </children>
                <opaqueInsets>

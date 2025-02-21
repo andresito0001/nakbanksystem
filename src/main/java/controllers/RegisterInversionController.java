@@ -8,6 +8,8 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.UnaryOperator;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
@@ -15,9 +17,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextFormatter;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import main.java.dao.BanksDAO;
 import main.java.dao.InventoryDAO;
 import main.java.entities.Banks;
@@ -39,7 +40,7 @@ public class RegisterInversionController {
     public DatabaseUtils dbUtils;
     public InventoryDAO inventoryDAO;
 
-    public void initialize () throws SQLException{
+    public void initialize () throws SQLException {
 
         List<Banks> listaBanks = new ArrayList<>();
 
@@ -59,6 +60,24 @@ public class RegisterInversionController {
                 ex.printStackTrace();
             }
         });
+
+        formatosTextField();
+
+    }
+
+    public void formatosTextField () {
+        UnaryOperator <TextFormatter.Change> filterMonto = change -> {
+            String newText = change.getControlNewText();
+
+            if (newText.matches("\\d*\\d*(\\.\\d{0,3})?")) {
+                return change;
+            }
+
+            return null;
+        };
+
+        TextFormatter<String> formatoMonto = new TextFormatter<>(filterMonto);
+        montoInversion.setTextFormatter(formatoMonto);
 
     }
 
@@ -94,7 +113,7 @@ public class RegisterInversionController {
                 public void updateItem(Banks banco, boolean empty) {
                     super.updateItem(banco, empty);
                         if (banco != null) {
-                            setText(banco.getCodigo());
+                            setText(banco.getNombre());
                         }
                         else 
                             setText(null);

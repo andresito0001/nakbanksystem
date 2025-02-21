@@ -33,10 +33,13 @@
             <Font name="System Bold" size="12.0" />
          </font>
       </Text>
-      <ImageView fitHeight="25.0" fitWidth="26.0" layoutX="22.0" layoutY="36.0">
+      <ImageView fitHeight="25.0" fitWidth="26.0" layoutX="22.0" layoutY="36.0" onMouseClicked="#back">
          <image>
             <Image url="@../img/back-icon.png" />
          </image>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
       </ImageView>
       <Button fx:id="registerButton" layoutX="195.0" layoutY="308.0" mnemonicParsing="false" onMouseClicked="#registerClient" stylesheets="@../css/registerClients.css" text="Confirmar">
          <cursor>

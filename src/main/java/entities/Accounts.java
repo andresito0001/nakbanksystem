@@ -46,7 +46,8 @@ public enum Accounts {
     VACATIONS_PAY("641200", "Pago de Vacaciones"),
     VACATIONS_BONUS("641220", "Bono de vacaciones"),
     CESTATICKETS("648400", "Tickets de Comida y Compensación"),
-    DONACIONES("671300", "Donaciones y generosidades")
+    DONACIONES("671300", "Donaciones y generosidades"),    
+    RXD_GAINS_USD("766200", "Profit VES-USD")
     ;
 
     Accounts(String costElementId, String costElementName) {
