@@ -46,6 +46,7 @@ public class RegisterInversionController {
 
         BanksDAO banksDAO = new BanksDAO();
         banksDAO.setBank(listaBanks, null, null);
+        dbUtils = new DatabaseUtils(ConnectionPool.getConnection());
 
         bancosBox.getItems().addAll(listaBanks);
         crearComponentes();

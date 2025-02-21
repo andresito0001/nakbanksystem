@@ -70,8 +70,6 @@ public class CxC {
                     new CxC(rs.getString("id_trans"), rs.getString("cliente"), rs.getDouble("monto_transaccion"),rs.getString("moneda_trans") ,rs.getDouble("abonado"), rs.getDouble("pendiente"), rs.getString("tipo"))
                 );
             }
-            rs.close();
-            st.close();
         } catch (SQLException exception) {
             exception.printStackTrace();
         }
