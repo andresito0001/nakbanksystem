@@ -90,8 +90,8 @@ public class DBConstants {
     );
 
     public static final List<String> INVENTORY_TYPES_LIST = List.of(
-        "serial primary key",
-        "text references transacciones(id)",
+        "text primary key",
+        "text",
         "date not null",
         "time with time zone",
         "text",

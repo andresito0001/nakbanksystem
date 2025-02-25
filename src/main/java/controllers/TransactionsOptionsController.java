@@ -27,7 +27,7 @@ public class TransactionsOptionsController {
     public void newCycle(MouseEvent event) {
         try {
             DatabaseUtils dbUtils = new DatabaseUtils(ConnectionPool.getConnection());
-            if (dbUtils.getInfoByLastReferenceOf("cicles", "status", null, null).equals("ACTIVE")) {
+            if (dbUtils.getInfoByLastReferenceOf("ciclos", "status", null, null).equals("ACTIVE")) {
                 Alert alert = new Alert(AlertType.WARNING, "Ya existe un ciclo activo en este momento",ButtonType.CLOSE);
                 alert.showAndWait();
                 return;

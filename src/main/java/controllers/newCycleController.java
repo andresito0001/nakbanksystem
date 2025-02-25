@@ -159,7 +159,7 @@ public class newCycleController implements Initializable {
                     byte[] entropy = new byte[] { 0x1, 0x1, 0x2, 0x3, 0x4, 0x5, 0x6, 0x7, 0x8, 0x9 };
                     final String id = ULID.generate(System.currentTimeMillis(), entropy);
                     
-                    final String query = "insert into cicles(id, cedula_cliente, admin, fecha, cantidad_recibida, moneda_recibida, metodo_recibido, cantidad_enviada, moneda_enviada, metodo_enviado, status, tasa, ref_bancaria) " + 
+                    final String query = "insert into ciclos(id, cedula_cliente, admin, fecha, cantidad_recibida, moneda_recibida, metodo_recibido, cantidad_enviada, moneda_enviada, metodo_enviado, status, tasa, ref_bancaria) " + 
                                         "values (" + "'" + id + "', " + "'" + clientID + "', " + "'" + Main.getUsername() + "', " +  "'" + TimeZone.getDateZoneCaracas() + "', " +
                                         "'" + Double.parseDouble(amount) + "', " + "'" + MoneyType.BOLIVARES.getNombre() + "', " + "'" + bankReceived + "', " + "'" + sent + "', " + "'" + bankSentTypeMoney + "', " + "'" + bankSent + "', " + "'ACTIVE', " + "'" + rateValue + "', " + "'" + ref + "');";
             
@@ -174,7 +174,7 @@ public class newCycleController implements Initializable {
 
                     try (final PreparedStatement st = conn.prepareStatement(query)) {
                         st.executeUpdate();
-                        final String dateTimeQuery = "select fecha, hora from cicles order by id desc limit 1";
+                        final String dateTimeQuery = "select fecha, hora from ciclos order by id desc limit 1";
 
                         try (final PreparedStatement stm = conn.prepareStatement(dateTimeQuery)) {
                             ResultSet rs = stm.executeQuery();
@@ -182,7 +182,7 @@ public class newCycleController implements Initializable {
                                 dbUtils.updateRegister("bancos", "saldo_actual", (totalBalanceAccount - Double.parseDouble(sent)), "codigo = " + "'" + bankSent + "'");
                                 dbUtils.updateRegister("bancos", "saldo_actual", Double.parseDouble(amount) + totalBalanceAccountReceived, "codigo = " + "'" + bankReceived + "'");
                             } else {
-                                System.err.println("No data found in cicles table.");
+                                System.err.println("No data found in ciclos table.");
                             }
 
                             stm.close();

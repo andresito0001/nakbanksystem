@@ -224,12 +224,12 @@ public class RegisterTransactionController {
                 final Double sent = Double.parseDouble(sentTextField.getText());
                 final Double ammonut = Double.parseDouble(amountTextField.getText());
                 final String ref = refTextField.getText();
-                final Double tasaMadre = Double.parseDouble(databaseUtils.getInfoByLastReferenceOf("cicles", "tasa", null, null));
+                final Double tasaMadre = Double.parseDouble(databaseUtils.getInfoByLastReferenceOf("ciclos", "tasa", null, null));
                 Double gananciaPerdida = received - (sent / tasaMadre);
                 
                 gananciaPerdida = gananciaPerdida < 0 ? gananciaPerdida * -1 : gananciaPerdida; 
 
-                final String cycleId = databaseUtils.getInfoByLastReferenceOf("cicles", "id", null, null);
+                final String cycleId = databaseUtils.getInfoByLastReferenceOf("ciclos", "id", null, null);
                 
                 final byte[] entropy = new byte[] { 0x1, 0x1, 0x2, 0x3, 0x4, 0x5, 0x6, 0x7, 0x8, 0x9 };
                 
