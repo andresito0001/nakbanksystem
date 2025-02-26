@@ -13,18 +13,17 @@ import main.java.util.ConnectionPool;
 import main.java.util.TimeZone;
 
 public class TransactionsDAO {
-    public TransactionsDAO(final Connection conn) {
-        this.conn = conn;
-    }
-
     public void fillByClient(final String cedula, Date beginDate, Date endDate) throws SQLException {
         final String query = "select * from transacciones where cedula_cliente = ? and fecha between ? and ?";
-        try (PreparedStatement st = this.conn.prepareStatement(query);) {
+        
+        try (final Connection conn = ConnectionPool.getConnection();
+            final PreparedStatement st = conn.prepareStatement(query);
+            final ResultSet rs = st.executeQuery()) {
+            
             st.setString(1, cedula);
             st.setDate(2, beginDate);
             st.setDate(3, endDate);
             
-            final ResultSet rs = st.executeQuery();
             StringBuilder metaData = new StringBuilder();
 
             while (rs.next()) {
@@ -38,23 +37,22 @@ public class TransactionsDAO {
                 .append(", metodo_enviado: ").append(rs.getString("metodo_enviado"))
                 .append(", status: ").append(rs.getString("status")).append("\n");
             }
-            System.out.println(metaData);
-            rs.close();
-            st.close();
         }
     }
 
     public void fillByDate(final Date beginDate, final Date endDate) throws SQLException {
-        String query = "select c.nombre, c.apellido, c.cedula, t.fecha, t.tipo, t.cantidad_recibida, t.moneda_recibida, " +
+        final String query = "select c.nombre, c.apellido, c.cedula, t.fecha, t.tipo, t.cantidad_recibida, t.moneda_recibida, " +
         "t.metodo_recibido, t.cantidad_enviada, t.moneda_enviada, t.metodo_enviado, t.status " +
         "from transacciones t " +
         "inner join clientes c on t.cedula_cliente = c.cedula " +
         "where t.fecha between ? and ?";
 
-        try (final PreparedStatement st = this.conn.prepareStatement(query)) {
+        try (final Connection conn = ConnectionPool.getConnection();
+            final PreparedStatement st = conn.prepareStatement(query);
+            final ResultSet rs = st.executeQuery()) {
             st.setDate(1, beginDate);
             st.setDate(2, endDate);
-            final ResultSet rs = st.executeQuery();
+            
             StringBuilder metaData = new StringBuilder();
             
             while (rs.next()) {
@@ -70,45 +68,41 @@ public class TransactionsDAO {
         }
     }
 
-    public Integer getNumOftTransByTypeAndDate(final String type, final Date beginDate, final Date endDate) throws SQLException {
+    public final Integer getNumOftTransByTypeAndDate(final String type, final Date beginDate, final Date endDate) throws SQLException {
         final String query = "select tipo, count(*) as total_transacciones " +
                         "from transacciones where tipo = ? and fecha between ? and ? group by tipo;";
 
-        try (final PreparedStatement st = conn.prepareStatement(query)) {
+        try (final Connection conn = ConnectionPool.getConnection();
+            final PreparedStatement st = conn.prepareStatement(query);
+            final ResultSet rs = st.executeQuery()) {
             st.setString(1, type);
             st.setDate(2, beginDate);
             st.setDate(3, endDate);
 
-            final ResultSet rs = st.executeQuery();
             rs.next();
-
-            Integer count = rs.getInt("total_transacciones");
             
-            rs.close();
-            st.close();
+            final Integer count = rs.getInt("total_transacciones");
+            
             return count > 0 ? count : 0;
         }
     }
     
-    public Float getAllAmountReceivedBy(final String transType, final String currencyReceived,
+    public final Float getAllAmountReceivedBy(final String transType, final String currencyReceived,
                                                 final String receivedMethod) throws SQLException {
         final String query = "select sum(cantidad_recibida) as total "
                               + "from transacciones " 
                               + "where tipo = ? and moneda_recibida = ? and metodo_recibido = ? ";
         
-        try (final PreparedStatement st = this.conn.prepareStatement(query)) {
+        try (final Connection conn = ConnectionPool.getConnection();
+            final PreparedStatement st = conn.prepareStatement(query);
+            final ResultSet rs = st.executeQuery()) {
             st.setString(1, transType);
             st.setString(2, currencyReceived);
             st.setString(3, receivedMethod);
 
-            final ResultSet rs = st.executeQuery();
             rs.next();
 
-            Float total = rs.getFloat("total");
-            rs.close();
-            st.close();
-
-            return total;
+            return rs.getFloat("total");
         }
     }
 
@@ -116,7 +110,7 @@ public class TransactionsDAO {
         List<String> accounts = new ArrayList<>();
         return accounts;
 
-        
+        // ... 
     }
     
     public void newTransaction(Transactions transaction) throws SQLException {
@@ -125,8 +119,8 @@ public class TransactionsDAO {
         + "moneda_enviada, metodo_enviado, status, tasa, ganancia, ref_bancaria) "
         + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-        try (Connection connection = ConnectionPool.getConnection();
-        PreparedStatement st = connection.prepareStatement(query);) {
+        try (final Connection connection = ConnectionPool.getConnection();
+        final PreparedStatement st = connection.prepareStatement(query)) {
             st.setString(1, transaction.getId());
             st.setString(2, transaction.getParent_id());
             st.setString(3, transaction.getClient().getCi());
@@ -144,11 +138,7 @@ public class TransactionsDAO {
             st.setDouble(15, transaction.getRevenue());
             st.setString(16, transaction.getBankRef());
 
-            Integer isu = st.executeUpdate();
-
-            st.close();
-            if (connection != null)
-                ConnectionPool.releaseConnection(connection);
+            st.executeUpdate();
         } catch (SQLException e) {
             System.err.println("[ERROR] Mensaje: " + e.getMessage());
             System.err.println("[ERROR] Estado SQL: " + e.getSQLState());
@@ -156,6 +146,4 @@ public class TransactionsDAO {
             e.printStackTrace();
         }
     }
-
-    private final Connection conn;
 }
