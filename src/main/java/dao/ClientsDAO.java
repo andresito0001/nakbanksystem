@@ -7,30 +7,24 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.postgresql.core.SqlCommand;
-
 import javafx.collections.ObservableList;
 import main.java.entities.Clients;
 import main.java.util.ConnectionPool;
 
 public class ClientsDAO {
-
-    public ClientsDAO(final Connection conn) {
-        this.conn = conn;
-    }
-
     /***
      * Muestra todos los datos de todos los clientes registrados
      * @param conn
      * @return void
      */
     public StringBuilder fillClients() throws SQLException {
-        String query = "select * from cliente";
+        final String query = "select * from cliente";
         StringBuilder metaData = new StringBuilder();
 
-        try (PreparedStatement st = conn.prepareStatement(query)) {
-            final ResultSet rs = st.executeQuery();
+        try (final Connection conn = ConnectionPool.getConnection();
+            final PreparedStatement st = conn.prepareStatement(query);
+            final ResultSet rs = st.executeQuery()) {
             
             while (rs.next()) {
                 metaData.append("Cedula: ").append(rs.getString("cedula"))
@@ -39,10 +33,9 @@ public class ClientsDAO {
                 .append(", Apellido: ").append(rs.getString("apellido"))
                 .append("\n");
             }
-            rs.close();
-            st.close();
+            
         } catch (SQLException e) {
-            System.err.println("[ERROR]: " + e.getSQLState());
+            throw new RuntimeException("Error al intentar obtener datos de los clientes");
         }
 
         return metaData;
@@ -58,17 +51,14 @@ public class ClientsDAO {
     public boolean existClient(final String cedula) throws SQLException {
         final String query = "SELECT COUNT(*) FROM cliente WHERE cedula = ?";
 
-        try (PreparedStatement st = conn.prepareStatement(query)) {
+        try (final Connection conn = ConnectionPool.getConnection();
+            final PreparedStatement st = conn.prepareStatement(query);
+            ResultSet rs = st.executeQuery()) {
+
             st.setString(1, cedula);
-
-            ResultSet rs = st.executeQuery();
             rs.next();
-            int count = rs.getInt(1);
             
-            rs.close();
-            st.close();
-
-            return count > 0;
+            return rs.getInt(1) > 0;
         } catch (SQLException e) {
             System.out.println("[ERROR]: " + e.getSQLState());
             return false;
@@ -219,22 +209,4 @@ public class ClientsDAO {
                 ConnectionPool.releaseConnection(cpnn);
         }
     }
-/*
-    public static void generarLista (ObservableList<ClientsDAO> listaClients, String filtro, String value) throws SQLException {
-        final String query = "select cedula, nombre, apellido, alias where " + filtro + " = '" + value + "'";
-
-        try (PreparedStatement st = conn.prepareStatement(query)) {
-            final ResultSet rs = st.executeQuery();
-
-            while(rs.next()) {
-                listaClients.add()
-                //Clients client = new Clients(rs.getString("cedula"), rs.getString("nombre"), rs.getString("apellido"), rs.getString("alias"));
-                //listaClients.add(client);
-            }
-        }
-    }
-    */
-
-
-    private final Connection conn;
 }

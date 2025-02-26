@@ -1,7 +1,6 @@
 package main.java.controllers;
 
 import javafx.scene.control.Label;
-import java.sql.Connection;
 import java.sql.SQLException;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
@@ -9,7 +8,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import main.java.dao.AdminDAO;
-import main.java.util.ConnectionPool;
 import main.java.Main;
 
 public class LoginController {
@@ -28,20 +26,13 @@ public class LoginController {
         long startTime = System.currentTimeMillis(); 
 
         Task<Boolean> loginTask = new Task<>() {
-            private Connection conn;
             @Override
             protected Boolean call() throws Exception {
                 try {
-                    conn = ConnectionPool.getConnection();
-                    
-                    AdminDAO admin = new AdminDAO(conn);
-                    return admin.authenticateUser(userNameId.getText(), passwordId.getText());
+                    AdminDAO admin = new AdminDAO();
+                    return admin.authenticateUser(userNameId.getText());
                 } catch (SQLException e) {
                     throw new RuntimeException("Error al obtener datos de usuario", e);
-                } finally {
-                    if (conn != null) {
-                        ConnectionPool.releaseConnection(conn);
-                    }
                 }
             }
         };

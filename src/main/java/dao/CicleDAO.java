@@ -7,12 +7,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import main.java.util.ConnectionPool;
 
 public class CicleDAO {
-    public CicleDAO (final Connection conn) {
-        this.conn = conn;
-    }
-
     public StringBuilder fillByDate(final Date beginDate, final Date endDate) throws SQLException {
         final String query = "select c.cedula, a.nombre_usuario, t.id, t.fecha, t.cantidad_recibida, t.moneda_recibida, " +
             "t.metodo_recibido, t.cantidad_enviada, t.moneda_enviada, t.metodo_enviado, t.status, t.tasa " +
@@ -21,10 +18,12 @@ public class CicleDAO {
             "inner join administradores a on t.admin = a.nombre_usuario " +
             "where t.fecha >= ? AND t.fecha <= ?";
         
-        try (final PreparedStatement st = this.conn.prepareStatement(query)) {
+        try (final Connection conn = ConnectionPool.getConnection();
+            final PreparedStatement st = conn.prepareStatement(query);
+            final ResultSet rs = st.executeQuery()) {
             st.setDate(1, beginDate);
             st.setDate(2, endDate);
-            final ResultSet rs = st.executeQuery();
+            
             StringBuilder metaData = new StringBuilder();
             
             while (rs.next()) {
@@ -38,8 +37,6 @@ public class CicleDAO {
                 .append(", Fecha: ").append(String.valueOf(rs.getDate("fecha"))).append("\n------------------------------------------------------------------------------------------\n");
             }
 
-            rs.close();
-            st.close();
             return metaData;
         }
     }
@@ -48,20 +45,16 @@ public class CicleDAO {
         List<String> ids =  new ArrayList<>();
         final String query = "select id from ciclos where fecha between ? and ?";
 
-        try (final PreparedStatement st = this.conn.prepareStatement(query)) {
+        try (final Connection conn = ConnectionPool.getConnection();
+            final PreparedStatement st = conn.prepareStatement(query);
+            final ResultSet rs = st.executeQuery()) {
             st.setDate(1, beginDate);
             st.setDate(2, endDate);
-            final ResultSet rs = st.executeQuery();
-
+            
             while(rs.next()) { 
                 ids.add(rs.getString("id"));
             }
-            
-            rs.close();
-            st.close();
         }
         return ids;
     }
-    
-    private final Connection conn;
 }
