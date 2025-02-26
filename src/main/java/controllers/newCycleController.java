@@ -42,7 +42,7 @@ public class newCycleController implements Initializable {
             bankCodes = new BanksDAO().getInfoOf("codigo", "moneda", "USD");
             sentComboBox.getItems().addAll(bankCodes);
 
-            ClientsDAO clientsDAO = new ClientsDAO(ConnectionPool.getConnection());
+            ClientsDAO clientsDAO = new ClientsDAO();
             List<Clients> clients = clientsDAO.getClientsAsList();
             clientsList.addAll(clients);
 
@@ -139,9 +139,8 @@ public class newCycleController implements Initializable {
             @Override
             public void handle(javafx.event.ActionEvent event) {
                 try {
-                    final Connection conn = ConnectionPool.getConnection();
                     final BanksDAO banksDAO = new BanksDAO();
-                    final DatabaseUtils dbUtils = new DatabaseUtils(conn);
+                    final DatabaseUtils dbUtils = new DatabaseUtils();
 
                     final String sent = sentTextField.getText();
                     final String rateValue = rate.getText();
@@ -172,7 +171,8 @@ public class newCycleController implements Initializable {
                         return;
                     }
 
-                    try (final PreparedStatement st = conn.prepareStatement(query)) {
+                    try (final Connection conn = ConnectionPool.getConnection();
+                    final PreparedStatement st = conn.prepareStatement(query)) {
                         st.executeUpdate();
                         final String dateTimeQuery = "select fecha, hora from ciclos order by id desc limit 1";
 
@@ -184,19 +184,13 @@ public class newCycleController implements Initializable {
                             } else {
                                 System.err.println("No data found in ciclos table.");
                             }
-
-                            stm.close();
                         }
-
-                        conn.close();
-                        st.close();
                     }
 
                     Alert alert = new Alert(Alert.AlertType.INFORMATION, "Transacción realizada con éxito", ButtonType.CLOSE);
                     alert.showAndWait();
                     
                     Main.switchToDashboard();
-
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

@@ -7,7 +7,6 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
-
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -23,7 +22,6 @@ import main.java.dao.BanksDAO;
 import main.java.dao.InventoryDAO;
 import main.java.entities.Banks;
 import main.java.entities.CxC;
-import main.java.util.ConnectionPool;
 import main.java.util.DatabaseUtils;
 import main.java.util.SceneSwitcher;
 import main.java.util.TimeZone;
@@ -84,7 +82,7 @@ public class AbonoContableController {
          */
 
         banksDAO = new BanksDAO();
-        dbUtils = new DatabaseUtils(ConnectionPool.getConnection());
+        dbUtils = new DatabaseUtils();
 
         typeMoney = cuentaXAbonar.getMonedaTransaccion();
 
@@ -129,7 +127,7 @@ public class AbonoContableController {
             }
         });
 
-        metodoId.setOnAction( e -> {
+        metodoId.setOnAction(_ -> {
             try {
                 bankInfoId.setText(
                     metodoId.getSelectionModel().getSelectedItem().getCodigo() + 
@@ -143,7 +141,7 @@ public class AbonoContableController {
         /*
          * Listeners de TextFields
          */
-        porcentajePM.textProperty().addListener((observable, oldValue, newValue) -> {
+        porcentajePM.textProperty().addListener((_, _, newValue) -> {
             if(!porcentajePM.getText().isEmpty() && !montoId.getText().isEmpty()) {
                 Double porcentaje = 0.0;
                 porcentaje = Double.parseDouble(newValue)/100;
@@ -155,7 +153,7 @@ public class AbonoContableController {
             comisionPM.setText("");
         });
 
-        montoId.textProperty().addListener((observable, oldValue, newValue) -> {
+        montoId.textProperty().addListener((_, _, newValue) -> {
             if (!porcentajePM.getText().isEmpty() && !montoId.getText().isEmpty()) {
                 Double porcentaje = (Double.parseDouble(porcentajePM.getText()))/100;
                 porcentaje = porcentaje * Double.parseDouble(newValue);
@@ -176,7 +174,7 @@ public class AbonoContableController {
         if (!montoId.getText().isEmpty() && !metodoId.getSelectionModel().isEmpty()) {
             Double monto = Double.parseDouble(montoId.getText());
         if (monto <= cuentaXAbonar.getPendienteTransaccion()) {
-            inventoryDAO = new InventoryDAO(ConnectionPool.getConnection());
+            inventoryDAO = new InventoryDAO();
             byte[] random = new byte[] { 0x1, 0x1, 0x2, 0x3, 0x4, 0x5, 0x6, 0x7, 0x8, 0x9 };
             
             String id_inventario, tipoMovimiento, tipoMetodo, tipoMoneda;
@@ -280,7 +278,7 @@ public class AbonoContableController {
                 }
         });
 
-        metodoId.setCellFactory((ListView<Banks> e) -> {
+        metodoId.setCellFactory((ListView<Banks> _) -> {
             final ListCell<Banks> listCell = new ListCell<>() {
                 @Override
                 public void updateItem(Banks banco, boolean empty) {

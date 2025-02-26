@@ -9,7 +9,6 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.UnaryOperator;
-
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
@@ -22,7 +21,6 @@ import javafx.scene.control.Alert.AlertType;
 import main.java.dao.BanksDAO;
 import main.java.dao.InventoryDAO;
 import main.java.entities.Banks;
-import main.java.util.ConnectionPool;
 import main.java.util.DatabaseUtils;
 import main.java.util.TimeZone;
 import main.java.util.ULID;
@@ -46,12 +44,12 @@ public class RegisterInversionController {
 
         BanksDAO banksDAO = new BanksDAO();
         banksDAO.setBank(listaBanks, null, null);
-        dbUtils = new DatabaseUtils(ConnectionPool.getConnection());
+        dbUtils = new DatabaseUtils();
 
         bancosBox.getItems().addAll(listaBanks);
         crearComponentes();
 
-        bancosBox.setOnAction(e -> {
+        bancosBox.setOnAction(_ -> {
             try {
                 saldoDisponibleLabel.setText(
                     "Saldo: " + bancosBox.getSelectionModel().getSelectedItem().getSaldo() + 
@@ -98,7 +96,7 @@ public class RegisterInversionController {
             byte[] random = new byte[] { 0x1, 0x1, 0x2, 0x3, 0x4, 0x5, 0x6, 0x7, 0x8, 0x9 };
             String idInversion = "I-" + ULID.generate(System.currentTimeMillis(), random);
             
-            inventoryDAO = new InventoryDAO(ConnectionPool.getConnection());
+            inventoryDAO = new InventoryDAO();
             inventoryDAO.newRegister(idInversion, fecha, timestamp, "INGRESO", monto, bancosBox.getSelectionModel().getSelectedItem().getMoneda(), 
             bancosBox.getSelectionModel().getSelectedItem().getCodigo(), "INVERSION", idInversion);
             dbUtils.updateRegister("bancos", "saldo_actual", bancosBox.getSelectionModel().getSelectedItem().getSaldo() + monto, "codigo = '" + bancosBox.getSelectionModel().getSelectedItem().getCodigo() + "'");
@@ -121,7 +119,7 @@ public class RegisterInversionController {
                 }
         });
 
-        bancosBox.setCellFactory((ListView<Banks> e) -> {
+        bancosBox.setCellFactory((ListView<Banks> _) -> {
             final ListCell<Banks> listCell = new ListCell<>() {
                 @Override
                 public void updateItem(Banks banco, boolean empty) {

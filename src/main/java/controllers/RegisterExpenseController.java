@@ -2,12 +2,10 @@ package main.java.controllers;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.UnaryOperator;
-
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
@@ -21,11 +19,9 @@ import javafx.scene.control.TextFormatter;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.MouseEvent;
 import main.java.dao.BanksDAO;
-import main.java.dao.InventoryDAO;
 import main.java.entities.Accounts;
 import main.java.entities.Banks;
-import main.java.entities.Gastos;
-import main.java.util.ConnectionPool;
+// import main.java.entities.Gastos;
 
 public class RegisterExpenseController {
     @FXML 
@@ -91,13 +87,13 @@ public class RegisterExpenseController {
             crearMenu("Prestamos", menuFinanzas)
         );
 
-        metodoPagoId.setOnAction(event -> { 
+        metodoPagoId.setOnAction(_ -> { 
             if (!montoGastoId.getText().isEmpty()) {
                 montoGastoId.setText("");
             }
         });
 
-        montoGastoId.textProperty().addListener((observable, oldValue, newValue) -> {
+        montoGastoId.textProperty().addListener((_, _, _) -> {
             if (!metodoPagoId.getSelectionModel().isEmpty() && !montoGastoId.getText().isEmpty()) {
                 Double montoEquivalente = Double.parseDouble(montoGastoId.getText().toString());
                 if (metodoPagoId.getSelectionModel().getSelectedItem().getMoneda().equals("VES")) {
@@ -175,7 +171,7 @@ public class RegisterExpenseController {
                 }
         });
 
-            metodoPagoId.setCellFactory((ListView<Banks> e) -> {
+            metodoPagoId.setCellFactory((ListView<Banks> _) -> {
             final ListCell<Banks> listCell = new ListCell<>() {
                 @Override
                 public void updateItem(Banks banco, boolean empty) {
@@ -271,7 +267,7 @@ public class RegisterExpenseController {
     }
     private MenuItem crearItem(Accounts cuenta) {
         MenuItem menuItem = new MenuItem(cuenta.getCostElementName());
-            menuItem.setOnAction(e -> {
+            menuItem.setOnAction(_ -> {
                 tipoGastoId.setText(cuenta.getCostElementId());
                 departamentoMenuId.setText(cuenta.getCostElementName());
             });

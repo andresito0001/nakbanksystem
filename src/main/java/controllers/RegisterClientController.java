@@ -2,8 +2,6 @@ package main.java.controllers;
 
 import java.sql.SQLException;
 import java.util.function.UnaryOperator;
-import java.util.regex.Pattern;
-
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
@@ -15,7 +13,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import main.java.dao.ClientsDAO;
 import main.java.entities.Clients;
-import main.java.util.ConnectionPool;
 import main.java.util.SceneSwitcher;
 
 public class RegisterClientController {
@@ -39,7 +36,7 @@ public class RegisterClientController {
     public void initialize() {
         filterTypeId.getItems().addAll("V-", "E-", "J-");
         
-        filterTypeId.setOnAction(event -> {
+        filterTypeId.setOnAction(_ -> {
         documentType = filterTypeId.getSelectionModel().getSelectedItem().toString();
         cedulaId.setText(documentType);
         });
@@ -102,7 +99,7 @@ public class RegisterClientController {
         }
         else {
                 registerMessageId.setId("registerMessageId");
-                ClientsDAO clientsDAO = new ClientsDAO(ConnectionPool.getConnection());
+                ClientsDAO clientsDAO = new ClientsDAO();
                 try {
                     Clients cliente = new Clients(cedulaId.getText().toString(), nombreId.getText().toString(), apellidoId.getText().toString(), aliasId.getText().toString());
                     clientsDAO.insertClient(cliente);

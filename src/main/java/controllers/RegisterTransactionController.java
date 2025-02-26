@@ -23,7 +23,7 @@ import main.java.dao.TransactionsDAO;
 import main.java.entities.Clients;
 import main.java.entities.Inventory;
 import main.java.entities.Transactions;
-import main.java.util.ConnectionPool;
+
 import main.java.util.DatabaseUtils;
 import main.java.util.ULID;
 import main.java.util.CheckTypes.checkMoneyType;
@@ -44,7 +44,7 @@ public class RegisterTransactionController {
         sentComboBox.setOnAction(this::getSentBank);
         typeTransComboBox.setOnAction(this::getTypeTrans);
 
-        ClientsDAO clientsDAO = new ClientsDAO(ConnectionPool.getConnection());
+        ClientsDAO clientsDAO = new ClientsDAO();
         List<Clients> clients = clientsDAO.getClientsAsList();
         clientsList.addAll(clients);
 
@@ -192,8 +192,8 @@ public class RegisterTransactionController {
             throw new IllegalArgumentException("All fields must be filled");
         }
 
-        DatabaseUtils databaseUtils = new DatabaseUtils(ConnectionPool.getConnection());
-        ClientsDAO clientsDAO = new ClientsDAO(null);
+        DatabaseUtils databaseUtils = new DatabaseUtils();
+        ClientsDAO clientsDAO = new ClientsDAO();
         final String typeTrans = typeTransComboBox.getValue();
 
         switch (typeTrans) {
@@ -236,9 +236,9 @@ public class RegisterTransactionController {
                 final String id = ULID.generate(System.currentTimeMillis(), entropy);
                 String inventoryULID = ULID.generate(System.currentTimeMillis(), entropy);
 
-                Double amountInitialPayment = null;
-                Double amountInitialPaymentClient = null;
-                Double mobilePayment = null;
+                Double amountInitialPayment = 0.0;
+                Double amountInitialPaymentClient = 0.0;
+                Double mobilePayment = 0.0;
 
                 if (fullPaymentReceiver.isSelected() && initialPaymentClientCehckbox.isSelected()) {
                     status = "OK";
@@ -291,8 +291,8 @@ public class RegisterTransactionController {
                     transaction.getId()
                 );
 
-                TransactionsDAO transactionsDAO = new TransactionsDAO(null);
-                InventoryDAO inventoryDAO = new InventoryDAO(null);
+                TransactionsDAO transactionsDAO = new TransactionsDAO();
+                InventoryDAO inventoryDAO = new InventoryDAO();
 
                 transactionsDAO.newTransaction(transaction);
 
@@ -368,10 +368,6 @@ public class RegisterTransactionController {
     private ComboBox<String> sentComboBox;
     @FXML
     private ComboBox<String> typeTransComboBox;
-    // @FXML
-    // private ComboBox<String> currencyReceivedComboBox;
-   // @FXML
-    //private ComboBox<String> sentCurrencyComboBox;
     @FXML
     private TextField receivedTextField;
     @FXML
@@ -386,14 +382,12 @@ public class RegisterTransactionController {
     private TextField initialPaymentReceiverTextField;
     @FXML
     private CheckBox fullPaymentReceiver;
-
     @FXML
     private TextField initialPaymentClientTextfield;
     @FXML
     private CheckBox initialPaymentClientCehckbox;
     @FXML
     private Label initialPaymentClientLabel;
-
     @FXML
     List<String> bankCodes = new ArrayList<>();
     @FXML
@@ -402,7 +396,6 @@ public class RegisterTransactionController {
     private Button confirmButton;
     @FXML
     private Button cancelButton;
-
     @FXML
     private Label swapCommissionLabel;
     @FXML

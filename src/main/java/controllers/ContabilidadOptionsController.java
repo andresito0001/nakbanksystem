@@ -1,14 +1,12 @@
 package main.java.controllers;
 
 import java.sql.SQLException;
-
 import javafx.fxml.FXML;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import main.java.Main;
 import main.java.dao.AdminDAO;
-import main.java.util.ConnectionPool;
 import main.java.util.SceneSwitcher;
 
 public class ContabilidadOptionsController {
@@ -22,7 +20,7 @@ public class ContabilidadOptionsController {
     private VBox dividendosButton;
 
     public void initialize () throws SQLException {
-        AdminDAO admin = new AdminDAO(ConnectionPool.getConnection());
+        AdminDAO admin = new AdminDAO();
         String rol = admin.authenticateRol(Main.getUsername());
 
         if (!rol.equals("administrador")) {

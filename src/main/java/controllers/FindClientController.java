@@ -16,7 +16,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import main.java.dao.ClientsDAO;
 import main.java.entities.Clients;
-import main.java.util.ConnectionPool;
 import main.java.util.SceneSwitcher;
 
 public class FindClientController {
@@ -47,7 +46,7 @@ public class FindClientController {
     public void initialize() {
         clientsTableId.setPlaceholder(new Label (""));
         filterId.getItems().addAll("cedula", "nombre", "apellido", "alias");
-        filterId.setOnAction(event -> {
+        filterId.setOnAction(_ -> {
             data = filterId.getSelectionModel().getSelectedItem().toString();
             filterLabelId.setText("Buscar por: " + data);
             selectFilter(data);
@@ -59,7 +58,7 @@ public class FindClientController {
         String value = clientFieldId.getText();
         listaClientes = FXCollections.observableArrayList();
 
-        ClientsDAO clientsDAO = new ClientsDAO(ConnectionPool.getConnection());
+        ClientsDAO clientsDAO = new ClientsDAO();
 
         clientsDAO.getClientsFilter(filtroQuery, value, listaClientes);
         

@@ -1,16 +1,11 @@
 package main.java.controllers;
 
-
-import java.sql.Connection;
-
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
-import javafx.stage.StageStyle;
-import main.java.util.ConnectionPool;
 import main.java.util.DatabaseUtils;
 import main.java.util.SceneSwitcher;
 
@@ -26,7 +21,7 @@ public class TransactionsOptionsController {
 
     public void newCycle(MouseEvent event) {
         try {
-            DatabaseUtils dbUtils = new DatabaseUtils(ConnectionPool.getConnection());
+            DatabaseUtils dbUtils = new DatabaseUtils();
             if (dbUtils.getInfoByLastReferenceOf("ciclos", "status", null, null).equals("ACTIVE")) {
                 Alert alert = new Alert(AlertType.WARNING, "Ya existe un ciclo activo en este momento",ButtonType.CLOSE);
                 alert.showAndWait();

@@ -8,15 +8,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DatabaseUtils {
-    public DatabaseUtils(final Connection conn ) {
-        this.conn = conn;
-    }
-
     public void updateRegister(final String table, final String colum, final Object value,
                                 final String condition) throws SQLException {
-        String sql = "update " + table + " set " + colum + " = ? where " + condition;
+        final String sql = "update " + table + " set " + colum + " = ? where " + condition;
         
-        try (final PreparedStatement st = this.conn.prepareStatement(sql)) {
+        try (final Connection conn = ConnectionPool.getConnection();
+            final PreparedStatement st = conn.prepareStatement(sql)) {
+            
             switch (value.getClass().getSimpleName()) {
                 case "String": st.setString(1, (String) value);
                     break;
@@ -45,20 +43,21 @@ public class DatabaseUtils {
         }
         sql.append(");");
 
-        try (final PreparedStatement st = conn.prepareStatement(sql.toString())) {
+        try (final Connection conn = ConnectionPool.getConnection();
+            final PreparedStatement st = conn.prepareStatement(sql.toString())) {
             st.executeUpdate();
-            st.close();
+        } catch (SQLException e) {
+            throw new SQLException("Error al crear la tabla " + name, e);
         }
     }
 
     public boolean isEmptyTable(final String tableName) throws SQLException {
         final String query = "select exists (select 1 from " + tableName + ")";
            
-        try (final PreparedStatement st = this.conn.prepareStatement(query)) {
-                
-            ResultSet rs = st.executeQuery();
-            st.close();
-    
+        try (final Connection conn = ConnectionPool.getConnection();
+            final PreparedStatement st = conn.prepareStatement(query);
+            ResultSet rs = st.executeQuery()) {
+
             return !rs.getBoolean(1);
         }
     }
@@ -69,11 +68,13 @@ public class DatabaseUtils {
             ? "select " + column + " from " + tableName + " order by id desc limit 1"
             : "select " + column + " from " + tableName + " where " + key + " = ? order by id desc limit 1";
 
-        try (final PreparedStatement st = conn.prepareStatement(query)) {
+        try (final Connection conn = ConnectionPool.getConnection();
+            final PreparedStatement st = conn.prepareStatement(query);
+            final ResultSet rs = st.executeQuery()) {
             if (key != null && value != null) {
                 st.setString(1, value);
             }
-            ResultSet rs = st.executeQuery();
+            
             if (rs.next()) {
                 String data = rs.getString(column);
                 rs.close();
@@ -87,9 +88,9 @@ public class DatabaseUtils {
     public Double sumColumn(final String column, final String tableName, final String condition) throws SQLException {
         final String query = "select sum(" + column + ") from " + tableName + " where " + condition;
         
-        try (final PreparedStatement st = conn.prepareStatement(query)) {
-            ResultSet rs = st.executeQuery();
-            
+        try (final Connection conn = ConnectionPool.getConnection();
+            final PreparedStatement st = conn.prepareStatement(query);
+            ResultSet rs = st.executeQuery()) {
             if (rs.next()) {
                 return rs.getDouble(1);
             } else {
@@ -100,7 +101,9 @@ public class DatabaseUtils {
 
     public Object getValueOf(final String column, final String tableName, final String condition) throws SQLException {
         final String query = "select " + column + " from " + tableName + " where " + condition;
-        try (final PreparedStatement st = conn.prepareStatement(query)) {
+        
+        try (final Connection conn = ConnectionPool.getConnection();
+            final PreparedStatement st = conn.prepareStatement(query)) {
             ResultSet rs = st.executeQuery();
             if (rs.next()) {
                 return rs.getObject(column);
@@ -112,7 +115,6 @@ public class DatabaseUtils {
 
     public final List<String> getTableSchemaAsList() throws SQLException {
         final String sql = "select table_name from information_schema.tables where table_schema = 'public';";
-
         final List<String> results = new ArrayList<>();
         
         try (final Connection connection = ConnectionPool.getConnection();
@@ -123,17 +125,9 @@ public class DatabaseUtils {
                     results.add(rs.getString("table_name"));
                 }
 
-                rs.close();
-                st.close();
-                
-                if (connection != null) 
-                    ConnectionPool.releaseConnection(connection);
             } catch (SQLException e) {
                 throw new SQLException("Error al obtener el esquema de la base de datos", e);
             }
-
         return results;
     }
-
-    private final Connection conn;
 }

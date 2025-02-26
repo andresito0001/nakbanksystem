@@ -1,5 +1,6 @@
 package main.java.controllers;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -59,10 +60,10 @@ public class AbonoCuentaController {
         infoTransactionId.setText("Cuenta #" + cuentaXAbonar.getIdTransaction() + ". Cliente: " + cuentaXAbonar.getCliente() + ". ");       
         infoTransactionId1.setText("Monto Total: " + cuentaXAbonar.getMontoTransaccion() + " " + cuentaXAbonar.getMonedaTransaccion() + ". Total Abonado: " + cuentaXAbonar.getAbonadoTransaccion() + ". Pendiente: " + cuentaXAbonar.getPendienteTransaccion());
        
-        metodoId.setOnAction(e -> {
+        metodoId.setOnAction(_ -> {
             try {
                 String codeBank = metodoId.getSelectionModel().getSelectedItem();
-                DatabaseUtils dbUtils = new DatabaseUtils(ConnectionPool.getConnection());
+                DatabaseUtils dbUtils = new DatabaseUtils();
                 String nameBank = dbUtils.getValueOf("nombre_banco", "bancos", "codigo = '" + codeBank + "'").toString();
         
                 bankInfoId.setText(codeBank + " " + nameBank);
@@ -83,12 +84,13 @@ public class AbonoCuentaController {
         if(monto <= cuentaXAbonar.getPendienteTransaccion())
         {
             System.out.println(tipoCuenta);
-            inventoryDAO = new InventoryDAO(ConnectionPool.getConnection());
-            DatabaseUtils dbUtils = new DatabaseUtils(ConnectionPool.getConnection());
+            inventoryDAO = new InventoryDAO();
+            DatabaseUtils dbUtils = new DatabaseUtils();
             
-            try (PreparedStatement st = ConnectionPool.getConnection().prepareStatement("select now () as hoy")) {
-                ResultSet rs = st.executeQuery();
-
+            try (final Connection conn = ConnectionPool.getConnection();
+                final PreparedStatement st = conn.prepareStatement("select now () as hoy");
+                final ResultSet rs = st.executeQuery()) {
+            
                 byte[] random = new byte[] { 0x1, 0x1, 0x2, 0x3, 0x4, 0x5, 0x6, 0x7, 0x8, 0x9 };
                 final String id_inventario = ULID.generate(System.currentTimeMillis(), random);
                 
@@ -135,10 +137,6 @@ public class AbonoCuentaController {
                         System.out.println("Le queda un pendiente de " + cuentaXAbonar.getPendienteTransaccion());
                     }
                 }
-
-                
-                rs.close();
-                st.close();
             }
         }
         else {
