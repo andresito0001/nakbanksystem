@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="650.0" style="-fx-background-color: #12151c;" stylesheets="@../css/loading.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Label layoutX="173.0" layoutY="269.0" text="Comprobando información de inicio de sesión" />
+      <Label layoutX="205.0" layoutY="290.0" text="Este proceso puede tardar un poco" />
+      <ImageView fitHeight="213.0" fitWidth="250.0" layoutX="219.0" layoutY="91.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../img/loading.gif" />
+         </image>
+      </ImageView>
+   </children>
+</AnchorPane>

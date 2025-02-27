@@ -45,7 +45,7 @@ public class AdminDAO {
         } 
     }
 
-    public String authenticateRol(final String userName) throws SQLException {
+    public String authenticateRol(final String userName) {
         final String query = "select rol from administradores where nombre_usuario = ?";
         String rol = "operador";
 
@@ -56,10 +56,10 @@ public class AdminDAO {
  
             if (rs.next())
                 rol = rs.getString("rol");
-            
+        
             return rol;
         } catch(SQLException e) {
-            throw new SQLException("Error al autenticar el rol");
+            return "void";
         }
     }
 }

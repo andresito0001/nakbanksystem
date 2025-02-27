@@ -1,6 +1,5 @@
 package main.java.controllers;
 
-import java.sql.SQLException;
 import javafx.fxml.FXML;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
@@ -19,7 +18,7 @@ public class ContabilidadOptionsController {
     @FXML
     private VBox dividendosButton;
 
-    public void initialize () throws SQLException {
+    public void initialize () {
         AdminDAO admin = new AdminDAO();
         String rol = admin.authenticateRol(Main.getUsername());
 

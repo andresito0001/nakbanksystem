@@ -7,7 +7,9 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.Pane;
 import main.java.dao.AdminDAO;
+import main.java.util.SceneSwitcher;
 import main.java.Main;
 
 public class LoginController {
@@ -19,6 +21,8 @@ public class LoginController {
     private Button loginButton;
     @FXML
     private Label errorMsg;
+    @FXML
+    private Pane hboxpane;
 
     @FXML
     public void loginUser(ActionEvent event) {
@@ -57,6 +61,15 @@ public class LoginController {
                 long duration = endTime - startTime; // Duración en milisegundos
 
                 System.out.println(duration);
+            }
+        });
+
+        loginTask.setOnRunning(_ -> { 
+            try {
+                SceneSwitcher.switchPane(hboxpane, "/main/resources/fxml/loading.fxml", "/main/resources/css/loading.css", new loadingController());
+
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         });
 

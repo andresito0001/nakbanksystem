@@ -1,15 +1,9 @@
 package main.java.entities;
 
-
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import javafx.collections.ObservableList;
-import main.java.util.ConnectionPool;
 
 public class CxC {
     private StringProperty idTransaction;
@@ -19,9 +13,9 @@ public class CxC {
     private DoubleProperty pendienteTransaccion;
     private StringProperty moneda;
     private StringProperty tipo;
-    private static String tipoDeCuenta;
+    private String tipoDeCuenta;
     
-        public CxC (String idTrans, String cliente, Double monto, String moneda, Double abonado, Double pendiente, String tipo) {
+        public CxC (String idTrans, String cliente, Double monto, String moneda, Double abonado, Double pendiente, String tipo, String tipoDeCuenta) {
             this.idTransaction = new SimpleStringProperty(idTrans);
             this.cliente = new SimpleStringProperty(cliente);
             this.moneda = new SimpleStringProperty(moneda);
@@ -29,6 +23,7 @@ public class CxC {
             this.montoTransaccion = new SimpleDoubleProperty(monto);
             this.abonadoTransaccion = new SimpleDoubleProperty(abonado);
             this.pendienteTransaccion = new SimpleDoubleProperty(pendiente);
+            this.tipoDeCuenta = tipoDeCuenta;
         }
     
         public String getIdTransaction () {
@@ -55,42 +50,8 @@ public class CxC {
         public String getTipoCuenta() {
             return tipoDeCuenta;
         }
-        public static void generarLista (ObservableList<CxC> listaCxC, String tipoCuenta)
-        {
-            tipoDeCuenta = tipoCuenta;
-        try {
-            String query = "select id_trans, cliente, monto_transaccion, moneda_trans, tipo, abonado, pendiente from " + tipoCuenta  + " where pendiente > 0";
-            PreparedStatement st = ConnectionPool.getConnection().prepareStatement(query);
-            ResultSet rs = st.executeQuery();
-
-            while (rs.next()) {
-                listaCxC.add(
-                    new CxC(rs.getString("id_trans"), rs.getString("cliente"), rs.getDouble("monto_transaccion"),rs.getString("moneda_trans") ,rs.getDouble("abonado"), rs.getDouble("pendiente"), rs.getString("tipo"))
-                );
-            }
-        } catch (SQLException exception) {
-            exception.printStackTrace();
+        public void setPendienteTransaccion (Double pendienteTransaccion) {
+            this.pendienteTransaccion.set(pendienteTransaccion);
         }
 
-
-    }
-
-    
-
-    public void actualizarPendiente (String tipoCuenta) {
-        try {
-            String query = "select pendiente from " + tipoCuenta + " where id_trans = '" + idTransaction.get() + "'";
-            PreparedStatement st = ConnectionPool.getConnection().prepareStatement(query);
-            ResultSet rs = st.executeQuery();
-
-            if (rs.next()) {
-                pendienteTransaccion.set(rs.getDouble("pendiente"));
-            }
-            rs.close();
-            st.close();
-        } catch (SQLException exception) {
-            exception.printStackTrace();
-        }
-        
-    }
 }

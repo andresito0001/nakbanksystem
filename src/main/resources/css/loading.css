@@ -1,0 +1,9 @@
+.anchor-pane {
+    -fx-background-color: #12151c;
+}
+
+.label {
+    -fx-text-fill: #abb2bf;
+    -fx-font-family: "Segoe UI";
+    -fx-font-size: 16;
+}

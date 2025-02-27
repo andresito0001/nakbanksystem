@@ -4,11 +4,13 @@
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
 <BorderPane fx:id="dashBoardPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="950.0" stylesheets="@../css/dashboard.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <left>
@@ -111,12 +113,31 @@
             <Insets />
          </opaqueInsets>
          <children>
-            <Label fx:id="centerPaneLabelTittle" prefHeight="35.0" prefWidth="163.0" text="Balance de cuentas" />
-            <ScrollPane fx:id="scrollPaneId" prefHeight="153.0" prefWidth="619.0" vbarPolicy="NEVER">
+            <Label fx:id="centerPaneLabelTittle" prefHeight="35.0" prefWidth="253.0" text="Balance de cuentas">
+               <VBox.margin>
+                  <Insets top="7.0" />
+               </VBox.margin>
+               <font>
+                  <Font size="16.0" />
+               </font></Label>
+            <ScrollPane fx:id="scrollPaneId" prefHeight="116.0" prefWidth="737.0" vbarPolicy="NEVER" vmax="0.0" VBox.vgrow="NEVER">
                <content>
-                  <HBox fx:id="hBoxCenterScrollPane" prefHeight="140.0" prefWidth="735.0" />
+                  <HBox fx:id="hBoxCenterScrollPane" prefHeight="140.0" prefWidth="735.0" spacing="7.0" />
                </content>
+               <VBox.margin>
+                  <Insets top="6.0" />
+               </VBox.margin>
             </ScrollPane>
+            <HBox prefHeight="13.0" prefWidth="737.0">
+               <children>
+                  <TextField prefHeight="27.0" prefWidth="731.0" style="-fx-background-color: transparent; -fx-border-color: transparent transparent #354357;" />
+                  <ImageView fitHeight="27.0" fitWidth="42.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../img/search-icon.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </HBox>
          </children>
          <padding>
             <Insets left="10.0" right="10.0" />

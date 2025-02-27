@@ -12,3 +12,17 @@
     -fx-font-size: 16;
     -fx-font-family: 'Souego UI'; 
 }
+
+#bankNameLabel {
+    -fx-text-fill: #009cde;
+    -fx-font-size: 14;
+}
+
+#vBoxMainBack {
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+}
+#hBoxMainBack {
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+}

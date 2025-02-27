@@ -17,6 +17,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import main.java.dao.CxCDAO;
 import main.java.entities.CxC;
 import main.java.util.SceneSwitcher;
 
@@ -47,8 +48,8 @@ public class CuentasPorCobrarController {
     public void initialize() throws SQLException {
         cxcTableId.setPlaceholder(new Label("No hay cuentas por cobrar pendientes"));
         listaCxC = FXCollections.observableArrayList();
-    
-        CxC.generarLista(listaCxC, "CUENTASXCOBRAR");
+
+        CxCDAO.generarLista(listaCxC, "CUENTASXCOBRAR");
         cxcTableId.setItems(listaCxC);
 
         trxId.setCellValueFactory(new PropertyValueFactory<CxC, String>("idTransaction"));

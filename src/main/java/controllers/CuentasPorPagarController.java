@@ -17,6 +17,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import main.java.dao.CxCDAO;
 import main.java.entities.CxC;
 import main.java.util.SceneSwitcher;
 
@@ -50,9 +51,7 @@ public class CuentasPorPagarController {
         cxcTableId.setPlaceholder(new Label("No hay cuentas por pagar pendientes"));
         
         listaCxC = FXCollections.observableArrayList();
-        
-
-        CxC.generarLista(listaCxC, "CUENTASXPAGAR");
+        CxCDAO.generarLista(listaCxC, "CUENTASXPAGAR");
         
         if (listaCxC.isEmpty() == true) {
             System.out.println("No hay cuentas por cobrar");

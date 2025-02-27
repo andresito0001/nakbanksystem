@@ -9,6 +9,8 @@ import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.control.ListView;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -71,6 +73,7 @@ public class DashBoardController implements Initializable {
                 hBoxCenterScrollPane.getChildren().add(card);
             }
 
+
         } catch (SQLException | IOException e) {
             e.printStackTrace();
         }
@@ -116,4 +119,6 @@ public class DashBoardController implements Initializable {
     private VBox vBoxCenterPane;
     @FXML
     private HBox hBoxCenterScrollPane;
+    @FXML
+    private ScrollPane scrollPaneId;
 }

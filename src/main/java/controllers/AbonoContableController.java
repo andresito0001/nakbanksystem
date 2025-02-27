@@ -19,6 +19,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.Pane;
 import main.java.dao.BanksDAO;
+import main.java.dao.CxCDAO;
 import main.java.dao.InventoryDAO;
 import main.java.entities.Banks;
 import main.java.entities.CxC;
@@ -228,8 +229,9 @@ public class AbonoContableController {
                     dbUtils.updateRegister("trans", tipoMoneda, metodoId.getSelectionModel().getSelectedItem().getMoneda(), "id = '" + cuentaXAbonar.getIdTransaction() + "'");
 
                 dbUtils.updateRegister("bancos", "saldo_actual", balanceNuevo, "codigo = '" + metodoId.getSelectionModel().getSelectedItem().getCodigo() + "'");
-                cuentaXAbonar.actualizarPendiente(cuentaXAbonar.getTipoCuenta());
-
+                CxCDAO cxcDAO = new CxCDAO();
+                cxcDAO.actualizarCxC(cuentaXAbonar);
+                
                 if (cuentaXAbonar.getPendienteTransaccion() == 0) {
                     dbUtils.updateRegister("trans", "status", "OK", "id = '" + cuentaXAbonar.getIdTransaction() + "'");
                     Alert alert = new Alert(AlertType.INFORMATION, "Cuenta por el monto " + monto.toString() + " " + cuentaXAbonar.getMonedaTransaccion() + " saldada completamente! ");
