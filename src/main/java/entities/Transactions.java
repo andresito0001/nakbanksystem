@@ -4,9 +4,9 @@ public class Transactions extends Cycle {
     public Transactions(final String id, final String parentID, final Clients client, final String adminUsername, final String date, final String time, final String type,
     final Double quantityReceived, final String currencyReceived, final String receivedMethod,
     final Double sentQuantity, final String sentCurrency, final String sentMethod, final String status, 
-    final Double rate, final Double revenue, final String bankRef) {
+    final Double rate, final Double revenue, final String bankRef, final String status_recepcion) {
         super(id, client, adminUsername, date, time, quantityReceived,
-        currencyReceived, receivedMethod, sentQuantity, sentCurrency, sentMethod, status, rate, bankRef);
+        currencyReceived, receivedMethod, sentQuantity, sentCurrency, sentMethod, status, rate, bankRef, status_recepcion);
         
         this. parent_id = parentID;
         this.revenue = revenue;

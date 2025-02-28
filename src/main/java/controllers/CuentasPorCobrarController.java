@@ -50,6 +50,7 @@ public class CuentasPorCobrarController {
         listaCxC = FXCollections.observableArrayList();
 
         CxCDAO.generarLista(listaCxC, "CUENTASXCOBRAR");
+
         cxcTableId.setItems(listaCxC);
 
         trxId.setCellValueFactory(new PropertyValueFactory<CxC, String>("idTransaction"));

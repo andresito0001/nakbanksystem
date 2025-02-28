@@ -19,7 +19,7 @@
       <Label layoutX="284.0" layoutY="291.0" text="Recibido en" />
       <TextField fx:id="sentTextField" layoutX="33.0" layoutY="233.0" prefHeight="25.0" prefWidth="165.0" promptText="0.00 $" />
       <Label layoutX="35.0" layoutY="215.0" text="Cantidad Enviada en USD - USDT" />
-      <Button fx:id="confirmButton" layoutX="36.0" layoutY="392.0" mnemonicParsing="false" text="Confirmar">
+      <Button fx:id="confirmButton" layoutX="36.0" layoutY="392.0" mnemonicParsing="false" onMouseClicked="#registerCycle" text="Confirmar">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>

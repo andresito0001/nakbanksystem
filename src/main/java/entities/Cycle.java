@@ -5,7 +5,7 @@ public class Cycle {
     final String date, final String time,
     final Double quantityReceived, final String currencyReceived, final String receivedMethod,
     final Double sentQuantity, final String sentCurrency, final String sentMethod, final String status, 
-    final Double rate, final String bankRef) {
+    final Double rate, final String bankRef, final String status_recepcion) {
         
         this.id = id;
         this.client = client;
@@ -21,6 +21,7 @@ public class Cycle {
         this.status = status;
         this.rate = rate;
         this.bankRef = bankRef;
+        this.status_recepcion = status_recepcion;
     }
     
     //getters 
@@ -38,6 +39,7 @@ public class Cycle {
     public String getStatus() { return status; }
     public Double getRate() { return rate; }
     public String getBankRef() { return bankRef;}
+    public String getStatusRecepcion () { return status_recepcion; }
 
     private final String id;
     private final Clients client;
@@ -53,4 +55,5 @@ public class Cycle {
     private final String status;
     private final Double rate; 
     private final String bankRef;
+    private final String status_recepcion;
 }

@@ -279,6 +279,7 @@ public class RegisterExpenseController {
 
     //  Gastos gasto = new Gastos("1234", null, null, null, null, null, null, null, null, null);
     //  Nuevo registro de inventario 
+        
        Alert alert = new Alert(AlertType.INFORMATION,"Gasto registrado exitosamente");
         alert.showAndWait();
     }

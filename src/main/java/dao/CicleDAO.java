@@ -7,6 +7,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
+import main.java.Main;
+import main.java.entities.Cycle;
 import main.java.util.ConnectionPool;
 
 public class CicleDAO {
@@ -56,5 +59,33 @@ public class CicleDAO {
             }
         }
         return ids;
+    }
+
+    public void insertCycle (Cycle ciclo) throws SQLException {
+        final String query = "insert into ciclos " + 
+        "(id, cedula_cliente, admin, fecha, hora, cantidad_recibida, moneda_recibida, metodo_recibido, cantidad_enviada, moneda_enviada, metodo_enviado, status, tasa, ref_bancaria, status_recepcion) " + 
+        " values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        try (final Connection conn = ConnectionPool.getConnection();
+            final PreparedStatement st = conn.prepareStatement(query)) {
+                st.setString(1, ciclo.getId());
+                st.setString(2, ciclo.getClient().getCedula());
+                st.setString(3, Main.getUsername());
+                st.setString(4, ciclo.getDate());
+                st.setString(5, ciclo.getTime());
+                st.setDouble(6, ciclo.getQuantityReceived());
+                st.setString(7, ciclo.getCurrencyReceived());
+                st.setString(8, ciclo.getReceivedMethod());
+                st.setDouble(9, ciclo.getSentQuantity());
+                st.setString(10, ciclo.getSentCurrency());
+                st.setString(11, ciclo.getSentMethod());
+                st.setString(12, ciclo.getStatus());
+                st.setDouble(13, ciclo.getRate());
+                st.setString(14, ciclo.getBankRef());
+                st.setString(15, ciclo.getStatusRecepcion());
+
+                st.executeQuery();
+        } catch (Exception e) {
+            throw new SQLException("Error al crear el ciclo");
+        }
     }
 }

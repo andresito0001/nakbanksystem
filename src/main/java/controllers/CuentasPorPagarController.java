@@ -52,7 +52,8 @@ public class CuentasPorPagarController {
         
         listaCxC = FXCollections.observableArrayList();
         CxCDAO.generarLista(listaCxC, "CUENTASXPAGAR");
-        
+        CxCDAO.generarLista(listaCxC, "CICLOSXPAGAR");
+
         if (listaCxC.isEmpty() == true) {
             System.out.println("No hay cuentas por cobrar");
         }
