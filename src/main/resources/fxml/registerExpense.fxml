@@ -41,7 +41,7 @@
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor></Button>
-      <Button fx:id="cancelPagoButton" layoutX="134.0" layoutY="236.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="66.0" stylesheets="@../css/registerExpense.css" text="Cancelar" />
+      <Button fx:id="cancelPagoButton" layoutX="134.0" layoutY="236.0" mnemonicParsing="false" onMouseClicked="#clearfields" prefHeight="25.0" prefWidth="66.0" stylesheets="@../css/registerExpense.css" text="Cancelar" />
       <Text fx:id="insId" fill="#abb2bf" layoutX="44.0" layoutY="129.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Ingrese todos los campos para registrar un gasto" />
    </children>
 </AnchorPane>

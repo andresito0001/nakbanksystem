@@ -46,19 +46,21 @@ public class AdminDAO {
     }
 
     public String authenticateRol(final String userName) {
-        final String query = "select rol from administradores where nombre_usuario = ?";
+        final String query = "select rol from administradores where nombre_usuario = '" + userName + "'";
         String rol = "operador";
 
         try (Connection conn = ConnectionPool.getConnection();
             final PreparedStatement st = conn.prepareStatement(query);
             final ResultSet rs = st.executeQuery()) {
-            st.setString(1, userName);
  
             if (rs.next())
                 rol = rs.getString("rol");
+            
+            rs.close();
+            st.close();
         
             return rol;
-        } catch(SQLException e) {
+        } catch (SQLException e) {
             return "void";
         }
     }

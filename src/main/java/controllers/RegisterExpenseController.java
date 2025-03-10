@@ -2,6 +2,7 @@ package main.java.controllers;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.sql.Date;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,6 +10,7 @@ import java.util.function.UnaryOperator;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Menu;
@@ -18,10 +20,20 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.MouseEvent;
+import main.java.Main;
 import main.java.dao.BanksDAO;
+import main.java.dao.CicleDAO;
+import main.java.dao.ExpensesDAO;
+import main.java.dao.InventoryDAO;
 import main.java.entities.Accounts;
 import main.java.entities.Banks;
+import main.java.entities.Cycle;
 // import main.java.entities.Gastos;
+import main.java.entities.Gastos;
+import main.java.entities.Inventory;
+import main.java.util.DatabaseUtils;
+import main.java.util.TimeZone;
+import main.java.util.ULID;
 
 public class RegisterExpenseController {
     @FXML 
@@ -36,11 +48,22 @@ public class RegisterExpenseController {
     private TextField equivalenteId;
     @FXML
     private TextField proveedorId;
+    @FXML
+    private TextField descripcionId;
+    @FXML
+    private DatePicker fechaGastoId;
+
+    String departamento;
+    Accounts cuentaSeleccionada;
+    Cycle lastCycle;
+    DatabaseUtils databaseUtils;
 
     public void initialize() throws SQLException{
 
         List<Banks> listaBanks = new ArrayList<>();
         BanksDAO banksDAO = new BanksDAO();
+        databaseUtils = new DatabaseUtils();
+
         banksDAO.setBank(listaBanks, null, null);
 
         metodoPagoId.getItems().addAll(listaBanks);
@@ -52,6 +75,26 @@ public class RegisterExpenseController {
         menuOperaciones = new Menu("Operaciones");
         menuTecnologia = new Menu("Tecnologia");
         menuFinanzas = new Menu("Finanzas");
+
+        menuGerenciaGeneral.setOnShowing(event -> {
+            departamento = "Gerencia General";
+        });
+
+        menuRecursosHumanos.setOnShowing(event -> {
+            departamento = "Recursos Humanos";
+        });
+
+        menuFinanzas.setOnShowing(event -> {
+            departamento = "Finanzas";
+        });
+        
+        menuOperaciones.setOnShowing(event -> {
+            departamento = "Operaciones";
+        });
+
+        menuTecnologia.setOnShowing(event -> {
+            departamento = "Tecnologia";
+        });
         
         departamentoMenuId.getItems().addAll(menuGerenciaGeneral,menuOperaciones,menuRecursosHumanos,menuTecnologia, menuFinanzas);
 
@@ -108,6 +151,19 @@ public class RegisterExpenseController {
             else 
                 equivalenteId.setText("");
         });
+
+        fechaGastoId.valueProperty().addListener((observable, old, newValue) -> {
+            if (!(fechaGastoId.getValue() == null)) {
+                try {
+                    String id_ciclo = databaseUtils.getValueOf("id", "ciclos", "fecha <= '" + newValue + "' order by fecha desc limit 1; ").toString();
+                    CicleDAO cicleDAO = new CicleDAO();
+                    lastCycle = cicleDAO.getCycle(id_ciclo);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            } 
+        });
+
         formatosTextField();
 
     }
@@ -160,8 +216,8 @@ public class RegisterExpenseController {
                             setText(banco.getNombre());
                             if (!montoGastoId.getText().isEmpty()) {
                                 Double montoEquivalente = Double.parseDouble(montoGastoId.getText().toString());
-                                    if (metodoPagoId.getSelectionModel().getSelectedItem().getMoneda().equals("VES")) {
-                                        montoEquivalente = montoEquivalente / 70; //debería calcular en base al promedio del ciclo activo 
+                                    if (metodoPagoId.getSelectionModel().getSelectedItem().getMoneda().equals("VES") && !(fechaGastoId.getValue() == null)) {
+                                        montoEquivalente = montoEquivalente / lastCycle.getRate(); //debería calcular en base al promedio del ciclo activo 
                                     }
                                 equivalenteId.setText(montoEquivalente.toString() + " USD");
                             }
@@ -270,18 +326,72 @@ public class RegisterExpenseController {
             menuItem.setOnAction(_ -> {
                 tipoGastoId.setText(cuenta.getCostElementId());
                 departamentoMenuId.setText(cuenta.getCostElementName());
+                cuentaSeleccionada = cuenta;
             });
 
         return menuItem;
     }
     @FXML
-    private void registerExpense(MouseEvent event) {
+    private void registerExpense(MouseEvent event) throws SQLException {
 
-    //  Gastos gasto = new Gastos("1234", null, null, null, null, null, null, null, null, null);
-    //  Nuevo registro de inventario 
-        
-       Alert alert = new Alert(AlertType.INFORMATION,"Gasto registrado exitosamente");
-        alert.showAndWait();
+        if (!montoGastoId.getText().isEmpty() && !(fechaGastoId.getValue() == null) 
+        && !(departamento == null) && !proveedorId.getText().isEmpty() && !(cuentaSeleccionada == null) &&
+        !metodoPagoId.getSelectionModel().isEmpty() && !(lastCycle == null)) {
+            byte[] random = new byte[] { 0x1, 0x1, 0x2, 0x3, 0x4, 0x5, 0x6, 0x7, 0x8, 0x9 };
+            String id_gasto = ULID.generate(System.currentTimeMillis(), random);
+                
+            Date fecha = Date.valueOf(fechaGastoId.getValue());
+            Double monto = Double.parseDouble(montoGastoId.getText());
+
+   
+            Gastos gasto = new Gastos(
+            id_gasto, lastCycle, Main.getUsername(), fecha, 
+            departamento, cuentaSeleccionada, proveedorId.getText().toString(), 
+            descripcionId.getText().toString(), Double.parseDouble(montoGastoId.getText()), metodoPagoId.getSelectionModel().getSelectedItem(), 
+            monto);
+           
+            String id_inventario = ULID.generate(System.currentTimeMillis(), random);
+
+            Inventory egreso = new Inventory(
+                id_inventario, 
+                gasto.getFecha().toString(), 
+                "EGRESO", 
+                gasto.getMonto(), 
+                gasto.getMoneda(), 
+                gasto.getMetodo(), 
+                "GASTO", 
+                TimeZone.getTimeZoneCaracas(), 
+                id_gasto);
+            
+            ExpensesDAO expensesDAO = new ExpensesDAO();
+            expensesDAO.registerExpense(gasto);
+            
+            InventoryDAO inventoryDAO = new InventoryDAO();
+            inventoryDAO.newRegister(egreso);
+
+            databaseUtils.updateRegister("bancos", "saldo_actual", (metodoPagoId.getSelectionModel().getSelectedItem().getSaldo() - gasto.getMonto()), "codigo = '" + metodoPagoId.getSelectionModel().getSelectedItem().getCodigo() + "'");
+
+           Alert alert = new Alert(AlertType.INFORMATION,"Gasto registrado exitosamente");
+            alert.showAndWait();
+
+            clearfields();
+
+        }
+        else {
+            Alert alert = new Alert(AlertType.WARNING,"Error. Debe llenar los campos obligatorios. ");
+            alert.showAndWait();
+        }
+
+    }
+
+    public void clearfields () {
+        montoGastoId.clear();
+        descripcionId.clear();
+        proveedorId.clear();
+        fechaGastoId.setValue(null);
+        departamentoMenuId.setText("Departamento");
+        tipoGastoId.clear();
+        metodoPagoId.getSelectionModel().clearSelection();
     }
     @FXML
     Menu menuGerenciaGeneral;

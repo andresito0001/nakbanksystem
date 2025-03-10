@@ -28,7 +28,7 @@ public class TransactionsOptionsController {
                 return;
             }
 
-            SceneSwitcher.switchPane(borderPane, "/main/resources/fxml/newCycle.fxml", "/main/resources/css/newCycle.css", new newCycleController2());
+            SceneSwitcher.switchPane(borderPane, "/main/resources/fxml/newCycle.fxml", "/main/resources/css/newCycle.css", new newCycleController());
         } catch (Exception e) {
             e.printStackTrace();
         }

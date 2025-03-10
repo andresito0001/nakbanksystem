@@ -61,7 +61,7 @@
 .table-cell { 
     -fx-padding: 0.5em 0.5em 0.1em 0.3em;
     -fx-border-color: -fx-box-border -fx-box-border transparent transparent;
-    -fx-font: 13px "Segoe UI";
+    -fx-font: 10px "Segoe UI";
     -fx-border-insets: 0;
 }
 

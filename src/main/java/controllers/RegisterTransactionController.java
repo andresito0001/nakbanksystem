@@ -230,7 +230,8 @@ public class RegisterTransactionController {
                 gananciaPerdida = gananciaPerdida < 0 ? gananciaPerdida * -1 : gananciaPerdida; 
 
                 final String cycleId = databaseUtils.getInfoByLastReferenceOf("ciclos", "id", null, null);
-                
+                final String cycleStatus = databaseUtils.getValueOf("status_recepcion", "ciclos", "id = '"+cycleId+"'").toString();
+
                 final byte[] entropy = new byte[] { 0x1, 0x1, 0x2, 0x3, 0x4, 0x5, 0x6, 0x7, 0x8, 0x9 };
                 
                 final String id = ULID.generate(System.currentTimeMillis(), entropy);
@@ -262,7 +263,7 @@ public class RegisterTransactionController {
                     id, cycleId, client, Main.getUsername(), date, time,
                     typeTrans, received, moneyTypeReceived, bankRecived,
                     sent, moneyTypeSent, bankSent, status, ammonut, 
-                    gananciaPerdida, ref
+                    gananciaPerdida, ref, cycleStatus
                 );
 
                 final Inventory inventoryEntrance = new Inventory (

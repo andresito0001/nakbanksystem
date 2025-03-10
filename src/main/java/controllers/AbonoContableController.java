@@ -182,27 +182,29 @@ public class AbonoContableController {
             
             Double balanceNuevo = 0.0, saldoBanco = metodoId.getSelectionModel().getSelectedItem().getSaldo();
 
-            if (cuentaXAbonar.getTipoCuenta().equals("CUENTASXPAGAR") && (saldoBanco <= 0 || saldoBanco < monto)) {
+            if ((cuentaXAbonar.getTipoCuenta().equals("CUENTASXPAGAR") || cuentaXAbonar.getTipoCuenta().equals("CICLOSXPAGAR")) 
+            && (saldoBanco <= 0 || saldoBanco < monto)) {
                 Alert alert = new Alert(AlertType.ERROR, "No hay saldo suficiente en esta cuenta");
                 alert.showAndWait();
             }
             else {
+                String tabla = "transacciones";
                 if (cuentaXAbonar.getTipoCuenta().equals("CUENTASXCOBRAR")) {
-                    id_inventario = "I-";
+                    id_inventario = ULID.generate(System.currentTimeMillis(), random);
                     tipoMovimiento = "INGRESO";
                     tipoMetodo = "metodo_recibido";
                     tipoMoneda = "moneda_recibida";
                     balanceNuevo = saldoBanco + monto;
                 }
                 else {
-                    id_inventario = "E-";
+                    id_inventario = ULID.generate(System.currentTimeMillis(), random);
                     tipoMovimiento = "EGRESO";
                     tipoMetodo = "metodo_enviado";
                     tipoMoneda = "moneda_enviada";
                     balanceNuevo = saldoBanco - monto;
+                    if (cuentaXAbonar.getTipoCuenta().equals("CICLOSXPAGAR"))
+                        tabla = "ciclos";
                 }
-
-                id_inventario += ULID.generate(System.currentTimeMillis(), random);
 
 
                 Date fecha = Date.valueOf(LocalDate.parse(TimeZone.getDateZoneCaracas()));
@@ -223,17 +225,17 @@ public class AbonoContableController {
                 inventoryDAO.newRegister(id_inventario, fecha, timestamp, tipoMovimiento, monto, metodoId.getSelectionModel().getSelectedItem().getMoneda(), 
                 metodoId.getSelectionModel().getSelectedItem().getCodigo(), "ABONO", cuentaXAbonar.getIdTransaction());
                 
-                dbUtils.updateRegister("trans", tipoMetodo, metodoId.getSelectionModel().getSelectedItem().getCodigo(), "id = '" + cuentaXAbonar.getIdTransaction() + "'");
+                dbUtils.updateRegister(tabla, tipoMetodo, metodoId.getSelectionModel().getSelectedItem().getCodigo(), "id = '" + cuentaXAbonar.getIdTransaction() + "'");
                 
                 if (typeMoney != metodoId.getSelectionModel().getSelectedItem().getMoneda())
-                    dbUtils.updateRegister("trans", tipoMoneda, metodoId.getSelectionModel().getSelectedItem().getMoneda(), "id = '" + cuentaXAbonar.getIdTransaction() + "'");
+                    dbUtils.updateRegister(tabla, tipoMoneda, metodoId.getSelectionModel().getSelectedItem().getMoneda(), "id = '" + cuentaXAbonar.getIdTransaction() + "'");
 
                 dbUtils.updateRegister("bancos", "saldo_actual", balanceNuevo, "codigo = '" + metodoId.getSelectionModel().getSelectedItem().getCodigo() + "'");
                 CxCDAO cxcDAO = new CxCDAO();
                 cxcDAO.actualizarCxC(cuentaXAbonar);
                 
                 if (cuentaXAbonar.getPendienteTransaccion() == 0) {
-                    dbUtils.updateRegister("trans", "status", "OK", "id = '" + cuentaXAbonar.getIdTransaction() + "'");
+                    dbUtils.updateRegister(tabla, "status", "OK", "id = '" + cuentaXAbonar.getIdTransaction() + "'");
                     Alert alert = new Alert(AlertType.INFORMATION, "Cuenta por el monto " + monto.toString() + " " + cuentaXAbonar.getMonedaTransaccion() + " saldada completamente! ");
                     alert.showAndWait();
                 }
@@ -260,7 +262,7 @@ public class AbonoContableController {
         try {
             if (cuentaXAbonar.getTipoCuenta() == "CUENTASXCOBRAR")
             SceneSwitcher.switchPane(AnchorPane, "/main/resources/fxml/cuentasPorCobrar.fxml", "/main/resources/css/cxc.css", new CuentasPorCobrarController());
-        else if (cuentaXAbonar.getTipoCuenta() == "CUENTASXPAGAR")
+        else if (cuentaXAbonar.getTipoCuenta() == "CUENTASXPAGAR" || cuentaXAbonar.getTipoCuenta() == "CICLOSXPAGAR")
             SceneSwitcher.switchPane(AnchorPane, "/main/resources/fxml/cuentasPorPagar.fxml", "/main/resources/css/cxc.css", new CuentasPorPagarController());
         } catch (Exception e) {
             e.printStackTrace();

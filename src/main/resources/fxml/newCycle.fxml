@@ -2,6 +2,7 @@
 
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
@@ -12,11 +13,11 @@
 
 <AnchorPane fx:id="borderPaneId" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="546.0" prefWidth="757.0" stylesheets="@../css/newCycle.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Label layoutX="284.0" layoutY="215.0" text="Enviado desde" />
-      <ComboBox fx:id="sentComboBox" layoutX="284.0" layoutY="233.0" prefHeight="28.0" prefWidth="165.0" promptText="-" styleClass="combo-box-style" />
+      <Label layoutX="263.0" layoutY="215.0" text="Enviado desde" />
+      <ComboBox fx:id="sentComboBox" layoutX="263.0" layoutY="233.0" prefHeight="28.0" prefWidth="165.0" promptText="-" styleClass="combo-box-style" />
       <Label fx:id="tittleId" layoutX="31.0" layoutY="67.0" text="Nuevo ciclo" />
-      <ComboBox fx:id="receivedComboBox" layoutX="284.0" layoutY="309.0" prefHeight="28.0" prefWidth="165.0" promptText="-" styleClass="combo-box-style" />
-      <Label layoutX="284.0" layoutY="291.0" text="Recibido en" />
+      <ComboBox fx:id="receivedComboBox" layoutX="263.0" layoutY="309.0" prefHeight="28.0" prefWidth="165.0" promptText="-" styleClass="combo-box-style" />
+      <Label fx:id="sentBankLabel" layoutX="263.0" layoutY="291.0" text="Recibido en" />
       <TextField fx:id="sentTextField" layoutX="33.0" layoutY="233.0" prefHeight="25.0" prefWidth="165.0" promptText="0.00 $" />
       <Label layoutX="35.0" layoutY="215.0" text="Cantidad Enviada en USD - USDT" />
       <Button fx:id="confirmButton" layoutX="36.0" layoutY="392.0" mnemonicParsing="false" onMouseClicked="#registerCycle" text="Confirmar">
@@ -24,7 +25,7 @@
             <Cursor fx:constant="HAND" />
          </cursor>
       </Button>
-      <Button fx:id="cancelButton" layoutX="125.0" layoutY="392.0" mnemonicParsing="false" text="Cancelar">
+      <Button fx:id="cancelButton" layoutX="125.0" layoutY="392.0" mnemonicParsing="false" onMouseClicked="#clearfields" text="Cancelar">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>
@@ -34,12 +35,12 @@
             <Image url="@../img/back-icon.png" />
          </image>
       </ImageView>
-      <TextField fx:id="rate" layoutX="541.0" layoutY="233.0" prefHeight="25.0" prefWidth="165.0" promptText="0.00 $" />
-      <Label layoutX="541.0" layoutY="215.0" prefHeight="7.0" prefWidth="34.0" text="Tasa " />
-      <TextField fx:id="refTextField" layoutX="541.0" layoutY="309.0" prefHeight="28.0" prefWidth="165.0" promptText="#" />
-      <Label layoutX="541.0" layoutY="291.0" text="Referencia" />
+      <TextField fx:id="rate" layoutX="517.0" layoutY="234.0" prefHeight="25.0" prefWidth="165.0" promptText="0.00 $" />
+      <Label layoutX="517.0" layoutY="216.0" prefHeight="7.0" prefWidth="34.0" text="Tasa " />
+      <TextField fx:id="refTextField" layoutX="517.0" layoutY="310.0" prefHeight="28.0" prefWidth="165.0" promptText="#" />
+      <Label fx:id="refLabel" layoutX="517.0" layoutY="292.0" text="Referencia" />
       <TextField fx:id="amountToReceive" layoutX="33.0" layoutY="309.0" prefHeight="28.0" prefWidth="165.0" promptText="0.00 Bs" />
-      <Label layoutX="34.0" layoutY="291.0" text="Cantidad a recibir en Bs" />
+      <Label fx:id="sentAmountLabel" layoutX="34.0" layoutY="291.0" text="Cantidad a recibir en Bs" />
       <TextField fx:id="searchClientsBar" layoutX="80.0" layoutY="126.0" prefHeight="25.0" prefWidth="287.0" promptText="Nombre, Apellido, Cedula, Alias" />
       <Label layoutX="34.0" layoutY="131.0" text="Cliente" />
       <ListView fx:id="listViewId" layoutX="80.0" layoutY="154.0" prefHeight="137.0" prefWidth="287.0" />
@@ -48,5 +49,7 @@
             <Image url="@../img/search-icon.png" />
          </image>
       </ImageView>
+      <CheckBox fx:id="pagadoCheck" layoutX="437.0" layoutY="239.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="107.0" selected="true" text="Pagado" />
+      <TextField fx:id="abonado" layoutX="264.0" layoutY="273.0" prefHeight="27.0" prefWidth="165.0" promptText="Cantidad abonada" visible="false" />
    </children>
 </AnchorPane>

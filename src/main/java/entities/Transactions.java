@@ -11,13 +11,16 @@ public class Transactions extends Cycle {
         this. parent_id = parentID;
         this.revenue = revenue;
         this.type = type;
+        status_recepcionCiclo = status_recepcion;
     }
 
     public String getType() { return type; }
     public String getParent_id() { return parent_id; }
     public Double getRevenue() { return revenue; }
+    public String getStatusRecepcionCiclo () { return status_recepcionCiclo; }
 
     private final String type;
     private final String parent_id;
     private final Double revenue;
+    private final String status_recepcionCiclo;
 }
