@@ -23,7 +23,6 @@ import main.java.dao.TransactionsDAO;
 import main.java.entities.Clients;
 import main.java.entities.Inventory;
 import main.java.entities.Transactions;
-
 import main.java.util.DatabaseUtils;
 import main.java.util.ULID;
 import main.java.util.CheckTypes.checkMoneyType;
@@ -33,7 +32,7 @@ public class RegisterTransactionController {
     public void initialize() throws SQLException {
         listViewId.setVisible(false);
 
-        receivedComboBox.getItems().add("DESCONOCIDO");
+        // receivedComboBox.getItems().add("DESCONOCIDO");
         
         bankCodes = new BanksDAO().getInfoOf("codigo", null, null);
         receivedComboBox.getItems().addAll(bankCodes);

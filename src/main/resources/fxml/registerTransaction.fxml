@@ -29,7 +29,7 @@
       <Label layoutX="469.0" layoutY="113.0" text="Transacción tipo" />
       <ComboBox fx:id="typeTransComboBox" layoutX="467.0" layoutY="134.0" prefHeight="28.0" prefWidth="211.0" promptText="COMPRA - SWAP" styleClass="combo-box-style" />
       <TextField fx:id="searchClientsBar" layoutX="81.0" layoutY="134.0" prefHeight="25.0" prefWidth="287.0" promptText="Nombre, Apellido, Cedula, Alias" />
-      <Label fx:id="tittleId" layoutX="27.0" layoutY="77.0" text="Registrar Transacción" />
+      <Label fx:id="tittleId" layoutX="27.0" layoutY="77.0" text="NEW TRANSACTION" />
       <Label layoutX="30.0" layoutY="139.0" text="Cliente" />
       <ComboBox fx:id="receivedComboBox" layoutX="27.0" layoutY="203.0" prefHeight="25.0" prefWidth="165.0" promptText="Codigo" styleClass="combo-box-style" />
       <Label layoutX="31.0" layoutY="182.0" text="Recibido en:" />

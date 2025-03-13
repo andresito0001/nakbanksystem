@@ -8,6 +8,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import main.java.Main;
+import main.java.entities.TableviewTransaction;
+import main.java.entities.TransactionFill;
 import main.java.entities.Transactions;
 import main.java.util.ConnectionPool;
 import main.java.util.TimeZone;
@@ -65,6 +67,63 @@ public class TransactionsDAO {
             System.out.println(metaData);
             rs.close();
             st.close();
+        }
+    }
+
+    public List<TableviewTransaction> fillTransactionBy(TransactionFill filter) throws SQLException {
+        StringBuilder queryBuilder = new StringBuilder (
+            "SELECT id, cedula_cliente, admin, hora, tipo, cantidad_recibida, " +
+            "moneda_recibida, metodo_recibido, cantidad_enviada, moneda_enviada, " +
+            "metodo_enviado, tasa, ganancia, ref_bancaria " +
+            "FROM transacciones WHERE fecha BETWEEN ? AND ? "
+        );
+
+        List<Object> params = new ArrayList<>();
+    
+        if (filter.getClientCi() != null && !filter.getClientCi().isEmpty()) {
+            queryBuilder.append(" AND cedula_cliente = ?");
+            params.add(filter.getClientCi());
+        }
+
+        if (filter.getStatus() != null && !filter.getStatus().equals("ALL")) {
+            queryBuilder.append(" AND status = ?");
+            params.add(filter.getStatus());
+        }
+
+        if (filter.getType() != null && !filter.getType().equals("ALL")) {
+            queryBuilder.append(" AND tipo = ?");
+            params.add(filter.getType());
+        }
+
+
+        try (Connection conn = ConnectionPool.getConnection();
+            PreparedStatement st = conn.prepareStatement(queryBuilder.toString())) {
+            st.setDate(1, filter.getFromDate());
+            st.setDate(2, filter.getToDate());
+            
+            for (int i = 0; i < params.size(); i++) {
+                Object param = params.get(i);
+                st.setString(i + 3, param.toString());
+            }
+
+            try (ResultSet rs = st.executeQuery()) {
+                List<TableviewTransaction> transactions = new ArrayList<>();
+                while (rs.next()) {
+                    transactions.add(new TableviewTransaction(
+                        rs.getString("id"),
+                        rs.getTime("hora"),
+                        rs.getString("cedula_cliente"),
+                        rs.getString("cantidad_recibida") + " " + rs.getString("moneda_recibida"),
+                        rs.getString("metodo_recibido"),
+                        rs.getString("cantidad_enviada") + " " + rs.getString("moneda_enviada"),
+                        rs.getString("metodo_enviado"),
+                        rs.getDouble("tasa"),
+                        rs.getDouble("ganancia")
+                    ));
+                }
+
+                return transactions;
+            }
         }
     }
 
@@ -146,4 +205,5 @@ public class TransactionsDAO {
             e.printStackTrace();
         }
     }
+
 }
