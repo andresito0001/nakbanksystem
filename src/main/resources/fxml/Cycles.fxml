@@ -13,34 +13,35 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="546.0" prefWidth="757.0" stylesheets="@../css/transactionOptions.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="546.0" prefWidth="757.0" stylesheets="@../css/Cycles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <top>
       <VBox blendMode="SCREEN" prefHeight="94.0" prefWidth="1067.0" spacing="10.0" styleClass="filter-section" BorderPane.alignment="CENTER">
          <children>
             <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
                <children>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="title-text" text="TRANSACTIONS" />
-                  <Pane prefHeight="35.0" prefWidth="573.0" HBox.hgrow="ALWAYS">
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="title-text" text="CICLOS" />
+                  <Pane prefHeight="35.0" prefWidth="353.0" HBox.hgrow="ALWAYS">
                      <children>
-                        <TextField fx:id="clientCiBar" prefHeight="37.0" prefWidth="416.0" promptText="Cedula: All" styleClass="search-bar" />
+                        <TextField fx:id="clientCiBar" prefHeight="37.0" prefWidth="323.0" promptText="Cedula: All" styleClass="search-bar" />
                         <ListView fx:id="listViewId" layoutY="31.0" prefHeight="193.0" prefWidth="310.0" visible="false" />
                      </children></Pane>
-                  <HBox alignment="CENTER_RIGHT" prefHeight="36.0" prefWidth="282.0" spacing="10.0">
+                  <HBox alignment="CENTER_RIGHT" prefHeight="36.0" prefWidth="333.0" spacing="10.0">
                      <children>
-                        <Button fx:id="addTransButtomn" mnemonicParsing="false" onMouseClicked="#newTransaction" prefHeight="35.0" prefWidth="123.0" text="New Transaction" />
+                        <Button fx:id="newCycleButtomn" mnemonicParsing="false" prefHeight="35.0" prefWidth="123.0" text="New cycle" />
+                        <Button fx:id="closeCycleButtonm" mnemonicParsing="false" prefHeight="35.0" prefWidth="123.0" text="Close Cycle" />
                      </children>
                   </HBox>
                </children>
             </HBox>
-            <HBox alignment="CENTER_LEFT" prefHeight="35.0" prefWidth="335.0" spacing="20.0">
+            <HBox alignment="CENTER_LEFT" prefHeight="24.0" prefWidth="727.0" spacing="20.0">
                <children>
-                  <HBox prefHeight="35.0" prefWidth="769.0" spacing="5.0">
+                  <HBox prefHeight="35.0" prefWidth="743.0" spacing="5.0">
                      <children>
-                        <ComboBox fx:id="statusCombobox" prefHeight="35.0" prefWidth="198.0" promptText="Status: All" styleClass="filter-combo" />
+                        <ComboBox fx:id="statusCombobox" prefHeight="35.0" prefWidth="140.0" promptText="Status: All" styleClass="filter-combo" />
                         <ComboBox fx:id="typeCombobox" prefHeight="35.0" prefWidth="231.0" promptText="Type: All" styleClass="filter-combo" />
                         <DatePicker fx:id="fromDatepicker" prefHeight="36.0" prefWidth="189.0" promptText="From:" styleClass="date-picker-popup" />
-                        <DatePicker fx:id="toDatePicker" prefHeight="35.0" prefWidth="177.0" promptText="To:" styleClass="date-picker-popup" />
-                        <Button fx:id="apllyFillButtonm" mnemonicParsing="false" prefHeight="35.0" prefWidth="87.0" text="Aplicar" />
+                        <DatePicker fx:id="toDatePicker" prefHeight="36.0" prefWidth="194.0" promptText="To:" styleClass="date-picker-popup" />
+                        <Button fx:id="apllyFillButtonm" mnemonicParsing="false" prefHeight="35.0" prefWidth="90.0" text="Aplicar" />
                      </children>
                   </HBox>
                </children>

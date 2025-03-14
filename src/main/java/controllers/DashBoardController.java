@@ -22,6 +22,14 @@ import main.java.util.SceneSwitcher;
 
 public class DashBoardController implements Initializable {
     @FXML
+    private void loadCycles(MouseEvent event) {
+        try {
+            SceneSwitcher.switchPane(vBoxCenterPane, "/main/resources/fxml/Cycles.fxml", "/main/resources/css/Cycles.css", new CyclesController());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    @FXML
     private void loadTransactions(MouseEvent event) {
         try {
             SceneSwitcher.switchPane(vBoxCenterPane, "/main/resources/fxml/transactionsOptions.fxml", "/main/resources/css/transactionOptions.css", new TransactionsOptionsController());

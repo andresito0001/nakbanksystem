@@ -76,22 +76,6 @@ public class TransactionsOptionsController implements Initializable {
             )
         );
 
-
-        // System.out.println("=======================================TRANSACTION=========================================");
-        // for (var elem : transactionsIntableview) {
-        //     System.out.println(
-        //         elem.getID() + "\n" +
-        //         elem.getHora() + "\n" +
-        //         elem.getClientCi() + "\n" +
-        //         elem.getQtyReciveWithCurrency() + "\n" +
-        //         elem.getReceivedMethod() + "\n" +
-        //         elem.getQtySendWithCurrency() + "\n" +
-        //         elem.getSentMethod() + "\n" +
-        //         elem.getExchangeRate() + "\n" +
-        //         elem.getRevenue() + "\n"
-        //     );
-        // }
-
         idTablecolumn.setCellValueFactory(new PropertyValueFactory<TableviewTransaction, String>("ID"));
         timeTablecolumn.setCellValueFactory(new PropertyValueFactory<TableviewTransaction, Time>("hora"));
         clientTablecolumn.setCellValueFactory(new PropertyValueFactory<TableviewTransaction, String>("clientCi"));

@@ -95,7 +95,6 @@ public class TransactionsDAO {
             params.add(filter.getType());
         }
 
-
         try (Connection conn = ConnectionPool.getConnection();
             PreparedStatement st = conn.prepareStatement(queryBuilder.toString())) {
             st.setDate(1, filter.getFromDate());
