@@ -11,6 +11,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.collections.transformation.FilteredList;
@@ -20,6 +21,7 @@ import main.java.dao.BanksDAO;
 import main.java.dao.ClientsDAO;
 import main.java.dao.InventoryDAO;
 import main.java.dao.TransactionsDAO;
+import main.java.entities.Banks;
 import main.java.entities.Clients;
 import main.java.entities.Inventory;
 import main.java.entities.Transactions;
@@ -33,15 +35,23 @@ public class RegisterTransactionController {
         listViewId.setVisible(false);
 
         // receivedComboBox.getItems().add("DESCONOCIDO");
-        
-        bankCodes = new BanksDAO().getInfoOf("codigo", null, null);
-        receivedComboBox.getItems().addAll(bankCodes);
-        sentComboBox.getItems().addAll(bankCodes);
-        typeTransComboBox.getItems().addAll("COMPRA", "SWAP");
+        BanksDAO banksDAO = new BanksDAO();
+        List<Banks> bancosRecibidos = new ArrayList<>();
+        List<Banks> bancosEnviados = new ArrayList<>();
 
-        receivedComboBox.setOnAction(this::getReceivedBank);
-        sentComboBox.setOnAction(this::getSentBank);
-        typeTransComboBox.setOnAction(this::getTypeTrans);
+
+        banksDAO.setBank(bancosRecibidos, null, null);
+        banksDAO.setBank(bancosEnviados, null, null);
+        
+        //bankCodes = new BanksDAO().getInfoOf("codigo", null, null);
+        //receivedComboBox.getItems().addAll(bankCodes);
+        //sentComboBox.getItems().addAll(bankCodes);
+
+        receivedComboBox.getItems().addAll(bancosRecibidos);
+        sentComboBox.getItems().addAll(bancosEnviados);
+        crearComponentes();
+
+        typeTransComboBox.getItems().addAll("COMPRA", "SWAP");
 
         ClientsDAO clientsDAO = new ClientsDAO();
         List<Clients> clients = clientsDAO.getClientsAsList();
@@ -180,6 +190,62 @@ public class RegisterTransactionController {
         });
     }
 
+    public void crearComponentes () {
+        receivedComboBox.setButtonCell(new ListCell<Banks>() {
+            @Override
+                public void updateItem(Banks banco, boolean empty) {
+                    super.updateItem(banco, empty);
+                        if (banco != null) {
+                            setText(banco.getCodigo());
+                        }
+                        else 
+                            setText(null);
+                }
+        });
+
+        receivedComboBox.setCellFactory((ListView<Banks> _) -> {
+            final ListCell<Banks> listCell = new ListCell<>() {
+                @Override
+                public void updateItem(Banks banco, boolean empty) {
+                    super.updateItem(banco, empty);
+                     if (banco != null) {
+                        setText(banco.getCodigo());
+                     }
+                     else 
+                        setText(null);
+                }
+            };
+            return listCell;
+        });
+
+        sentComboBox.setButtonCell(new ListCell<Banks>() {
+            @Override
+                public void updateItem(Banks banco, boolean empty) {
+                    super.updateItem(banco, empty);
+                        if (banco != null) {
+                            setText(banco.getCodigo());
+                        }
+                        else 
+                            setText(null);
+                }
+        });
+
+        sentComboBox.setCellFactory((ListView<Banks> _) -> {
+            final ListCell<Banks> listCell = new ListCell<>() {
+                @Override
+                public void updateItem(Banks banco, boolean empty) {
+                    super.updateItem(banco, empty);
+                     if (banco != null) {
+                        setText(banco.getCodigo());
+                     }
+                     else 
+                        setText(null);
+                }
+            };
+            return listCell;
+        });
+    }
+
     private void registerTransaction() throws SQLException {
         if (sentComboBox.getValue() == null || receivedComboBox.getValue() == null || typeTransComboBox.getValue() == null) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -200,10 +266,10 @@ public class RegisterTransactionController {
                 final String clientID = searchClientsBar.getText().split(" ")[0];
                 final Clients client = clientsDAO.getCLientBy("where cedula = " + "'" + clientID + "'");
 
-                final String bankRecived = receivedComboBox.getValue();
-                final String bankSent = sentComboBox.getValue();
-                String moneyTypeSent = (String)databaseUtils.getValueOf("moneda", "bancos", "codigo = " + "'" + bankSent + "'");
-                String moneyTypeReceived = (String)databaseUtils.getValueOf("moneda", "bancos", "codigo = " + "'" + bankRecived + "'");
+                final String bankRecived = receivedComboBox.getSelectionModel().getSelectedItem().getCodigo();
+                final String bankSent = sentComboBox.getSelectionModel().getSelectedItem().getCodigo();
+                String moneyTypeSent = sentComboBox.getSelectionModel().getSelectedItem().getMoneda();
+                String moneyTypeReceived = receivedComboBox.getSelectionModel().getSelectedItem().getMoneda();
                 String status = new String();
 
                 if (bankRecived.equals(bankSent) || moneyTypeReceived.equals(moneyTypeSent)) {
@@ -265,11 +331,30 @@ public class RegisterTransactionController {
                     gananciaPerdida, ref, cycleStatus
                 );
 
+                Double cantidadIngreso = received, cantidadEgreso = sent;
+
+                if (status.equals("OK")) {
+                    cantidadIngreso = received;
+                    cantidadEgreso = sent;
+                }
+                else if (status.equals("PENDIENTE")) {
+                    cantidadIngreso = amountInitialPaymentClient;
+                    cantidadIngreso = amountInitialPayment;
+                }
+                else if (status.equals("ENVIADO")) {
+                    cantidadIngreso = amountInitialPaymentClient;
+                    cantidadEgreso = sent;
+                }
+                else if (status.equals("RECIBIDO")) {
+                    cantidadIngreso = received;
+                    cantidadEgreso = amountInitialPayment;
+                }
+
                 final Inventory inventoryEntrance = new Inventory (
                     inventoryULID,
                     transaction.getDate(),
                     "INGRESO",
-                    transaction.getQuantityReceived(),
+                    cantidadIngreso,
                     transaction.getCurrencyReceived(),
                     transaction.getReceivedMethod(),
                     typeTrans,
@@ -277,13 +362,14 @@ public class RegisterTransactionController {
                     transaction.getId()
                 );
 
+
                 inventoryULID = ULID.generate(System.currentTimeMillis(), entropy);
 
                 final Inventory inventoryExit = new Inventory (
                     inventoryULID,
                     transaction.getDate(),
                     "EGRESO",
-                    transaction.getSentQuantity(),
+                    cantidadEgreso,
                     transaction.getSentCurrency(),
                     transaction.getSentMethod(),
                     typeTrans,
@@ -298,6 +384,20 @@ public class RegisterTransactionController {
 
                 inventoryDAO.newRegister(inventoryEntrance);
                 inventoryDAO.newRegister(inventoryExit);
+
+                //Actualizar banco enviado
+                Double saldoBancoEnviado = sentComboBox.getSelectionModel().getSelectedItem().getSaldo();
+                Double balanceEnviado = saldoBancoEnviado - inventoryExit.getQuantity();
+                
+                databaseUtils.updateRegister("bancos", "saldo_actual", balanceEnviado, "codigo = '" + sentComboBox.getSelectionModel().getSelectedItem().getCodigo() + "'");
+                //Actualizar banco recibido
+                Double saldoBancoRecibido = receivedComboBox.getSelectionModel().getSelectedItem().getSaldo();
+                Double balanceRecibido = saldoBancoRecibido + inventoryEntrance.getQuantity();
+                
+                databaseUtils.updateRegister("bancos", "saldo_actual", balanceRecibido, "codigo = '" + receivedComboBox.getSelectionModel().getSelectedItem().getCodigo() + "'");
+
+
+
             } break;
             case "SWAP" : {
 
@@ -316,18 +416,6 @@ public class RegisterTransactionController {
         // System.out.println("Sent bank: " + sentBank + "\nReceived bank: " + receivedBank + "\nTransaction type: " + transactionType + "\nSent: " + sent + "\nReceived: " + received + "\nAmount: " + amount + "\nClient: " + ID);
         clearFields();
         Main.switchToDashboard();
-    }
-
-    public String getReceivedBank(ActionEvent event) {
-        return receivedComboBox.getValue();
-    }
-
-    public String getSentBank(ActionEvent event) {
-        return sentComboBox.getValue();
-    }
-
-    public String getTypeTrans(ActionEvent event) {
-        return typeTransComboBox.getValue();
     }
 
     private void clearFields() {
@@ -363,9 +451,9 @@ public class RegisterTransactionController {
     @FXML
     ObservableList<Clients> clientsList = FXCollections.observableArrayList();
     @FXML
-    private ComboBox<String> receivedComboBox;
+    private ComboBox<Banks> receivedComboBox;
     @FXML
-    private ComboBox<String> sentComboBox;
+    private ComboBox<Banks> sentComboBox;
     @FXML
     private ComboBox<String> typeTransComboBox;
     @FXML
