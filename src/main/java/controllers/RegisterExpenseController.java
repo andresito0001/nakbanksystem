@@ -57,6 +57,7 @@ public class RegisterExpenseController {
     Accounts cuentaSeleccionada;
     Cycle lastCycle;
     DatabaseUtils databaseUtils;
+    Double montoEquivalente;
 
     public void initialize() throws SQLException{
 
@@ -138,9 +139,9 @@ public class RegisterExpenseController {
 
         montoGastoId.textProperty().addListener((_, _, _) -> {
             if (!metodoPagoId.getSelectionModel().isEmpty() && !montoGastoId.getText().isEmpty()) {
-                Double montoEquivalente = Double.parseDouble(montoGastoId.getText().toString());
+                montoEquivalente = Double.parseDouble(montoGastoId.getText().toString());
                 if (metodoPagoId.getSelectionModel().getSelectedItem().getMoneda().equals("VES")) {
-                    montoEquivalente = montoEquivalente / 70;
+                    montoEquivalente = montoEquivalente / lastCycle.getRate();
                     BigDecimal monto = new BigDecimal(montoEquivalente);
                     monto = monto.setScale(3, RoundingMode.HALF_UP);
                     equivalenteId.setText(monto.toString() + " USD");
@@ -343,7 +344,6 @@ public class RegisterExpenseController {
             Date fecha = Date.valueOf(fechaGastoId.getValue());
             Double monto = Double.parseDouble(montoGastoId.getText());
 
-   
             Gastos gasto = new Gastos(
             id_gasto, lastCycle, Main.getUsername(), fecha, 
             departamento, cuentaSeleccionada, proveedorId.getText().toString(), 

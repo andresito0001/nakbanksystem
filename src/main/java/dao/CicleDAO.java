@@ -15,34 +15,42 @@ import main.java.util.ConnectionPool;
 import main.java.util.TimeZone;
 
 public class CicleDAO {
-    public StringBuilder fillByDate(final Date beginDate, final Date endDate) throws SQLException {
-        final String query = "select c.cedula, a.nombre_usuario, t.id, t.fecha, t.cantidad_recibida, t.moneda_recibida, " +
-            "t.metodo_recibido, t.cantidad_enviada, t.moneda_enviada, t.metodo_enviado, t.status, t.tasa " +
-            "from ciclos t " +
-            "inner join clientes c on t.cedula_cliente = c.cedula " +
-            "inner join administradores a on t.admin = a.nombre_usuario " +
-            "where t.fecha >= ? AND t.fecha <= ?";
+    public void fillByDate(List<Cycle> listaCycles, final Date beginDate, final Date endDate, String condition) throws SQLException {
+        String query = "select * from ciclos where fecha between ? and ? ";
+        if (condition != null) {
+            query = query + condition;
+        }
         
         try (final Connection conn = ConnectionPool.getConnection();
-            final PreparedStatement st = conn.prepareStatement(query);
-            final ResultSet rs = st.executeQuery()) {
+            final PreparedStatement st = conn.prepareStatement(query)) {
             st.setDate(1, beginDate);
             st.setDate(2, endDate);
-            
-            StringBuilder metaData = new StringBuilder();
-            
+
+            ResultSet rs = st.executeQuery();
+                        
             while (rs.next()) {
-                metaData.append("ID: ").append(rs.getString("id"))
-                .append(", Cedula: ").append(rs.getString("cedula"))
-                .append(", admin: ").append(rs.getString("nombre_usuario"))
-                .append(", Recibido: ").append(rs.getString("cantidad_recibida") + " " + rs.getString("moneda_recibida") + " en " + rs.getString("metodo_recibido"))
-                .append(", Enviado: ").append(rs.getString("cantidad_enviada") + " " + rs.getString("moneda_enviada") + " desde " + rs.getString("metodo_enviado"))
-                .append(", status: ").append(rs.getString("status"))
-                .append(", tasa: ").append(rs.getDouble("tasa"))
-                .append(", Fecha: ").append(String.valueOf(rs.getDate("fecha"))).append("\n------------------------------------------------------------------------------------------\n");
+                String clientID = rs.getString("cedula_cliente");
+                Clients client = new ClientsDAO().getCLientBy("where cedula = '" + clientID + "'");
+                Cycle cycle = new Cycle(
+                    rs.getString("id"),
+                    client,
+                    rs.getString("admin"), 
+                    rs.getDate("fecha").toString(), 
+                    rs.getTimestamp("hora").toString(), 
+                    rs.getDouble("cantidad_recibida"), 
+                    rs.getString("moneda_recibida"), 
+                    rs.getString("metodo_recibido"), 
+                    rs.getDouble("cantidad_enviada"), 
+                    rs.getString("moneda_enviada"), 
+                    rs.getString("metodo_enviado"), 
+                    rs.getString("status"), 
+                    rs.getDouble("tasa"), 
+                    rs.getString("ref_bancaria"), 
+                    rs.getString("status_recepcion"));
+
+                listaCycles.add(cycle);
             }
 
-            return metaData;
         }
     }
 
@@ -125,4 +133,22 @@ public class CicleDAO {
                     return null;
         } 
     }
+
+    public Double getAvailableByCycle (String cycleId) throws SQLException {
+        final String query = "select sum(cantidad) as spend from inventario inner join " + 
+                        "transacciones on id_trans = transacciones.id " + 
+                        "where cicle_id = '" + cycleId + "' and " + 
+                        "moneda = 'VES' and tipo_movimiento = 'EGRESO'";
+        try (final Connection conn = ConnectionPool.getConnection();
+            final PreparedStatement st = conn.prepareStatement(query);
+            final ResultSet rs = st.executeQuery()) {
+                if (rs.next()) { 
+                    return rs.getDouble("spend");
+                } else {
+                    return 0.0;
+                }
+
+        }
+    }
+
 }

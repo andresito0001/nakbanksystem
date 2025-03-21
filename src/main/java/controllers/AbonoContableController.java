@@ -18,11 +18,17 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.Pane;
+import main.java.Main;
 import main.java.dao.BanksDAO;
+import main.java.dao.CicleDAO;
 import main.java.dao.CxCDAO;
+import main.java.dao.ExpensesDAO;
 import main.java.dao.InventoryDAO;
+import main.java.entities.Accounts;
 import main.java.entities.Banks;
 import main.java.entities.CxC;
+import main.java.entities.Cycle;
+import main.java.entities.Gastos;
 import main.java.util.DatabaseUtils;
 import main.java.util.SceneSwitcher;
 import main.java.util.TimeZone;
@@ -213,13 +219,34 @@ public class AbonoContableController {
                 Timestamp timestamp = Timestamp.valueOf(fechaHora);
                 
 
-                if (typeMoney.equals("VES") && tipoMovimiento.equals("EGRESO")) {
+                if (typeMoney.equals("VES") && tipoMovimiento.equals("EGRESO") && !porcentajePM.getText().isEmpty()) {
                     balanceNuevo = balanceNuevo - comisionAbono; //El balance nuevo del banco es el balance actual - esa comision del pago movil
                     String id_inventarioComision = "E-" + ULID.generate(System.currentTimeMillis(), random);
-
+                    String id_gasto = ULID.generate(System.currentTimeMillis(), random);
+                    
                     inventoryDAO.newRegister(id_inventarioComision, fecha, timestamp, tipoMovimiento, comisionAbono, metodoId.getSelectionModel().getSelectedItem().getMoneda(), 
-                    metodoId.getSelectionModel().getSelectedItem().getCodigo(), "EGRESO", cuentaXAbonar.getIdTransaction());
+                    metodoId.getSelectionModel().getSelectedItem().getCodigo(), "GASTO", cuentaXAbonar.getIdTransaction());
+                   
+                    String lastCycleId = dbUtils.getInfoByLastReferenceOf("ciclos", "id", null, null);
+                    CicleDAO cicleDAO = new CicleDAO();
+                    Cycle lastCycle = cicleDAO.getCycle(lastCycleId);
+
+                    Gastos gasto = new Gastos(
+                        id_gasto, lastCycle,
+                        Main.getUsername(), fecha, 
+                        "Operaciones", Accounts.PAGO_MOVIL, 
+                        cuentaXAbonar.getCliente(), 
+                        "Comision por Pago Movil", 
+                        comisionAbono, 
+                        metodoId.getSelectionModel().getSelectedItem(), 
+                        comisionAbono);
+                    
+                    ExpensesDAO expensesDAO = new ExpensesDAO();
+                    expensesDAO.registerExpense(gasto);
+
                     //Y de paso Guardar en gastos como comisión x pago móvil
+                    dbUtils.updateRegister("transacciones", "ganancia", "ganancia - " + gasto.getUsd_Equivalente(), "id = '" + cuentaXAbonar.getIdTransaction() + "'");
+
                 }
 
                 inventoryDAO.newRegister(id_inventario, fecha, timestamp, tipoMovimiento, monto, metodoId.getSelectionModel().getSelectedItem().getMoneda(), 
