@@ -41,6 +41,10 @@ public class Cycle {
     public String getBankRef() { return bankRef;}
     public String getStatusRecepcion () { return status_recepcion; }
 
+    public void setStatus(final String newStatus) {
+        this.status = newStatus;
+    }
+
     private final String id;
     private final Clients client;
     private final String adminUsername;
@@ -52,7 +56,7 @@ public class Cycle {
     private final Double sentQuantity;
     private final String sentCurrency;
     private final String sentMethod;
-    private final String status;
+    private String status;
     private final Double rate; 
     private final String bankRef;
     private final String status_recepcion;
