@@ -37,7 +37,7 @@
                <children>
                   <HBox prefHeight="35.0" prefWidth="743.0" spacing="5.0">
                      <children>
-                        <ComboBox fx:id="statusCombobox" prefHeight="35.0" prefWidth="140.0" promptText="Status: All" styleClass="filter-combo" />
+                        <ComboBox fx:id="statusCombobox" prefHeight="35.0" prefWidth="140.0" promptText="Status Recepcion: All" styleClass="filter-combo" />
                         <DatePicker fx:id="fromDatepicker" prefHeight="36.0" prefWidth="189.0" promptText="From:" styleClass="date-picker-popup" />
                         <DatePicker fx:id="toDatePicker" prefHeight="36.0" prefWidth="194.0" promptText="To:" styleClass="date-picker-popup" />
                         <Button fx:id="apllyFillButtonm" mnemonicParsing="false" onMouseClicked="#updateTable" prefHeight="35.0" prefWidth="90.0" text="Aplicar" />

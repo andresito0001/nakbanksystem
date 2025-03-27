@@ -69,10 +69,10 @@ public class BanksDAO {
         Double totalBalance = 0.0;
 
         try (final Connection conn = ConnectionPool.getConnection();
-            final PreparedStatement stmt = conn.prepareStatement("select sum(saldo_actual) from bancos where codigo = ?");
-            final ResultSet rs = stmt.executeQuery()) {
-
+            final PreparedStatement stmt = conn.prepareStatement("select sum(saldo_actual) from bancos where codigo = ?")) {
+        
             stmt.setString(1, bankCode);
+            final ResultSet rs = stmt.executeQuery();
 
             if (rs.next())
                 totalBalance = rs.getDouble(1);

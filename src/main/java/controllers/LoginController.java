@@ -5,8 +5,10 @@ import java.sql.SQLException;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.Pane;
 import main.java.dao.AdminDAO;
 import main.java.util.SceneSwitcher;
@@ -54,8 +56,14 @@ public class LoginController {
 
                 System.out.println(duration);
             } else {
-                errorMsg.setText("* Usuario o contraseña invalidos");
-                loginButton.setDisable(false);
+                Alert alert = new Alert(AlertType.ERROR, "Usuario o clave incorrectas. ");
+                alert.showAndWait();
+
+                try {
+                    SceneSwitcher.switchPane(hboxpane, "/main/resources/fxml/login.fxml", "/main/resources/css/login.css", new LoginController());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
 
                 long endTime = System.currentTimeMillis(); // Tiempo final
                 long duration = endTime - startTime; // Duración en milisegundos
@@ -67,14 +75,24 @@ public class LoginController {
         loginTask.setOnRunning(_ -> { 
             try {
                 SceneSwitcher.switchPane(hboxpane, "/main/resources/fxml/loading.fxml", "/main/resources/css/loading.css", new loadingController());
-
             } catch (Exception e) {
                 e.printStackTrace();
+                Alert alert = new Alert(AlertType.WARNING, "Ha ocurrido un error al acceder al sistema. ");
+                alert.showAndWait();
             }
         });
 
         loginTask.setOnFailed(_ -> {
             loginTask.getException().printStackTrace();
+            try {
+                Alert alert = new Alert(AlertType.ERROR, "Ha ocurrido un error de conexion");
+                alert.showAndWait();
+                SceneSwitcher.switchPane(hboxpane, "/main/resources/fxml/login.fxml", "/main/resources/css/login.css", new LoginController());
+            } catch (Exception e) {
+                e.printStackTrace();
+                Alert alert = new Alert(AlertType.ERROR, "Ha ocurrido un error. Reinicie");
+                alert.showAndWait();
+            }
         });
 
         new Thread(loginTask).start();

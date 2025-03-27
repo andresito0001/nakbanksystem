@@ -77,6 +77,16 @@ public class TransferBanksController {
             }
         });
 
+        pmId.textProperty().addListener((_, _, _) -> {
+            if (!sentTextField.getText().isEmpty()) {
+                Double totalSent = Double.parseDouble(sentTextField.getText().toString());
+                Double porcentaje = Double.parseDouble(pmId.getText().toString()) / 100;
+                porcentaje = porcentaje * totalSent;
+                totalSent = totalSent + porcentaje;
+                totalId.setText(totalSent.toString());
+            }
+        });
+
         
         PMCheck.setOnAction(_ -> {
             if (PMCheck.isSelected()) {
@@ -213,6 +223,8 @@ public class TransferBanksController {
     
                     Alert alert = new Alert(AlertType.INFORMATION, "Transferencia realizada exitosamente");
                     alert.showAndWait();
+
+                    Main.switchToDashboard();
             } else {
                 Alert alert = new Alert(AlertType.ERROR, "Saldo insuficiente");
                 alert.showAndWait();

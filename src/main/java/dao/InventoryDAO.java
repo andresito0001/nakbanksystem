@@ -3,8 +3,11 @@ package main.java.dao;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Time;
+import java.util.List;
+
 import main.java.entities.Inventory;
 import main.java.util.ConnectionPool;
 
@@ -53,6 +56,37 @@ public class InventoryDAO {
             System.err.println("[ERROR] Estado SQL: " + e.getSQLState());
             System.err.println("[ERROR] Código de error: " + e.getErrorCode());
             e.printStackTrace();
+        }
+    }
+
+    public void fillByDate (List<Inventory> listaInventory, final Date beginDate, final Date endDate, String condition) throws SQLException {
+        String query = "select * from inventario where fecha between ? and ?";
+    
+        if (condition != null) {
+            query = query + condition;
+        }
+
+        try (final Connection connection = ConnectionPool.getConnection(); 
+            final PreparedStatement st = connection.prepareStatement(query)) {
+                st.setDate(1, beginDate);
+                st.setDate(2, endDate);
+                
+                ResultSet rs = st.executeQuery();
+
+                while (rs.next()) {
+                    Inventory inventory = new Inventory(
+                        rs.getString("referencia"), 
+                        rs.getDate("fecha").toString(), 
+                        rs.getString("tipo_movimiento"),
+                        rs.getDouble("cantidad"), 
+                        rs.getString("moneda"), 
+                        rs.getString("metodo"), 
+                        rs.getString("tipo"), 
+                        rs.getTimestamp("hora").toString(),
+                        rs.getString("id_trans")
+                    ); 
+                    listaInventory.add(inventory);
+                }
         }
     }
 }

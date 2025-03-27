@@ -25,6 +25,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
+import main.java.dao.BanksDAO;
 import main.java.dao.CicleDAO;
 import main.java.dao.InventoryDAO;
 import main.java.entities.Clients;
@@ -55,10 +56,9 @@ public class CyclesController implements Initializable {
                 condicion += " and cedula_cliente = '" + clientCiBar.getText().toString() + "'";
             }
     
-            if (!statusCombobox.getSelectionModel().isEmpty()) {
-                condicion += " and status = '" + statusCombobox.getSelectionModel().getSelectedItem().toString() + "'";
+            if (!statusCombobox.getSelectionModel().isEmpty() && !statusCombobox.getSelectionModel().getSelectedItem().equals("ALL")) {
+                condicion += " and status_recepcion = '" + statusCombobox.getSelectionModel().getSelectedItem().toString() + "'";
             }
-
 
             CicleDAO cicleDAO = new CicleDAO();
 
@@ -66,11 +66,8 @@ public class CyclesController implements Initializable {
             
             cicleDAO.fillByDate(listaCycles, Date.valueOf(fromDatepicker.getValue()), Date.valueOf(toDatePicker.getValue()), condicion);
             
-            if (listaCycles.isEmpty() == true) {
-                System.out.println("No hay ciclos");
-            }
-            else {
-                cycleTableView.setItems(listaCycles);
+
+            cycleTableView.setItems(listaCycles);
 
                 timeTablecolumn.setCellValueFactory(new PropertyValueFactory<Cycle, String>("date"));
                 clientTablecolumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getClient().getAlias()));
@@ -80,14 +77,10 @@ public class CyclesController implements Initializable {
                 sendMethodTablecolumn.setCellValueFactory(new PropertyValueFactory<>("sentMethod"));
                 rate.setCellValueFactory(new PropertyValueFactory<>("rate"));
                 status.setCellValueFactory(new PropertyValueFactory<>("status"));
-    
-            }
-
-
             
-            
-
-
+                if (listaCycles.isEmpty() == true) {
+                    cycleTableView.setPlaceholder(new Label("No se encontraron ciclos para estos filtros"));
+                }
     
         } else {
             Alert alert = new Alert(AlertType.WARNING, "Debe seleccionar una fecha de inicio y fin");
@@ -137,9 +130,14 @@ public class CyclesController implements Initializable {
                 //Calculo disponible del ciclo: (cantidad_recibida - cantidad_enviada) / tasa madre
                 if (availableBalanceOfCycle <= 10.00) {
                     databaseUtils.updateRegister("ciclos", "status", "INACTIVE", "id = '" + lastCycleId + "'"); 
+                    BanksDAO banksDAO = new BanksDAO();
 
-                    databaseUtils.updateRegister("bancos", "saldo_actual", "saldo_actual + " + remanente, "nombre_banco = 'Remanente'");
-                   // databaseUtils.updateRegister("bancos", "saldo_actual", lastCycle, lastCycleId);
+                    Double saldo_remanente = banksDAO.getTotalBalanceOf("REMANENTE");
+                    
+                    Double saldo_banco_ciclo = banksDAO.getTotalBalanceOf(lastCycle.getReceivedMethod());
+
+                    databaseUtils.updateRegister("bancos", "saldo_actual", saldo_remanente + remanente, "nombre_banco = 'Remanente'");
+                    databaseUtils.updateRegister("bancos", "saldo_actual", saldo_banco_ciclo - remanente, "codigo = '" + lastCycle.getReceivedMethod() + "'");
 
                     Alert alerta = new Alert(AlertType.INFORMATION, "Se ha cerrado el ciclo #" + lastCycleId);
                     alerta.showAndWait();

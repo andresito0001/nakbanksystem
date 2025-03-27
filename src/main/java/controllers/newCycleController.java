@@ -324,6 +324,11 @@ public class newCycleController {
                     statusRecepcion = "RECIBIDO";
                     cantidadEnviada = Double.parseDouble(abonado.getText().toString());
                     tipoOperacion = "ABONO";
+                } 
+                else if (abonado.getText().isEmpty() && pagadoCheck.isSelected()) {
+                    statusRecepcion = "RECIBIDO";
+                    cantidadEnviada = 0.0;
+                    tipoOperacion = "ABONO";
                 }
 
                 final Cycle cycle = new Cycle(
@@ -340,7 +345,6 @@ public class newCycleController {
 
                 Double saldoRecibido = receivedComboBox.getSelectionModel().getSelectedItem().getSaldo() + cantidadRecibida;
                 Double saldoEnviado = sentComboBox.getSelectionModel().getSelectedItem().getSaldo() - cantidadEnviada;
-                System.out.println ("Saldo en recibido: " + saldoRecibido + "Saldo en enviado: " + saldoEnviado);
 
                 databaseUtils.updateRegister("bancos", "saldo_actual", saldoRecibido, "codigo = '" + receivedComboBox.getSelectionModel().getSelectedItem().getCodigo().toString() + "'");
                 databaseUtils.updateRegister("bancos", "saldo_actual", saldoEnviado, "codigo = '" + sentComboBox.getSelectionModel().getSelectedItem().getCodigo().toString() + "'");
@@ -381,6 +385,9 @@ public class newCycleController {
                 clearfields();
                 Main.switchToDashboard();
             }
+        } else {
+            Alert alert = new Alert(AlertType.WARNING, "Debe llenar todos los campos para crear el ciclo");
+            alert.showAndWait();
         }
     }
 

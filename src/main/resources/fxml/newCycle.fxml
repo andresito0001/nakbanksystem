@@ -39,7 +39,7 @@
       <Label layoutX="517.0" layoutY="216.0" prefHeight="7.0" prefWidth="34.0" text="Tasa " />
       <TextField fx:id="refTextField" layoutX="517.0" layoutY="310.0" prefHeight="28.0" prefWidth="165.0" promptText="#" />
       <Label fx:id="refLabel" layoutX="517.0" layoutY="292.0" text="Referencia" />
-      <TextField fx:id="amountToReceive" layoutX="33.0" layoutY="309.0" prefHeight="28.0" prefWidth="165.0" promptText="0.00 Bs" />
+      <TextField fx:id="amountToReceive" editable="false" layoutX="33.0" layoutY="309.0" prefHeight="28.0" prefWidth="165.0" promptText="0.00 Bs" />
       <Label fx:id="sentAmountLabel" layoutX="34.0" layoutY="291.0" text="Cantidad a recibir en Bs" />
       <TextField fx:id="searchClientsBar" layoutX="80.0" layoutY="126.0" prefHeight="25.0" prefWidth="287.0" promptText="Nombre, Apellido, Cedula, Alias" />
       <Label layoutX="34.0" layoutY="131.0" text="Cliente" />

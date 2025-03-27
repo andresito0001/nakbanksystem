@@ -261,8 +261,12 @@ public class AbonoContableController {
                 CxCDAO cxcDAO = new CxCDAO();
                 cxcDAO.actualizarCxC(cuentaXAbonar);
                 
-                if (cuentaXAbonar.getPendienteTransaccion() == 0 && tabla != "ciclos") {
-                    dbUtils.updateRegister(tabla, "status", "OK", "id = '" + cuentaXAbonar.getIdTransaction() + "'");
+                if (cuentaXAbonar.getPendienteTransaccion() == 0) {
+                    String columna_status = "status";
+                    if (tabla.equals("ciclos")) {
+                        columna_status = "status_recepcion";
+                    }
+                    dbUtils.updateRegister(tabla, columna_status, "OK", "id = '" + cuentaXAbonar.getIdTransaction() + "'");
                     Alert alert = new Alert(AlertType.INFORMATION, "Cuenta por el monto " + monto.toString() + " " + cuentaXAbonar.getMonedaTransaccion() + " saldada completamente! ");
                     alert.showAndWait();
                 }
