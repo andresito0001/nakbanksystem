@@ -79,7 +79,7 @@
                         <Cursor fx:constant="HAND" />
                      </cursor>
                      <children>
-                        <Label alignment="CENTER" prefHeight="90.0" prefWidth="220.0" text="Prestamos">
+                        <Label alignment="CENTER" onMouseClicked="#loadRegisterBank" prefHeight="90.0" prefWidth="220.0" text="Crear Banco">
                            <graphic>
                               <ImageView fitHeight="50.0" fitWidth="81.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -87,6 +87,12 @@
                                  </image>
                               </ImageView>
                            </graphic>
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                           <opaqueInsets>
+                              <Insets right="10.0" />
+                           </opaqueInsets>
                         </Label>
                      </children>
                   </VBox>
@@ -111,11 +117,11 @@
                   </VBox>
                   <VBox fx:id="dividendosButton" prefHeight="79.0" prefWidth="220.0" styleClass="buttomCard">
                      <children>
-                        <Label fx:id="gastosButton1" alignment="CENTER" prefHeight="79.0" prefWidth="237.0" text="Pago de Dividendos">
+                        <Label fx:id="transfButton" alignment="CENTER" onMouseClicked="#loadTransfers" prefHeight="79.0" prefWidth="237.0" text="Transferir Bancos Propios">
                            <graphic>
-                              <ImageView fitHeight="60.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                              <ImageView fitHeight="60.0" fitWidth="50.0" onMouseClicked="#loadTransfers" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@../img/dividendo.png" />
+                                    <Image url="@../img/transf.png" />
                                  </image>
                               </ImageView>
                            </graphic>

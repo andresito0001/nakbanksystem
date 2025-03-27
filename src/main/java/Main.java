@@ -8,7 +8,7 @@ import main.java.controllers.LoginController;
 import main.java.util.SceneSwitcher;
 
 public class Main extends Application {
-    private static Stage primaryStage;
+    private static Stage primaryStage; 
     private static String username;
 
     @Override

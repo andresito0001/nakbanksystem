@@ -64,6 +64,22 @@ public class ContabilidadOptionsController {
         }
     }
 
+    public void loadRegisterBank(MouseEvent event) {
+        try {
+            SceneSwitcher.switchPane(borderPane, "/main/resources/fxml/registerBank.fxml", "/main/resources/css/newCycle.css", new RegisterBankController());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void loadTransfers(MouseEvent event) {
+        try {
+            SceneSwitcher.switchPane(borderPane, "/main/resources/fxml/transfersBanks.fxml", "/main/resources/css/newCycle.css", new TransferBanksController());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     @FXML
     private Pane borderPane;
 }

@@ -129,6 +129,7 @@ public class CyclesController implements Initializable {
 
             Double spendOfCycle = cicleDAO.getAvailableByCycle(lastCycleId);
             Double availableBalanceOfCycle = ( lastCycle.getQuantityReceived() - spendOfCycle ) / lastCycle.getRate();
+            Double remanente = lastCycle.getQuantityReceived() - spendOfCycle;
             
             Alert alert = new Alert(AlertType.CONFIRMATION, "Del ciclo # " + lastCycle.getId() + " quedan " + availableBalanceOfCycle + " USD. " + "¿Desea cerrar el ciclo?");
             alert.showAndWait();
@@ -136,6 +137,10 @@ public class CyclesController implements Initializable {
                 //Calculo disponible del ciclo: (cantidad_recibida - cantidad_enviada) / tasa madre
                 if (availableBalanceOfCycle <= 10.00) {
                     databaseUtils.updateRegister("ciclos", "status", "INACTIVE", "id = '" + lastCycleId + "'"); 
+
+                    databaseUtils.updateRegister("bancos", "saldo_actual", "saldo_actual + " + remanente, "nombre_banco = 'Remanente'");
+                   // databaseUtils.updateRegister("bancos", "saldo_actual", lastCycle, lastCycleId);
+
                     Alert alerta = new Alert(AlertType.INFORMATION, "Se ha cerrado el ciclo #" + lastCycleId);
                     alerta.showAndWait();
                 }

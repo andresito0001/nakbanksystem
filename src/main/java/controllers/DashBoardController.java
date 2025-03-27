@@ -63,6 +63,14 @@ public class DashBoardController implements Initializable {
             e.printStackTrace();
         }
     }
+    @FXML
+    private void loadInventory(MouseEvent event) {
+        try {
+            SceneSwitcher.switchPane(vBoxCenterPane, "/main/resources/fxml/inventory.fxml", "/main/resources/css/Cycles.css", new InventoryController());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {

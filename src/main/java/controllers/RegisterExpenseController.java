@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.function.UnaryOperator;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.ListCell;
@@ -52,12 +54,23 @@ public class RegisterExpenseController {
     private TextField descripcionId;
     @FXML
     private DatePicker fechaGastoId;
+    @FXML
+    private CheckBox pmCheck;
+    @FXML
+    private TextField porcentajePM;
+    @FXML
+    private TextField equivalentePM;
+    @FXML
+    private Button registerPagoButton;
+    @FXML
+    private Button cancelPagoButton;
 
     String departamento;
     Accounts cuentaSeleccionada;
     Cycle lastCycle;
     DatabaseUtils databaseUtils;
     Double montoEquivalente;
+    Double pmEquivalente;
 
     public void initialize() throws SQLException{
 
@@ -135,18 +148,65 @@ public class RegisterExpenseController {
             if (!montoGastoId.getText().isEmpty()) {
                 montoGastoId.setText("");
             }
+            if(!metodoPagoId.getSelectionModel().getSelectedItem().equals(null) && metodoPagoId.getSelectionModel().getSelectedItem().getMoneda().equals("VES")) {
+                pmCheck.setVisible(true);
+                registerPagoButton.setLayoutY(276);
+                cancelPagoButton.setLayoutY(276);
+            } else {
+                pmCheck.setVisible(false);
+                registerPagoButton.setLayoutY(236);
+                cancelPagoButton.setLayoutY(236);
+            }
+        });
+
+
+        pmCheck.setOnAction(_ -> {
+            if (pmCheck.isSelected()) {
+                porcentajePM.setVisible(true);
+                porcentajePM.setDisable(false);
+                equivalentePM.setVisible(true);
+            }
+            else {
+                porcentajePM.setVisible(false);
+                porcentajePM.setDisable(true);
+                porcentajePM.setText("");
+                equivalentePM.setVisible(false);
+            }
+        });
+
+        porcentajePM.textProperty().addListener((_, _, newValue) -> {
+            if (!porcentajePM.getText().isEmpty() && !montoGastoId.getText().isEmpty()) {
+                if (lastCycle != null) {
+                    Double porcentaje = 0.0;
+                    porcentaje = Double.parseDouble(porcentajePM.getText()) / 100;
+                    porcentaje = porcentaje * Double.parseDouble(montoGastoId.getText());
+                    pmEquivalente = porcentaje / lastCycle.getRate();
+                    equivalentePM.setText(pmEquivalente + " USD");
+                } else {
+                    equivalentePM.setText("");
+                }
+
+            } else {
+                equivalentePM.setText("");
+            }
         });
 
         montoGastoId.textProperty().addListener((_, _, _) -> {
             if (!metodoPagoId.getSelectionModel().isEmpty() && !montoGastoId.getText().isEmpty()) {
                 montoEquivalente = Double.parseDouble(montoGastoId.getText().toString());
                 if (metodoPagoId.getSelectionModel().getSelectedItem().getMoneda().equals("VES")) {
-                    montoEquivalente = montoEquivalente / lastCycle.getRate();
-                    BigDecimal monto = new BigDecimal(montoEquivalente);
-                    monto = monto.setScale(3, RoundingMode.HALF_UP);
-                    equivalenteId.setText(monto.toString() + " USD");
+                    if (lastCycle != null && fechaGastoId.getValue() != null) {
+                        montoEquivalente = montoEquivalente / lastCycle.getRate();
+                        BigDecimal monto = new BigDecimal(montoEquivalente);
+                        monto = monto.setScale(3, RoundingMode.HALF_UP);
+                        equivalenteId.setText(monto.toString() + " USD");
+                        comisionPM();
+                    }
+                    else {
+                        equivalenteId.setText("");
+                    }
                 }
-                else
+                else 
                     equivalenteId.setText(montoEquivalente.toString() + " USD");
             }
             else 
@@ -159,6 +219,12 @@ public class RegisterExpenseController {
                     String id_ciclo = databaseUtils.getValueOf("id", "ciclos", "fecha <= '" + newValue + "' order by fecha desc limit 1; ").toString();
                     CicleDAO cicleDAO = new CicleDAO();
                     lastCycle = cicleDAO.getCycle(id_ciclo);
+                    if (!porcentajePM.getText().isEmpty()) {
+                        comisionPM();
+                    } 
+                    if (!montoGastoId.getText().isEmpty()) {
+                        calcularEquivalente();
+                    }
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
@@ -167,6 +233,49 @@ public class RegisterExpenseController {
 
         formatosTextField();
 
+    }
+
+    public void comisionPM () {
+        if (lastCycle != null ) { 
+            if (!porcentajePM.getText().isEmpty() && !montoGastoId.getText().isEmpty()) {
+                Double porcentaje = 0.0;
+                porcentaje = Double.parseDouble(porcentajePM.getText()) / 100;
+                porcentaje = porcentaje * Double.parseDouble(montoGastoId.getText());
+                pmEquivalente = porcentaje / lastCycle.getRate();
+                equivalentePM.setText(pmEquivalente + " USD");
+            } else {
+                equivalentePM.setText("");
+            }
+        } else {
+            Alert alert = new Alert(AlertType.WARNING,"No existen ciclos para esta fecha");
+            alert.showAndWait();
+            equivalentePM.setText("");
+        }
+    }
+
+    private void calcularEquivalente() {
+        if (lastCycle != null) {
+            if (!metodoPagoId.getSelectionModel().isEmpty() && !montoGastoId.getText().isEmpty()) {
+                montoEquivalente = Double.parseDouble(montoGastoId.getText().toString());
+
+                if (metodoPagoId.getSelectionModel().getSelectedItem().getMoneda().equals("VES")) {
+                    montoEquivalente = montoEquivalente / lastCycle.getRate();
+                    BigDecimal monto = new BigDecimal(montoEquivalente);
+                    monto = monto.setScale(3, RoundingMode.HALF_UP);
+                    equivalenteId.setText(monto.toString() + " USD");
+                    comisionPM();
+                } else {
+                    equivalenteId.setText("");
+                } 
+            } else {
+            equivalenteId.setText(montoEquivalente.toString() + " USD");
+            }
+        } else {
+            Alert alert = new Alert(AlertType.WARNING,"No existen ciclos para esta fecha");
+            alert.showAndWait();
+            equivalenteId.setText("");
+        }
+        
     }
 
     public void formatosTextField () {
@@ -202,10 +311,12 @@ public class RegisterExpenseController {
         TextFormatter<String> formatoMonto = new TextFormatter<>(filterMonto);
         TextFormatter<String> formatoProveedor = new TextFormatter<>(filterProveedor);
         TextFormatter<String> formatoEquivalente = new TextFormatter<>(filterEquivalente);
+        TextFormatter<String> formatoPagoMovil = new TextFormatter<>(filterMonto);
 
         montoGastoId.setTextFormatter(formatoMonto);
         proveedorId.setTextFormatter(formatoProveedor);      
         equivalenteId.setTextFormatter(formatoEquivalente);  
+        porcentajePM.setTextFormatter(formatoPagoMovil);
     }
 
     public void crearComponentes() {
@@ -338,44 +449,58 @@ public class RegisterExpenseController {
         if (!montoGastoId.getText().isEmpty() && !(fechaGastoId.getValue() == null) 
         && !(departamento == null) && !proveedorId.getText().isEmpty() && !(cuentaSeleccionada == null) &&
         !metodoPagoId.getSelectionModel().isEmpty() && !(lastCycle == null)) {
-            byte[] random = new byte[] { 0x1, 0x1, 0x2, 0x3, 0x4, 0x5, 0x6, 0x7, 0x8, 0x9 };
-            String id_gasto = ULID.generate(System.currentTimeMillis(), random);
+
+            if (Double.parseDouble(montoGastoId.getText().toString()) <= metodoPagoId.getSelectionModel().getSelectedItem().getSaldo()) {
+
+                byte[] random = new byte[] { 0x1, 0x1, 0x2, 0x3, 0x4, 0x5, 0x6, 0x7, 0x8, 0x9 };
+                String id_gasto = ULID.generate(System.currentTimeMillis(), random);
+                    
+                Date fecha = Date.valueOf(fechaGastoId.getValue());
+                Double monto = Double.parseDouble(montoGastoId.getText());
+
+                if (!porcentajePM.getText().isEmpty()) {
+                    Double porcentaje = Double.parseDouble(porcentajePM.getText().toString());
+                    porcentaje = porcentaje / 100;
+                    monto = monto + (monto * porcentaje);
+                }
+    
+                Gastos gasto = new Gastos(
+                id_gasto, lastCycle, Main.getUsername(), fecha, 
+                departamento, cuentaSeleccionada, proveedorId.getText().toString(), 
+                descripcionId.getText().toString(), Double.parseDouble(montoGastoId.getText()), metodoPagoId.getSelectionModel().getSelectedItem(), 
+                monto);
+               
+                String id_inventario = ULID.generate(System.currentTimeMillis(), random);
+    
+                Inventory egreso = new Inventory(
+                    id_inventario, 
+                    gasto.getFecha().toString(), 
+                    "EGRESO", 
+                    gasto.getMonto(), 
+                    gasto.getMoneda(), 
+                    gasto.getMetodo(), 
+                    "GASTO", 
+                    TimeZone.getTimeZoneCaracas(), 
+                    id_gasto);
                 
-            Date fecha = Date.valueOf(fechaGastoId.getValue());
-            Double monto = Double.parseDouble(montoGastoId.getText());
-
-            Gastos gasto = new Gastos(
-            id_gasto, lastCycle, Main.getUsername(), fecha, 
-            departamento, cuentaSeleccionada, proveedorId.getText().toString(), 
-            descripcionId.getText().toString(), Double.parseDouble(montoGastoId.getText()), metodoPagoId.getSelectionModel().getSelectedItem(), 
-            monto);
+                ExpensesDAO expensesDAO = new ExpensesDAO();
+                expensesDAO.registerExpense(gasto);
+                
+                InventoryDAO inventoryDAO = new InventoryDAO();
+                inventoryDAO.newRegister(egreso);
+    
+                databaseUtils.updateRegister("bancos", "saldo_actual", (metodoPagoId.getSelectionModel().getSelectedItem().getSaldo() - gasto.getMonto()), "codigo = '" + metodoPagoId.getSelectionModel().getSelectedItem().getCodigo() + "'");
+    
+               Alert alert = new Alert(AlertType.INFORMATION,"Gasto registrado exitosamente");
+                alert.showAndWait();
+    
+                clearfields();
+    
+            } else {
+                Alert alert = new Alert(AlertType.ERROR, "Saldo insuficiente");
+                alert.showAndWait();
+            }
            
-            String id_inventario = ULID.generate(System.currentTimeMillis(), random);
-
-            Inventory egreso = new Inventory(
-                id_inventario, 
-                gasto.getFecha().toString(), 
-                "EGRESO", 
-                gasto.getMonto(), 
-                gasto.getMoneda(), 
-                gasto.getMetodo(), 
-                "GASTO", 
-                TimeZone.getTimeZoneCaracas(), 
-                id_gasto);
-            
-            ExpensesDAO expensesDAO = new ExpensesDAO();
-            expensesDAO.registerExpense(gasto);
-            
-            InventoryDAO inventoryDAO = new InventoryDAO();
-            inventoryDAO.newRegister(egreso);
-
-            databaseUtils.updateRegister("bancos", "saldo_actual", (metodoPagoId.getSelectionModel().getSelectedItem().getSaldo() - gasto.getMonto()), "codigo = '" + metodoPagoId.getSelectionModel().getSelectedItem().getCodigo() + "'");
-
-           Alert alert = new Alert(AlertType.INFORMATION,"Gasto registrado exitosamente");
-            alert.showAndWait();
-
-            clearfields();
-
         }
         else {
             Alert alert = new Alert(AlertType.WARNING,"Error. Debe llenar los campos obligatorios. ");
@@ -385,13 +510,23 @@ public class RegisterExpenseController {
     }
 
     public void clearfields () {
+        lastCycle = null;
         montoGastoId.clear();
         descripcionId.clear();
         proveedorId.clear();
         fechaGastoId.setValue(null);
         departamentoMenuId.setText("Departamento");
         tipoGastoId.clear();
+        equivalentePM.clear();
+        equivalentePM.setVisible(false);
+        registerPagoButton.setLayoutY(236);
+        cancelPagoButton.setLayoutY(236);
+        porcentajePM.clear();
+        pmCheck.setSelected(false);
+        pmCheck.setVisible(false);
+        porcentajePM.setVisible(false);
         metodoPagoId.getSelectionModel().clearSelection();
+
     }
     @FXML
     Menu menuGerenciaGeneral;

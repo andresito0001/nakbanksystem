@@ -86,6 +86,24 @@ public class BanksDAO {
         return totalBalance;
     }
 
+    public void insertBank(Banks bank) throws SQLException {
+        final String query = "insert into bancos (codigo, nombre_banco, moneda, correo, saldo_actual) values (?, ?, ?, ?, ?)";
+
+        try (final Connection conn = ConnectionPool.getConnection();
+            final PreparedStatement st = conn.prepareStatement(query)) {
+                
+                st.setString(1, bank.getCodigo());
+                st.setString(2, bank.getNombre());
+                st.setString(3, bank.getMoneda());
+                st.setString(4, bank.getCorreo());
+                st.setDouble(5, bank.getSaldo());
+
+                st.executeUpdate();
+        } 
+    }
+
+
+
     public void setBank(List<Banks> listaBancos, String key, String value) {
         String query = new String();
 
@@ -105,7 +123,8 @@ public class BanksDAO {
                         rs.getString("codigo"), 
                         rs.getString("nombre_banco"), 
                         rs.getString("moneda"), 
-                        rs.getDouble("saldo_actual")
+                        rs.getDouble("saldo_actual"),
+                        rs.getString("correo")
                     )
                 );
             }
