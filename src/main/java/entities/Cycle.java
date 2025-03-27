@@ -45,12 +45,20 @@ public class Cycle {
         this.status = newStatus;
     }
 
+    public void setQuantityReceived(Double newQuantityReceived) {
+        this.quantityReceived = newQuantityReceived;
+    }
+
+    public void setSentQuantity(Double newSentQuantity) {
+        this.quantityReceived = newSentQuantity;
+    }
+
     private final String id;
     private final Clients client;
     private final String adminUsername;
     private final String date;
     private final String time;
-    private final Double quantityReceived;
+    private Double quantityReceived;
     private final String currencyReceived;
     private final String receivedMethod;
     private final Double sentQuantity;

@@ -15,7 +15,6 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.collections.transformation.FilteredList;
-import javafx.event.ActionEvent;
 import main.java.Main;
 import main.java.dao.BanksDAO;
 import main.java.dao.ClientsDAO;
@@ -23,7 +22,6 @@ import main.java.dao.InventoryDAO;
 import main.java.dao.TransactionsDAO;
 import main.java.entities.Banks;
 import main.java.entities.Clients;
-import main.java.entities.Gastos;
 import main.java.entities.Inventory;
 import main.java.entities.Transactions;
 import main.java.util.DatabaseUtils;
@@ -34,13 +32,12 @@ public class RegisterTransactionController {
     @FXML
     public void initialize() throws SQLException {
         listViewId.setVisible(false);
-        sentTextField.setEditable(false);
+        // sentTextField.setEditable(false);
         
         // receivedComboBox.getItems().add("DESCONOCIDO");
         BanksDAO banksDAO = new BanksDAO();
         List<Banks> bancosRecibidos = new ArrayList<>();
         List<Banks> bancosEnviados = new ArrayList<>();
-
 
         banksDAO.setBank(bancosRecibidos, null, null);
         banksDAO.setBank(bancosEnviados, null, null);
@@ -54,6 +51,13 @@ public class RegisterTransactionController {
         crearComponentes();
 
         typeTransComboBox.getItems().addAll("COMPRA", "SWAP");
+        swapComboBox.getItems().addAll("CLIENTE", "EMPRESA");
+        swapComboBox.setLayoutX(234);
+        swapComboBox.setLayoutY(346);
+        swapComboBox.setPrefWidth(165);
+        swapComboBox.setPrefHeight(28);
+
+        swapComboBox.setVisible(false);
 
         ClientsDAO clientsDAO = new ClientsDAO();
         List<Clients> clients = clientsDAO.getClientsAsList();
@@ -124,7 +128,7 @@ public class RegisterTransactionController {
                 e.printStackTrace();
             }
         });
-
+        
         fullPaymentReceiver.setOnAction(_ -> {
             if (fullPaymentReceiver.isSelected()) {
                 initialPaymentReceiverTextField.setDisable(true);
@@ -155,38 +159,66 @@ public class RegisterTransactionController {
             }
         });
 
-        cancelButton.setOnAction(_ -> Main.switchToDashboard());
-
-        typeTransComboBox.setOnAction(_ -> {
-            if (typeTransComboBox.getValue().equals("COMPRA")) {
-                swapCommissionTextField.setDisable(true);
-                swapCommissionLabel.setDisable(true);
-
-                amountTextField.setDisable(false);
-                amountLabel.setDisable(false);
-
-                initialPaymentReceiverTextField.setDisable(false);
-                fullPaymentReceiver.setDisable(false);
-                initialPaymentReceiverLabel.setDisable(false);
-
-                initialPaymentClientTextfield.setDisable(false);
-                initialPaymentClientCehckbox.setDisable(false);
-                initialPaymentClientLabel.setDisable(false);
-
-                mobilePaymentCheckBox.setDisable(false);
-                mobilePaymentCheckBox.setSelected(false);
-    
-
-            } else if (typeTransComboBox.getValue().equals("SWAP")) {
-                amountTextField.setDisable(true);
-                amountLabel.setDisable(true);
-
+        swapCommission.setOnAction(_ -> {
+            if (swapCommission.isSelected()) {
                 swapCommissionTextField.setDisable(false);
                 swapCommissionLabel.setDisable(false);
+                swapComboBox.setDisable(false);
+                amountLabel.setDisable(false);
+            } else {
+                swapCommissionTextField.setDisable(true);
+                swapCommissionLabel.setDisable(true);
+                swapComboBox.setDisable(true);
+                amountLabel.setDisable(true);
+            }
+        });
 
-                mobilePaymentTextField.setDisable(true);
-                mobilePaymentLabel.setDisable(true);
-                mobilePaymentCheckBox.setDisable(true);
+        cancelButton.setOnAction(_ -> Main.switchToDashboard());
+
+        typeTransComboBox.setOnAction(_ -> {            
+            if (typeTransComboBox.getValue().equals("COMPRA")) {
+                sentTextField.setEditable(false);
+      
+                swapComboBox.setVisible(false);
+
+                swapCommissionTextField.setVisible(false);
+                swapCommissionLabel.setVisible(false);
+                swapCommission.setVisible(false);
+
+                amountTextField.setVisible(true);
+                amountTextField.setDisable(false);
+                amountLabel.setVisible(true);
+                amountLabel.setDisable(false);
+                amountLabel.setText("Tasa $");
+
+                mobilePaymentCheckBox.setVisible(true);
+                mobilePaymentCheckBox.setDisable(false);
+                mobilePaymentTextField.setVisible(true);
+                mobilePaymentLabel.setVisible(true);
+                mobilePaymentCheckBox.setSelected(false);
+                
+            } else if (typeTransComboBox.getValue().equals("SWAP")) {
+                sentTextField.setEditable(true);
+                swapComboBox.setVisible(true);
+                swapComboBox.setDisable(true);
+
+                amountTextField.setVisible(false);
+
+                amountLabel.setVisible(true);
+                amountLabel.setDisable(true);
+                amountLabel.setText("Comision pagada por: ");
+            
+                swapCommissionTextField.setVisible(true);
+                swapCommissionTextField.setDisable(true);
+                swapCommissionLabel.setVisible(true);
+                swapCommissionLabel.setDisable(true);
+                swapCommission.setVisible(true);
+                swapCommission.setDisable(false);
+                
+                mobilePaymentTextField.setVisible(false);
+                mobilePaymentLabel.setVisible(false);
+                mobilePaymentCheckBox.setVisible(false);
+
             } else { throw new IllegalArgumentException("Invalid transaction type"); }
         });
 
@@ -212,20 +244,63 @@ public class RegisterTransactionController {
 
         mobilePaymentTextField.textProperty().addListener((_, oldValue, newValue) -> {
             if (!newValue.isEmpty()) {
-                if (!newValue.matches("^(1|0(\\.\\d*)?|\\.\\d*)$")) {
+                if (!newValue.matches("^\\d*\\.?\\d*$")) {
                     mobilePaymentTextField.setText(oldValue);
                 } else {
                     try {
                         double value = Double.parseDouble(newValue);
-                        if (value < 0 || value > 1) {
+                        
+                        if (value < 0 || value > 100) {
                             mobilePaymentTextField.setText(oldValue);
                         }
+
+                        if (newValue.contains(".") && newValue.split("\\.")[1].length() > 2) {
+                            mobilePaymentTextField.setText(oldValue);
+                        }
+                        
                     } catch (NumberFormatException e) {
                         mobilePaymentTextField.clear();
                     }
                 }
             }
         });
+
+        
+        swapCommissionTextField.textProperty().addListener((_, oldValue, newValue) -> {
+            if (!newValue.isEmpty()) {
+                if (!newValue.matches("^\\d*\\.?\\d*$")) {
+                    swapCommissionTextField.setText(oldValue);
+                } else {
+                    try {
+                        double value = Double.parseDouble(newValue);
+                        
+                        if (value < 0 || value > 100) {
+                            swapCommissionTextField.setText(oldValue);
+                        }
+
+                        if (newValue.contains(".") && newValue.split("\\.")[1].length() > 2) {
+                            swapCommissionTextField.setText(oldValue);
+                        }
+
+                        final String commissionBy = swapComboBox.getSelectionModel().getSelectedItem();
+                        if (commissionBy.equals("CLIENTE")) {
+                            final Double receivedValue = Double.parseDouble(receivedTextField.getText());
+                            receivedTextField.setText(String.valueOf(receivedValue + (receivedValue * value / 100)));
+                        } else if (commissionBy.equals("EMPRESA")) {
+                            final Double sent = Double.parseDouble(sentTextField.getText());
+                            sentTextField.setText(String.valueOf(sent + (sent * value / 100)));
+                        }
+
+                    } catch (NumberFormatException e) {
+                        swapCommissionTextField.clear();
+                    }
+                }
+            } else {
+                receivedTextField.clear();
+                sentTextField.clear();
+            }
+        });
+
     }
 
     public void crearComponentes () {
@@ -296,6 +371,7 @@ public class RegisterTransactionController {
             throw new IllegalArgumentException("All fields must be filled");
         }
 
+        amountLabel.setText("Tasa $");
         DatabaseUtils databaseUtils = new DatabaseUtils();
         ClientsDAO clientsDAO = new ClientsDAO();
         final String typeTrans = typeTransComboBox.getValue();
@@ -538,13 +614,13 @@ public class RegisterTransactionController {
                 
                 if (mobilePaymentCheckBox.isSelected()) {
                     Double mobilePaymentValue = 0.00;
-                    if (initialPaymentClientCehckbox.isSelected() && !initialPaymentClientTextfield.getText().isEmpty()) {
+                    if (!initialPaymentClientCehckbox.isSelected() && !initialPaymentClientTextfield.getText().isEmpty()) {
                         mobilePaymentValue = Double.parseDouble(initialPaymentClientTextfield.getText()) * (Double.parseDouble(mobilePaymentTextField.getText()) / 100);
                     } else {
                         mobilePaymentValue = Double.parseDouble(sentTextField.getText()) * (Double.parseDouble(mobilePaymentTextField.getText()) / 100);
                     }
 
-                    final Inventory mobilePaymentInventory = new Inventory (
+                    inventoryDAO.newRegister(new Inventory (
                         ULID.generate(System.currentTimeMillis(), entropy),
                         transaction.getDate(),
                         "EGRESO",
@@ -554,13 +630,233 @@ public class RegisterTransactionController {
                         "GASTO",
                         transaction.getTime(),
                         transaction.getId()
-                    );
-
-                    inventoryDAO.newRegister(mobilePaymentInventory);
+                    ));
                 }
             } break;
             case "SWAP" : {
+                final String clientID = searchClientsBar.getText().split(" ")[0];
+                final String cycleId = databaseUtils.getInfoByLastReferenceOf("ciclos", "id", null, null);
+                final byte[] entropy = new byte[] { 0x1, 0x1, 0x2, 0x3, 0x4, 0x5, 0x6, 0x7, 0x8, 0x9 };
 
+                Transactions transaction = new Transactions (
+                    ULID.generate(System.currentTimeMillis(), entropy),
+                    cycleId,
+                    clientsDAO.getCLientBy("where cedula = " + "'" + clientID + "'"),
+                    Main.getUsername(),
+                    main.java.util.TimeZone.getDateZoneCaracas(),
+                    main.java.util.TimeZone.getTimeZoneCaracas(),
+                    typeTransComboBox.getValue(),
+                    Double.parseDouble(receivedTextField.getText()),
+                    receivedComboBox.getSelectionModel().getSelectedItem().getMoneda(),
+                    receivedComboBox.getSelectionModel().getSelectedItem().getCodigo(),
+                    Double.parseDouble(sentTextField.getText()),
+                    sentComboBox.getSelectionModel().getSelectedItem().getMoneda(),
+                    sentComboBox.getSelectionModel().getSelectedItem().getCodigo(),
+                    null,
+                    0.0,
+                    0.0,
+                    refTextField.getText(),
+                    databaseUtils.getValueOf("status_recepcion", "ciclos", "id = '"+cycleId+"'").toString()
+                );
+
+                TransactionsDAO transactionsDAO = new TransactionsDAO();
+                InventoryDAO inventoryDAO = new InventoryDAO();
+
+                if (fullPaymentReceiver.isSelected() && initialPaymentClientCehckbox.isSelected()) {
+                    // REGISTRAR TRANSACCION
+                    transaction.setStatus("OK");
+                    transactionsDAO.newTransaction(transaction);
+
+                    // if (swapCommission.isSelected() && !swapCommissionTextField.getText().isEmpty()
+                    // && Double.parseDouble(swapCommissionTextField.getText()) > 0 && swapComboBox != null) {
+                    //     if (swapSelected.equals("CLIENTE")) {
+                    //        Double recivedOldValue = transaction.getQuantityReceived();
+                    //        System.out.println(recivedOldValue);
+                    //        transaction.setQuantityReceived(recivedOldValue + (recivedOldValue * Double.parseDouble(swapCommissionTextField.getText()) / 100));
+                    //         System.out.println("Recived: " + transaction.getQuantityReceived());
+                    //     } else if (swapSelected.equals("EMPRESA")) { 
+                    //         Double sentOldValue = transaction.getSentQuantity();
+                    //         System.out.println(sentOldValue);
+                    //         transaction.setSentQuantity(sentOldValue + (sentOldValue * Double.parseDouble(swapCommissionTextField.getText()) / 100));
+                            
+                    //         System.out.println("Sent: " + transaction.getSentQuantity());
+                    //     }
+                    // }
+
+                    // INGRESO
+                    inventoryDAO.newRegister(new Inventory (
+                        ULID.generate(System.currentTimeMillis(), entropy),
+                        transaction.getDate(),
+                        "INGRESO",
+                        transaction.getQuantityReceived(),
+                        transaction.getCurrencyReceived(),
+                        transaction.getReceivedMethod(),
+                        transaction.getType(),
+                        transaction.getTime(),
+                        transaction.getId()
+                    ));
+                    
+                    // EGRESO
+                    inventoryDAO.newRegister(new Inventory (
+                        ULID.generate(System.currentTimeMillis(), entropy),
+                        transaction.getDate(),
+                        "EGRESO",
+                        transaction.getSentQuantity(),
+                        transaction.getSentCurrency(),
+                        transaction.getSentMethod(),
+                        transaction.getType(),
+                        transaction.getTime(),
+                        transaction.getId()
+                    ));
+
+                    // ACTUALIZAR BANCO ENVIADO
+                    Double saldoBancoEnviado = sentComboBox.getSelectionModel().getSelectedItem().getSaldo();
+                    Double balanceEnviado = saldoBancoEnviado - transaction.getSentQuantity();
+                    
+                    databaseUtils.updateRegister("bancos", "saldo_actual", balanceEnviado, "codigo = '" + sentComboBox.getSelectionModel().getSelectedItem().getCodigo() + "'");
+                    
+                    // ACTUALIZAR BANCO RECIBIDO
+                    Double saldoBancoRecibido = receivedComboBox.getSelectionModel().getSelectedItem().getSaldo();
+                    Double balanceRecibido = saldoBancoRecibido + transaction.getQuantityReceived();
+
+                    databaseUtils.updateRegister("bancos", "saldo_actual", balanceRecibido, "codigo = '" + receivedComboBox.getSelectionModel().getSelectedItem().getCodigo() + "'");
+
+                } else if (!fullPaymentReceiver.isSelected() && !initialPaymentClientCehckbox.isSelected()) {
+                    // status = "PENDIENTE";
+                    final Double amountInitialPayment = Double.parseDouble(initialPaymentReceiverTextField.getText());
+                    final Double amountInitialPaymentClient = Double.parseDouble(initialPaymentClientTextfield.getText());
+
+                    //REGISTRAR TRANSACCION
+                    transaction.setStatus("PEDIENTE");
+                    transactionsDAO.newTransaction(transaction);
+                    
+                    // EGRESO ABONADO POR EMPRESA
+                    inventoryDAO.newRegister(new Inventory (
+                        ULID.generate(System.currentTimeMillis(), entropy),
+                        transaction.getDate(),
+                        "EGRESO",
+                        amountInitialPaymentClient,
+                        transaction.getSentCurrency(),
+                        transaction.getSentMethod(),
+                        "ABONO",
+                        transaction.getTime(),
+                        transaction.getId()
+                    ));
+
+                    // INGRESO ABONADO POR CLIENTE
+                    inventoryDAO.newRegister(new Inventory (
+                        ULID.generate(System.currentTimeMillis(), entropy),
+                        transaction.getDate(),
+                        "INGRESO",
+                        amountInitialPayment,
+                        transaction.getCurrencyReceived(),
+                        transaction.getReceivedMethod(),
+                        "ABONO",
+                        transaction.getTime(),
+                        transaction.getId()
+                    ));
+
+                    // ACTUALIZAR BANCO ENVIADO
+                    Double saldoBancoEnviado = sentComboBox.getSelectionModel().getSelectedItem().getSaldo();
+                    Double balanceEnviado = saldoBancoEnviado - amountInitialPaymentClient;
+                    
+                    databaseUtils.updateRegister("bancos", "saldo_actual", balanceEnviado, "codigo = '" + sentComboBox.getSelectionModel().getSelectedItem().getCodigo() + "'");
+                    
+                    // ACTUALIZAR BANCO RECIBIDO
+                    Double saldoBancoRecibido = receivedComboBox.getSelectionModel().getSelectedItem().getSaldo();
+                    Double balanceRecibido = saldoBancoRecibido + amountInitialPayment;
+
+                    databaseUtils.updateRegister("bancos", "saldo_actual", balanceRecibido, "codigo = '" + receivedComboBox.getSelectionModel().getSelectedItem().getCodigo() + "'");
+
+                } else if (fullPaymentReceiver.isSelected() && !initialPaymentClientCehckbox.isSelected()) {
+                    final Double amountInitialPaymentClient = Double.parseDouble(initialPaymentClientTextfield.getText());
+ 
+                    // REGISTRAR TRANSACCION
+                    transaction.setStatus("RECIBIDO");
+                    transactionsDAO.newTransaction(transaction);
+
+                    // EGRESO ABONADO POR EMPRESA
+                    inventoryDAO.newRegister(new Inventory (
+                        ULID.generate(System.currentTimeMillis(), entropy),
+                        transaction.getDate(),
+                        "EGRESO",
+                        amountInitialPaymentClient,
+                        transaction.getSentCurrency(),
+                        transaction.getSentMethod(),
+                        "ABONO",
+                        transaction.getTime(),
+                        transaction.getId()
+                    ));
+                    
+                    // INGRESO POR CLIENTE
+                    inventoryDAO.newRegister(new Inventory (
+                        ULID.generate(System.currentTimeMillis(), entropy),
+                        transaction.getDate(),
+                        "INGRESO",
+                        transaction.getQuantityReceived(),
+                        transaction.getCurrencyReceived(),
+                        transaction.getReceivedMethod(),
+                        transaction.getType(),
+                        transaction.getTime(),
+                        transaction.getId()
+                    ));
+
+                    // ACTUALIZAR BANCO ENVIADO
+                    Double saldoBancoEnviado = sentComboBox.getSelectionModel().getSelectedItem().getSaldo();
+                    Double balanceEnviado = saldoBancoEnviado - amountInitialPaymentClient;
+                    
+                    databaseUtils.updateRegister("bancos", "saldo_actual", balanceEnviado, "codigo = '" + sentComboBox.getSelectionModel().getSelectedItem().getCodigo() + "'");
+                    
+                    // ACTUALIZAR BANCO RECIBIDO
+                    Double saldoBancoRecibido = receivedComboBox.getSelectionModel().getSelectedItem().getSaldo();
+                    Double balanceRecibido = saldoBancoRecibido + transaction.getQuantityReceived();
+
+                    databaseUtils.updateRegister("bancos", "saldo_actual", balanceRecibido, "codigo = '" + receivedComboBox.getSelectionModel().getSelectedItem().getCodigo() + "'");
+                } else {
+                    final Double amountInitialPayment = Double.parseDouble(initialPaymentReceiverTextField.getText());
+          
+                    // REGISTRAR TRANSACCION
+                    transaction.setStatus("ENVIADO");
+                    transactionsDAO.newTransaction(transaction);
+
+                    // EGRESO POR EMPRESA
+                    inventoryDAO.newRegister(new Inventory(
+                        ULID.generate(System.currentTimeMillis(), entropy),
+                        transaction.getDate(),
+                        "EGRESO",
+                        transaction.getSentQuantity(),
+                        transaction.getSentCurrency(),
+                        transaction.getSentMethod(),
+                        transaction.getType(),
+                        transaction.getTime(),
+                        transaction.getId()
+                    ));
+
+                    // INGRESO ABONADO POR CLIENTE
+                    inventoryDAO.newRegister(new Inventory (
+                        ULID.generate(System.currentTimeMillis(), entropy),
+                        transaction.getDate(),
+                        "INGRESO",
+                        amountInitialPayment,
+                        transaction.getCurrencyReceived(),
+                        transaction.getReceivedMethod(),
+                        "ABONO",
+                        transaction.getTime(),
+                        transaction.getId()
+                    ));
+
+                    // ACTUALIZAR BANCO ENVIADO
+                    Double saldoBancoEnviado = sentComboBox.getSelectionModel().getSelectedItem().getSaldo();
+                    Double balanceEnviado = saldoBancoEnviado - transaction.getSentQuantity();
+                    
+                    databaseUtils.updateRegister("bancos", "saldo_actual", balanceEnviado, "codigo = '" + sentComboBox.getSelectionModel().getSelectedItem().getCodigo() + "'");
+                    
+                    // ACTUALIZAR BANCO RECIBIDO
+                    Double saldoBancoRecibido = receivedComboBox.getSelectionModel().getSelectedItem().getSaldo();
+                    Double balanceRecibido = saldoBancoRecibido + amountInitialPayment;
+
+                    databaseUtils.updateRegister("bancos", "saldo_actual", balanceRecibido, "codigo = '" + receivedComboBox.getSelectionModel().getSelectedItem().getCodigo() + "'");
+                }
             } break;
             default: {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -573,7 +869,6 @@ public class RegisterTransactionController {
             }
         }
         
-        // System.out.println("Sent bank: " + sentBank + "\nReceived bank: " + receivedBank + "\nTransaction type: " + transactionType + "\nSent: " + sent + "\nReceived: " + received + "\nAmount: " + amount + "\nClient: " + ID);
         clearFields();
         Main.switchToDashboard();
     }
@@ -584,26 +879,23 @@ public class RegisterTransactionController {
         amountTextField.clear();
         sentComboBox.setValue(null);
         receivedComboBox.setValue(null);
-        // typeTransComboBox.setValue(null);
     }
-
 
     private void diableFields() {
-        amountLabel.setDisable(true);
-        amountTextField.setDisable(true);
-        swapCommissionLabel.setDisable(true);
-        swapCommissionTextField.setDisable(true);
-        fullPaymentReceiver.setDisable(true);
-        initialPaymentReceiverLabel.setDisable(true);
-        initialPaymentReceiverTextField.setDisable(true);
-        initialPaymentClientLabel.setDisable(true);
-        initialPaymentClientTextfield.setDisable(true);
-        initialPaymentClientCehckbox.setDisable(true);
-        mobilePaymentCheckBox.setDisable(true);
-        mobilePaymentLabel.setDisable(true);
-        mobilePaymentTextField.setDisable(true);
+        amountTextField.setVisible(false);
+        amountLabel.setVisible(false);
+
+        swapCommissionTextField.setVisible(false);
+        swapCommissionLabel.setVisible(false);
+        swapCommission.setVisible(false);
+
+        mobilePaymentLabel.setVisible(false);
+        mobilePaymentTextField.setVisible(false);
+        mobilePaymentCheckBox.setVisible(false);
     }
 
+    @FXML
+    private ComboBox<String> swapComboBox;
     @FXML
     private ListView<String> listViewId;
     @FXML
@@ -656,4 +948,6 @@ public class RegisterTransactionController {
     private TextField mobilePaymentTextField;
     @FXML
     private TextField refTextField;
+    @FXML
+    private CheckBox swapCommission;
 }

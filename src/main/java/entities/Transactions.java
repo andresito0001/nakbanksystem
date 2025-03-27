@@ -18,9 +18,17 @@ public class Transactions extends Cycle {
     public String getParent_id() { return parent_id; }
     public Double getRevenue() { return revenue; }
     public String getStatusRecepcionCiclo () { return status_recepcionCiclo; }
-
+    
     public void setStatus(final String newStatus) {
         super.setStatus(newStatus);
+    }
+
+    public void setQuantityReceived (final Double newQuantityReceived) {
+        super.setQuantityReceived(newQuantityReceived);
+    }
+
+    public void settSentQuantity (final Double newSentQuantity) {
+        super.setSentQuantity(newSentQuantity);
     }
 
     private final String type;

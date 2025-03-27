@@ -1,6 +1,7 @@
 package main.java.util;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -129,5 +130,15 @@ public class DatabaseUtils {
                 throw new SQLException("Error al obtener el esquema de la base de datos", e);
             }
         return results;
+    }
+
+    public void deleteAllRegistersFrom(final String tableName, final Date date) throws SQLException {
+        final String sql = "delete from " + tableName + " WHERE fecha = ?";
+
+        try (final Connection conn = ConnectionPool.getConnection();
+            final PreparedStatement st = conn.prepareStatement(sql)) {
+            st.setDate(1, date);
+            st.executeUpdate();
+        }
     }
 }

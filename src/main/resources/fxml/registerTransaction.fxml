@@ -27,7 +27,7 @@
       <TextField fx:id="swapCommissionTextField" layoutX="441.0" layoutY="346.0" prefHeight="28.0" prefWidth="165.0" promptText="\%" />
       <Label fx:id="swapCommissionLabel" layoutX="441.0" layoutY="327.0" text="Comision swap" />
       <Label layoutX="469.0" layoutY="113.0" text="Transacción tipo" />
-      <ComboBox fx:id="typeTransComboBox" layoutX="467.0" layoutY="134.0" prefHeight="28.0" prefWidth="211.0" promptText="COMPRA - SWAP" styleClass="combo-box-style" />
+      <ComboBox fx:id="typeTransComboBox" layoutX="467.0" layoutY="134.0" prefHeight="28.0" prefWidth="211.0" promptText="Seleccione una opcion -" styleClass="combo-box-style" />
       <TextField fx:id="searchClientsBar" layoutX="81.0" layoutY="134.0" prefHeight="25.0" prefWidth="287.0" promptText="Nombre, Apellido, Cedula, Alias" />
       <Label fx:id="tittleId" layoutX="27.0" layoutY="77.0" text="NEW TRANSACTION" />
       <Label layoutX="30.0" layoutY="139.0" text="Cliente" />
@@ -64,5 +64,7 @@
       <TextField fx:id="initialPaymentClientTextfield" layoutX="441.0" layoutY="275.0" prefHeight="28.0" prefWidth="165.0" promptText="0.00" />
       <Label fx:id="initialPaymentClientLabel" layoutX="441.0" layoutY="258.0" text="Pago inicial" />
       <CheckBox fx:id="initialPaymentClientCehckbox" layoutX="626.0" layoutY="281.0" mnemonicParsing="false" text="Pago completo" />
+      <ComboBox fx:id="swapComboBox" layoutX="234.0" layoutY="374.0" prefHeight="28.0" prefWidth="165.0" promptText="-" styleClass="combo-box-style" />
+      <CheckBox fx:id="swapCommission" layoutX="627.0" layoutY="351.0" mnemonicParsing="false" text="Comision swap" />
    </children>
 </AnchorPane>
