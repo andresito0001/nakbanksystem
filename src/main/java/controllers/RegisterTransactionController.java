@@ -480,7 +480,7 @@ public class RegisterTransactionController {
                     amountInitialPaymentClient = Double.parseDouble(initialPaymentClientTextfield.getText());
 
                     //REGISTRAR TRANSACCION
-                    transaction.setStatus("PEDIENTE");
+                    transaction.setStatus("PENDIENTE");
                     transactionsDAO.newTransaction(transaction);
                     
                     // EGRESO ABONADO POR EMPRESA
@@ -727,7 +727,7 @@ public class RegisterTransactionController {
                     final Double amountInitialPaymentClient = Double.parseDouble(initialPaymentClientTextfield.getText());
 
                     //REGISTRAR TRANSACCION
-                    transaction.setStatus("PEDIENTE");
+                    transaction.setStatus("PENDIENTE");
                     transactionsDAO.newTransaction(transaction);
                     
                     // EGRESO ABONADO POR EMPRESA
