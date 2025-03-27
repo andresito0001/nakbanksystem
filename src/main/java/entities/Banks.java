@@ -2,11 +2,12 @@ package main.java.entities;
 
 public class Banks {
     
-    public Banks (String codigo, String nombre, String moneda, Double saldo) {
+    public Banks (String codigo, String nombre, String moneda, Double saldo, String correo) {
         this.codigo = codigo;
         this.nombre = nombre;
         this.moneda = moneda;
         this.saldo = saldo;
+        this.correo = correo;
     }
 
     
@@ -22,10 +23,14 @@ public class Banks {
     public Double getSaldo () {
         return saldo;
     }
+    public String getCorreo () {
+        return correo;
+    }
 
     String codigo;
     String nombre;
     String moneda;
     Double saldo;
+    String correo;
     
 }

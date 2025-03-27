@@ -335,6 +335,8 @@ public class newCycleController {
 
                 CicleDAO cicleDAO = new CicleDAO();
                 cicleDAO.insertCycle(cycle);
+                String id_inventario = ULID.generate(System.currentTimeMillis(), random);
+
 
                 Double saldoRecibido = receivedComboBox.getSelectionModel().getSelectedItem().getSaldo() + cantidadRecibida;
                 Double saldoEnviado = sentComboBox.getSelectionModel().getSelectedItem().getSaldo() - cantidadEnviada;
@@ -343,7 +345,6 @@ public class newCycleController {
                 databaseUtils.updateRegister("bancos", "saldo_actual", saldoRecibido, "codigo = '" + receivedComboBox.getSelectionModel().getSelectedItem().getCodigo().toString() + "'");
                 databaseUtils.updateRegister("bancos", "saldo_actual", saldoEnviado, "codigo = '" + sentComboBox.getSelectionModel().getSelectedItem().getCodigo().toString() + "'");
                 
-                String id_inventario = ULID.generate(System.currentTimeMillis(), random);
                 
                 final Inventory inventoryIncome = new Inventory(
                     id_inventario, 
@@ -378,6 +379,7 @@ public class newCycleController {
                 alert.showAndWait();
 
                 clearfields();
+                Main.switchToDashboard();
             }
         }
     }
