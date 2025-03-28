@@ -73,7 +73,9 @@ public class newCycleController {
     private Label sentBankLabel;
     @FXML
     private Label refLabel;
-
+    @FXML
+    private Label saldoDisponibleLabel;
+    
     
     public void initialize() throws SQLException {
         listViewId.setVisible(false);
@@ -168,7 +170,11 @@ public class newCycleController {
                 }
             });
 
-
+        sentComboBox.getSelectionModel().selectedItemProperty().addListener((_, _, newValue) -> {
+            if (newValue != null) {
+                saldoDisponibleLabel.setText("Saldo disponible: " + newValue.getSaldo() + " " + newValue.getMoneda());
+            }
+        });
     }
 
     public void updateListView(ObservableList<Clients> clientsList) {
@@ -325,7 +331,7 @@ public class newCycleController {
                     cantidadEnviada = Double.parseDouble(abonado.getText().toString());
                     tipoOperacion = "ABONO";
                 } 
-                else if (abonado.getText().isEmpty() && pagadoCheck.isSelected()) {
+                else if (abonado.getText().isEmpty() && !pagadoCheck.isSelected()) {
                     statusRecepcion = "RECIBIDO";
                     cantidadEnviada = 0.0;
                     tipoOperacion = "ABONO";

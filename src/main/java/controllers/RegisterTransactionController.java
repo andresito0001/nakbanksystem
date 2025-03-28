@@ -32,9 +32,7 @@ public class RegisterTransactionController {
     @FXML
     public void initialize() throws SQLException {
         listViewId.setVisible(false);
-        // sentTextField.setEditable(false);
-        
-        // receivedComboBox.getItems().add("DESCONOCIDO");
+
         BanksDAO banksDAO = new BanksDAO();
         List<Banks> bancosRecibidos = new ArrayList<>();
         List<Banks> bancosEnviados = new ArrayList<>();
@@ -178,7 +176,6 @@ public class RegisterTransactionController {
         typeTransComboBox.setOnAction(_ -> {            
             if (typeTransComboBox.getValue().equals("COMPRA")) {
                 sentTextField.setEditable(false);
-      
                 swapComboBox.setVisible(false);
 
                 swapCommissionTextField.setVisible(false);
@@ -194,7 +191,9 @@ public class RegisterTransactionController {
                 mobilePaymentCheckBox.setVisible(true);
                 mobilePaymentCheckBox.setDisable(false);
                 mobilePaymentTextField.setVisible(true);
+                mobilePaymentTextField.setDisable(true);
                 mobilePaymentLabel.setVisible(true);
+                mobilePaymentLabel.setDisable(true);
                 mobilePaymentCheckBox.setSelected(false);
                 
             } else if (typeTransComboBox.getValue().equals("SWAP")) {
@@ -349,11 +348,14 @@ public class RegisterTransactionController {
                 @Override
                 public void updateItem(Banks banco, boolean empty) {
                     super.updateItem(banco, empty);
-                     if (banco != null) {
+                    if (banco != null) {
                         setText(banco.getCodigo().concat(" (").concat(banco.getMoneda()).concat(")"));
-                     }
-                     else 
+                        saldoEnviadoDisp.setText("Saldo disponible: " + banco.getSaldo());    
+                    }
+                    else {
                         setText(null);
+                        saldoEnviadoDisp.setText(null);
+                    }
                 }
             };
             return listCell;
@@ -361,16 +363,6 @@ public class RegisterTransactionController {
     }
     
     private void registerTransaction() throws SQLException {
-        if (sentComboBox.getValue() == null || receivedComboBox.getValue() == null || typeTransComboBox.getValue() == null) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText("Error");
-            alert.setContentText("All fields must be filled");
-            alert.showAndWait();
-
-            throw new IllegalArgumentException("All fields must be filled");
-        }
-
         amountLabel.setText("Tasa $");
         DatabaseUtils databaseUtils = new DatabaseUtils();
         ClientsDAO clientsDAO = new ClientsDAO();
@@ -378,6 +370,21 @@ public class RegisterTransactionController {
 
         switch (typeTrans) {
             case "COMPRA" : {
+                double saldoBanco = sentComboBox.getSelectionModel().getSelectedItem().getSaldo();
+                double montoRequerido = !initialPaymentClientCehckbox.isSelected() 
+                                        ? Double.parseDouble(initialPaymentClientTextfield.getText())
+                                        : Double.parseDouble(sentTextField.getText());
+
+                if (saldoBanco < montoRequerido) {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Error");
+                    alert.setHeaderText("Error");
+                    alert.setContentText("The bank does not have enough money");
+                    alert.showAndWait();
+
+                    throw new IllegalArgumentException("The bank does not have enough money");
+                }
+
                 final String clientID = searchClientsBar.getText().split(" ")[0];
                 final Clients client = clientsDAO.getCLientBy("where cedula = " + "'" + clientID + "'");
 
@@ -385,7 +392,6 @@ public class RegisterTransactionController {
                 final String bankSent = sentComboBox.getSelectionModel().getSelectedItem().getCodigo();
                 String moneyTypeSent = sentComboBox.getSelectionModel().getSelectedItem().getMoneda();
                 String moneyTypeReceived = receivedComboBox.getSelectionModel().getSelectedItem().getMoneda();
-                String status = new String();
 
                 if (bankRecived.equals(bankSent) || moneyTypeReceived.equals(moneyTypeSent)) {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -417,9 +423,7 @@ public class RegisterTransactionController {
                 final String id = ULID.generate(System.currentTimeMillis(), entropy);
 
                 Double amountInitialPayment = 0.0,
-                amountInitialPaymentClient = 0.0,
-                cantidadIngreso = received,
-                cantidadEgreso = sent;
+                amountInitialPaymentClient = 0.0;
 
                 final Transactions transaction = new Transactions (
                     id, cycleId, client, Main.getUsername(), date, time,
@@ -475,7 +479,6 @@ public class RegisterTransactionController {
                     databaseUtils.updateRegister("bancos", "saldo_actual", balanceRecibido, "codigo = '" + receivedComboBox.getSelectionModel().getSelectedItem().getCodigo() + "'");
 
                 } else if (!fullPaymentReceiver.isSelected() && !initialPaymentClientCehckbox.isSelected()) {
-                    status = "PENDIENTE";
                     amountInitialPayment = Double.parseDouble(initialPaymentReceiverTextField.getText());
                     amountInitialPaymentClient = Double.parseDouble(initialPaymentClientTextfield.getText());
 
@@ -634,6 +637,21 @@ public class RegisterTransactionController {
                 }
             } break;
             case "SWAP" : {
+                double saldoBanco = sentComboBox.getSelectionModel().getSelectedItem().getSaldo();
+                double montoRequerido = !initialPaymentClientCehckbox.isSelected() 
+                                        ? Double.parseDouble(initialPaymentClientTextfield.getText())
+                                        : Double.parseDouble(sentTextField.getText());
+                
+                if (saldoBanco < montoRequerido) {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Error");
+                    alert.setHeaderText("Error");
+                    alert.setContentText("The bank does not have enough money");
+                    alert.showAndWait();
+
+                    throw new IllegalArgumentException("The bank does not have enough money");
+                }
+
                 final String clientID = searchClientsBar.getText().split(" ")[0];
                 final String cycleId = databaseUtils.getInfoByLastReferenceOf("ciclos", "id", null, null);
                 final byte[] entropy = new byte[] { 0x1, 0x1, 0x2, 0x3, 0x4, 0x5, 0x6, 0x7, 0x8, 0x9 };
@@ -666,22 +684,6 @@ public class RegisterTransactionController {
                     // REGISTRAR TRANSACCION
                     transaction.setStatus("OK");
                     transactionsDAO.newTransaction(transaction);
-
-                    // if (swapCommission.isSelected() && !swapCommissionTextField.getText().isEmpty()
-                    // && Double.parseDouble(swapCommissionTextField.getText()) > 0 && swapComboBox != null) {
-                    //     if (swapSelected.equals("CLIENTE")) {
-                    //        Double recivedOldValue = transaction.getQuantityReceived();
-                    //        System.out.println(recivedOldValue);
-                    //        transaction.setQuantityReceived(recivedOldValue + (recivedOldValue * Double.parseDouble(swapCommissionTextField.getText()) / 100));
-                    //         System.out.println("Recived: " + transaction.getQuantityReceived());
-                    //     } else if (swapSelected.equals("EMPRESA")) { 
-                    //         Double sentOldValue = transaction.getSentQuantity();
-                    //         System.out.println(sentOldValue);
-                    //         transaction.setSentQuantity(sentOldValue + (sentOldValue * Double.parseDouble(swapCommissionTextField.getText()) / 100));
-                            
-                    //         System.out.println("Sent: " + transaction.getSentQuantity());
-                    //     }
-                    // }
 
                     // INGRESO
                     inventoryDAO.newRegister(new Inventory (
@@ -950,4 +952,6 @@ public class RegisterTransactionController {
     private TextField refTextField;
     @FXML
     private CheckBox swapCommission;
+    @FXML
+    private Label saldoEnviadoDisp;
 }

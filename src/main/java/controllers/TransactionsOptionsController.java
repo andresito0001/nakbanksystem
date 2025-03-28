@@ -92,6 +92,14 @@ public class TransactionsOptionsController implements Initializable {
     @FXML
     public void newTransaction(MouseEvent event) {
         try {
+            DatabaseUtils dbUtils = new DatabaseUtils();
+            if (dbUtils.getInfoByLastReferenceOf("ciclos", "status", null, null).equals("INACTIVE") 
+            || dbUtils.getInfoByLastReferenceOf("ciclos", "status",null, null).equals("VOID")) {
+                Alert alert = new Alert(AlertType.WARNING, "No existe un ciclo activo en este momento", ButtonType.CLOSE);
+                alert.showAndWait();
+                return;
+            }
+
             SceneSwitcher.switchPane(borderPane, "/main/resources/fxml/registerTransaction.fxml", "/main/resources/css/registerTransaction.css", new RegisterTransactionController());
         } catch (Exception e ) {
             e.printStackTrace();

@@ -13,7 +13,7 @@ import main.java.entities.Banks;
 public class BanksDAO {
     public List<BankInfo> getAllBankInfo() throws SQLException {
         List<BankInfo> bankInfoList = new ArrayList<>();
-        String query = "select codigo, nombre_banco, saldo_actual, moneda from bancos";
+        String query = "select codigo, nombre_banco, numero_cuenta, moneda, saldo_actual, correo from bancos";
 
         try (final Connection conn = ConnectionPool.getConnection();
             final PreparedStatement statement = conn.prepareStatement(query);
@@ -23,8 +23,10 @@ public class BanksDAO {
                 bankInfoList.add(new BankInfo (
                     resultSet.getString("codigo"),
                     resultSet.getString("nombre_banco"),
-                    resultSet.getString("saldo_actual"),
-                    resultSet.getString("moneda")
+                    resultSet.getString("saldo_actual").concat(" " + resultSet.getString("moneda")),
+                    resultSet.getString("moneda"),
+                    resultSet.getString("correo"),
+                    resultSet.getString("numero_cuenta")
                 ));
             }
 

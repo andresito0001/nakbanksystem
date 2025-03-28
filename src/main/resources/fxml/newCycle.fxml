@@ -13,13 +13,13 @@
 
 <AnchorPane fx:id="borderPaneId" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="546.0" prefWidth="757.0" stylesheets="@../css/newCycle.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Label layoutX="263.0" layoutY="215.0" text="Enviado desde" />
-      <ComboBox fx:id="sentComboBox" layoutX="263.0" layoutY="233.0" prefHeight="28.0" prefWidth="165.0" promptText="-" styleClass="combo-box-style" />
+      <Label layoutX="263.0" layoutY="199.0" text="Enviado desde" />
+      <ComboBox fx:id="sentComboBox" layoutX="263.0" layoutY="217.0" prefHeight="28.0" prefWidth="165.0" promptText="-" styleClass="combo-box-style" />
       <Label fx:id="tittleId" layoutX="31.0" layoutY="67.0" text="Nuevo ciclo" />
       <ComboBox fx:id="receivedComboBox" layoutX="263.0" layoutY="309.0" prefHeight="28.0" prefWidth="165.0" promptText="-" styleClass="combo-box-style" />
       <Label fx:id="sentBankLabel" layoutX="263.0" layoutY="291.0" text="Recibido en" />
-      <TextField fx:id="sentTextField" layoutX="33.0" layoutY="233.0" prefHeight="25.0" prefWidth="165.0" promptText="0.00 $" />
-      <Label layoutX="35.0" layoutY="215.0" text="Cantidad Enviada en USD - USDT" />
+      <TextField fx:id="sentTextField" layoutX="33.0" layoutY="217.0" prefHeight="25.0" prefWidth="165.0" promptText="0.00 $" />
+      <Label layoutX="35.0" layoutY="199.0" text="Cantidad Enviada en USD - USDT" />
       <Button fx:id="confirmButton" layoutX="36.0" layoutY="392.0" mnemonicParsing="false" onMouseClicked="#registerCycle" text="Confirmar">
          <cursor>
             <Cursor fx:constant="HAND" />
@@ -35,8 +35,8 @@
             <Image url="@../img/back-icon.png" />
          </image>
       </ImageView>
-      <TextField fx:id="rate" layoutX="517.0" layoutY="234.0" prefHeight="25.0" prefWidth="165.0" promptText="0.00 $" />
-      <Label layoutX="517.0" layoutY="216.0" prefHeight="7.0" prefWidth="34.0" text="Tasa " />
+      <TextField fx:id="rate" layoutX="517.0" layoutY="218.0" prefHeight="25.0" prefWidth="165.0" promptText="0.00 $" />
+      <Label layoutX="517.0" layoutY="200.0" prefHeight="7.0" prefWidth="34.0" text="Tasa " />
       <TextField fx:id="refTextField" layoutX="517.0" layoutY="310.0" prefHeight="28.0" prefWidth="165.0" promptText="#" />
       <Label fx:id="refLabel" layoutX="517.0" layoutY="292.0" text="Referencia" />
       <TextField fx:id="amountToReceive" editable="false" layoutX="33.0" layoutY="309.0" prefHeight="28.0" prefWidth="165.0" promptText="0.00 Bs" />
@@ -49,7 +49,8 @@
             <Image url="@../img/search-icon.png" />
          </image>
       </ImageView>
-      <CheckBox fx:id="pagadoCheck" layoutX="437.0" layoutY="239.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="107.0" selected="true" text="Pagado" />
+      <CheckBox fx:id="pagadoCheck" layoutX="437.0" layoutY="223.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="107.0" selected="true" text="Pagado" />
       <TextField fx:id="abonado" layoutX="264.0" layoutY="273.0" prefHeight="27.0" prefWidth="165.0" promptText="Cantidad abonada" visible="false" />
+      <Label fx:id="saldoDisponibleLabel" layoutX="261.0" layoutY="247.0" />
    </children>
 </AnchorPane>

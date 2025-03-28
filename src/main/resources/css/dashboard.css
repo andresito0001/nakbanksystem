@@ -55,3 +55,79 @@
 #dasboardLeftPane {
     -fx-background-color: #2d3546;
 }
+
+
+.table-view {
+    -fx-background-color: linear-gradient(#12151c 0%, #354357 100%);
+    -fx-background-radius: 10px;
+    -fx-border-color: #354357;
+    -fx-border-radius: 10px;
+    -fx-border-width: 1.5px;
+}
+.table-column {
+    -fx-background-color: transparent;
+}
+
+
+.table-cell {
+    -fx-padding: 0.5em 0.5em 0.1em 0.3em;
+    -fx-border-color: -fx-box-border -fx-box-border transparent transparent;
+    -fx-font: 13px "Segoe UI";
+    -fx-border-insets: 0;
+}
+.table-row-cell:empty, .table-cell-empty:hover {
+    -fx-background-color: transparent;
+}
+
+.table-row-cell:empty .table-cell {
+    -fx-border-color: transparent #354357 transparent transparent;
+}
+
+.table-view .column-header .label {
+    -fx-text-fill: #abb2bf;
+    -fx-alignment: center;
+}
+.table-view .column-header-background {
+    -fx-background-color: transparent;
+    -fx-border-width: 1px;
+    -fx-border-color: transparent transparent #abb2bf transparent;
+}
+.table-row-cell {
+    -fx-background-color: transparent;
+}
+.table-view .table-cell {
+    -fx-text-fill: #abb2bf;
+    -fx-border-color: transparent #354357 transparent transparent;
+}
+.table-row-cell:selected .text,
+.table-row-cell:hover .text{
+    -fx-fill: #009cde;
+    -fx-cursor: HAND;
+
+}
+
+.table-row-cell .text {
+    -fx-fill: #abb2bf;
+}
+.table-row-cell:odd {
+    -fx-background-color: #12151c;
+}
+
+.table-view > .virtual-flow > .scroll-bar:vertical,
+.table-view > .virtual-flow > .scroll-bar:vertical > .track,
+.table-view > .virtual-flow > .scroll-bar:vertical > .track-background, 
+.table-view > .virtual-flow > .scroll-bar:horizontal, 
+.table-view > .virtual-flow > .scroll-bar:horizontal > .track,
+.table-view > .virtual-flow > .scroll-bar:horizontal > .track-background {
+    -fx-background-color:  transparent;
+}
+
+.table-view > .virtual-flow > .scroll-bar:vertical > .thumb {
+    -fx-background-color: #009cde;
+}
+
+.table-view > .virtual-flow > .scroll-bar > .increment-button,
+.table-view > .virtual-flow > .scroll-bar > .decrement-button { 
+    -fx-opacity: 0;
+}
+

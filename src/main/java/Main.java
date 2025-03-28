@@ -15,6 +15,7 @@ public class Main extends Application {
     public void start(Stage stage) {
         try {
             primaryStage = stage;
+            primaryStage.setResizable(false);
             SceneSwitcher.switchScene(stage, "/main/resources/fxml/login.fxml", "/main/resources/css/login.css", new LoginController());
         } catch (Exception e) {
             e.printStackTrace();
