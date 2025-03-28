@@ -1,0 +1,230 @@
+.root {
+    -fx-font-family: "Segoe UI";
+    -fx-base: #12151c;
+    -fx-background: #12151c;
+    -fx-text-fill: #e0e0e0;
+}
+
+.title-text {
+    -fx-font-size: 20px;
+    -fx-fill: #ffffff;
+}
+
+.search-bar {
+    -fx-background-color: transparent;
+    -fx-border-color: #3a3f4b;
+    -fx-border-radius: 4;
+    -fx-background-radius: 4;
+    -fx-text-fill: #e0e0e0;
+    -fx-prompt-text-fill: #e0e0e0;
+    -fx-font-size: 10px;
+    -fx-padding: 8 12;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 0, 0, 0, 1);
+    -fx-cursor: text;
+}
+
+.search-bar:focused {
+    -fx-border-color: #3a6df0;
+    -fx-background-color: #3a3f4b;
+    -fx-effect: dropshadow(gaussian, rgba(58,109,240,0.2), 0, 0, 0, 2);
+}
+
+
+/* Efecto hover para items de la lista */
+.list-cell:hover {
+    -fx-background-color: #12151c;
+    -fx-text-fill: white;
+    -fx-border-color: #12151c;
+    -fx-border-width: 0 0 0 3px;
+}
+
+/* Item seleccionado */
+.list-cell:selected {
+    -fx-background-color: #12151c;
+    -fx-text-fill: #b4c9ff;
+}
+
+/* Lista desplegable */
+.list-view {
+    -fx-background-color: #2d323d;
+    -fx-border-color: #3a3f4b;
+    -fx-border-radius: 4;
+    -fx-background-radius: 4;
+    -fx-padding: 5 0;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 8, 0, 0, 2);
+}
+
+.list-view:focused {
+    -fx-border-color: #3a3f4b;
+}
+
+.list-cell:empty {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+
+
+/* Etiqueta de fecha */
+.date-label {
+    -fx-text-fill: #e0e0e0;
+    -fx-prompt-text-fill: #e0e0e0;
+    -fx-font-size: 10px;
+    -fx-padding: 0 5px 0 0;
+}
+
+/* Contenedor principal del DatePicker */
+.date-picker {
+    -fx-background-color: transparent;
+    -fx-background-radius: 4;
+    -fx-border-radius: 4;
+    -fx-border-color: #3a3f4b;
+    -fx-text-fill: #e0e0e0;
+    -fx-prompt-text-fill: #e0e0e0;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 0, 0, 0, 1);
+    -fx-prompt-text-fill: #6c757d;
+}
+
+/* Efecto hover para el DatePicker */
+.date-picker:hover {
+    -fx-background-color: #3a3f4b;
+    -fx-border-color: #4a4f5b;
+}
+
+/* Botón del calendario */
+.date-picker .arrow-button {
+    -fx-background-color: #3a3f4b;
+    -fx-background-radius: 0 4 4 0;
+    -fx-border-color: transparent;
+    -fx-cursor: hand;
+}
+
+.date-picker .arrow-button:hover {
+    -fx-background-color: #4a4f5b;
+}
+
+/* Flecha del calendario */
+.date-picker .arrow {
+    -fx-background-color: #e0e0e0;
+    -fx-shape: "M 0 0 L 4 4 L 8 0 Z";
+}
+
+/* Popup del calendario */
+.date-picker .date-picker-popup {
+    -fx-background-color: #2d323d;
+    -fx-border-color: #3a3f4b;
+    -fx-border-radius: 4;
+    -fx-background-radius: 4;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 0, 0, 0, 2);
+}
+
+/* Cabecera del calendario */
+.date-picker .month-year-pane {
+    -fx-background-color: #1a1e27;
+    -fx-text-fill: #ffffff;
+    -fx-border-color: #3a3f4b;
+    -fx-border-width: 0 0 1 0;
+}
+
+/* Botones de navegación */
+.date-picker .previous-month-button,
+.date-picker .next-month-button {
+    -fx-background-color: transparent;
+    -fx-shape: "M 0 0 L 4 4 L 0 8 Z";
+    -fx-scale-shape: false;
+}
+
+.date-picker .next-month-button {
+    -fx-rotate: 180;
+}
+
+.date-picker .previous-month-button:hover,
+.date-picker .next-month-button:hover {
+    -fx-background-color: #3a6df0;
+}
+
+/* Celdas del calendario */
+.date-picker .day-cell {
+    -fx-background-color: transparent;
+    -fx-text-fill: #e0e0e0;
+    -fx-border-radius: 4;
+    -fx-background-radius: 4;
+}
+
+/* Celda hover */
+.date-picker .day-cell:hover {
+    -fx-background-color: #3a6df0 !important;
+    -fx-text-fill: white !important;
+}
+
+/* Celda seleccionada */
+.date-picker .day-cell:selected {
+    -fx-background-color: #12151c;
+    -fx-text-fill: #3a6df0;
+    -fx-font-weight: bold;
+}
+
+/* Día actual */
+.date-picker .today {
+    -fx-background-color: #3a3f4b;
+    -fx-text-fill: #e0e0e0;
+    -fx-font-weight: normal;
+}
+
+.date-picker .today:selected {
+    -fx-background-color: #12151c;
+    -fx-text-fill: #3a6df0;
+}
+
+/* Días de otros meses */
+.date-picker .other-month {
+    -fx-text-fill: #6c757d;
+}
+
+/* Campo de texto */
+.date-picker .text-field {
+    -fx-background-color: transparent;
+    -fx-text-fill: #e0e0e0;
+    -fx-front-family: "Segoe UI";
+    -fx-prompt-text-fill: #6c757d;
+    -fx-font-size: 10px;
+    -fx-padding: 7px;
+}
+
+#apllyFillButtonm {
+    -fx-background-color: transparent;
+    -fx-text-fill: #ffffff;
+    -fx-front-family: "Segoe UI";
+    -fx-border-color: #225fec;
+    -fx-border-width: 2;
+    -fx-cursor: hand;
+    -fx-padding: 8 15;
+    -fx-background-radius: 4;
+    -fx-border-radius: 4;
+}
+
+#apllyFillButtonm:hover {
+    -fx-background-color: #225fec;
+    -fx-effect: dropshadow(gaussian, rgba(34,95,236,0.5), 0, 0, 1, 1);
+}
+
+.header-button.primary {
+    -fx-background-color: #3a6df0;
+    -fx-text-fill: #ffffff;
+    -fx-border-color: #2d5ac4;
+}
+
+.header-button.primary:hover {
+    -fx-background-color: #2d5ac4;
+}
+
+.header-button.secondary {
+    -fx-background-color: #2d323d;
+    -fx-text-fill: #a0a5b0;
+    -fx-border-color: #3a3f4b;
+}
+
+.header-button.secondary:hover {
+    -fx-background-color: #3a3f4b;
+}

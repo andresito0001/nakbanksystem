@@ -412,7 +412,7 @@ public class RegisterTransactionController {
                 final String ref = refTextField.getText();
                 final Double tasaMadre = Double.parseDouble(databaseUtils.getInfoByLastReferenceOf("ciclos", "tasa", null, null));
                 Double gananciaPerdida = received - (sent / tasaMadre);
-                
+                                
                 gananciaPerdida = gananciaPerdida < 0 ? gananciaPerdida * -1 : gananciaPerdida; 
 
                 final String cycleId = databaseUtils.getInfoByLastReferenceOf("ciclos", "id", null, null);
@@ -622,6 +622,10 @@ public class RegisterTransactionController {
                     } else {
                         mobilePaymentValue = Double.parseDouble(sentTextField.getText()) * (Double.parseDouble(mobilePaymentTextField.getText()) / 100);
                     }
+                    
+                    Double newGanancia = transaction.getRevenue() - (mobilePaymentValue / tasaMadre);
+
+                    databaseUtils.updateRegister("transacciones", "ganancia", newGanancia, "id = '" + transaction.getId() + "'");
 
                     inventoryDAO.newRegister(new Inventory (
                         ULID.generate(System.currentTimeMillis(), entropy),

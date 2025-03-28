@@ -81,6 +81,14 @@ public class DashBoardController implements Initializable {
             e.printStackTrace();
         }
     }
+    @FXML
+    private void loadProfit (MouseEvent event) {
+        try {
+            SceneSwitcher.switchPane(vBoxCenterPane, "/main/resources/fxml/profit.fxml", "/main/resources/css/profit.css", new ProfitController());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {

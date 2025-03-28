@@ -6,10 +6,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
+import main.java.util.ConnectionPool;
+
 public class CicleService {
-    public CicleService(final Connection conn) {
-        this.conn = conn;
-    }
 
     // OBTIENE EL PROFIT DE UN CICLO ESPECIFICO
     // public Double getProfit(final String id) throws SQLException {
@@ -36,7 +35,8 @@ public class CicleService {
     public Double averagePurchaseRate(final String columAvg, final String tableName, final String condition)  throws SQLException {
         final String query = "select avg(" + columAvg + ") from " + tableName + " where " + condition;
         
-        try (final PreparedStatement st = this.conn.prepareStatement(query)) {
+        try (final Connection conn = ConnectionPool.getConnection();
+            final PreparedStatement st = conn.prepareStatement(query)) {
             final ResultSet rs = st.executeQuery();
 
             return rs.next() ? rs.getDouble(1) : 0;
@@ -46,7 +46,8 @@ public class CicleService {
     public Integer getNumofTransByCicleId(final String id)  throws SQLException {
         final String query = "select count(*) from trans where cicle_id = ?";
 
-        try (final PreparedStatement st = this.conn.prepareStatement(query)) {
+        try (final Connection conn = ConnectionPool.getConnection();
+            final PreparedStatement st = conn.prepareStatement(query)) {
             st.setString(1, id);
             final ResultSet rs = st.executeQuery();
 
@@ -64,5 +65,4 @@ public class CicleService {
         return num;
     }
 
-    private final Connection conn;
 }

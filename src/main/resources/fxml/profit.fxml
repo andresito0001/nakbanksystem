@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.text.Text?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="747.0" stylesheets="@../css/profit.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <top>
+      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
+         <children>
+            <ImageView fitHeight="58.0" fitWidth="58.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../img/report-icon.png" />
+               </image>
+            </ImageView>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="title-text" text="PROFIT" wrappingWidth="95.61848831176758" />
+            <DatePicker fx:id="fromDatepicker" prefHeight="36.0" prefWidth="189.0" promptText="From:" styleClass="date-picker-popup" />
+            <DatePicker fx:id="toDatePicker" prefHeight="36.0" prefWidth="194.0" promptText="To:" styleClass="date-picker-popup" />
+            <Button fx:id="apllyFillButtonm" mnemonicParsing="false" onMouseClicked="#updateTable" prefHeight="35.0" prefWidth="90.0" text="Aplicar" />
+         </children>
+      </HBox>
+   </top>
+   <center>
+      <ListView fx:id="listView" prefHeight="463.0" prefWidth="676.0" stylesheets="@../css/profit.css">
+         <BorderPane.margin>
+            <Insets left="15.0" right="15.0" />
+         </BorderPane.margin>
+      </ListView>
+   </center>
+   <bottom>
+      <AnchorPane prefHeight="37.0" prefWidth="747.0" BorderPane.alignment="CENTER" />
+   </bottom>
+</BorderPane>
